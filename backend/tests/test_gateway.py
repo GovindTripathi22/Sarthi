@@ -78,3 +78,24 @@ def test_proxy_validate_payload_invalid_missing_ids():
     data = response.json()
     assert data["valid"] is False
     assert "customer identifier" in data["error"].lower()
+
+def test_proxy_customer_simulate_drift_flag():
+    response = client.get("/proxy/int_commerce_01/v2/customers/cust_8810?simulate_drift=true")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["customer"]["id"] == "cust_8810"
+    assert data["simulated_drift"] is True
+
+def test_get_contract_registered():
+    response = client.get("/contracts/int_commerce_01")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["integration_id"] == "int_commerce_01"
+    assert data["provider"] == "CommerceCore"
+    assert "properties" in data["schema"]
+
+def test_get_contract_unknown_returns_404():
+    response = client.get("/contracts/non_existent_id")
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+

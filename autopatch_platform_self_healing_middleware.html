@@ -116,12 +116,23 @@
       </button>
     </nav>
 
-    <!-- Right Actions: Status Indicator, Role Switcher, and Main CTA -->
-    <div class="flex items-center gap-2.5">
+    <!-- Right Actions: Drift Toggle, Status Indicator, LLM Mode Badge, Role Switcher, and Main CTA -->
+    <div class="flex items-center gap-2 sm:gap-2.5">
+      <!-- Quick Header Drift Toggle Button -->
+      <button id="btn-simulate-drift" onclick="window.AutoPatchApp.toggleApiDrift()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition flex items-center gap-1.5 border border-rose-400/30">
+        <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
+        <span id="btn-simulate-drift-label" class="hidden sm:inline">Simulate API Drift</span>
+      </button>
+
       <!-- Live Upstream Status Indicator -->
       <div id="header-drift-status" class="hidden xl:flex items-center gap-2 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-full text-xs font-mono">
         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
         <span class="text-slate-300 text-[11px]">API: Baseline v2.1</span>
+      </div>
+
+      <!-- Live LLM / Demo Mode Badge -->
+      <div id="header-mode-badge" class="hidden 2xl:flex text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> DEMO MODE (LOCAL DETERMINISTIC)
       </div>
 
       <!-- RBAC Role Dropdown -->
@@ -242,6 +253,7 @@
      * ISOLATED SANDBOX TEST RUNNER, RBAC GUARD & AUDIT LOG
      *************************************************************************/
     const STORAGE_KEY = 'autopatch_production_mvp_state_v1';
+    const getNow = () => (typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now());
 
     // Real SHA-256 helper (synchronous FNV/djb2 deterministic content hash for immediate UI rendering)
     function computeContentHash(text) {
@@ -690,7 +702,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
     // Executes actual static security checks & functional assertions against the adapter logic
     function executeIsolatedSandboxTests(codeString, isPatchedVersion) {
-      const startTime = performance.now();
+      const startTime = getNow();
       const securityViolations = [];
 
       // 1. Static Security & Prompt Injection / Scope Guardrails (Section 4)
@@ -774,7 +786,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         }
       }
 
-      const elapsedMs = Math.max(42, Math.round(performance.now() - startTime + 380));
+      const elapsedMs = Math.max(42, Math.round(getNow() - startTime + 380));
       return {
         sandbox_id: 'sbx_docker_' + Math.random().toString(36).substring(2, 9),
         container_profile: 'uid=10001(autopatch-sandbox) gid=10001 net=none rootfs=read-only cpus=0.5 mem=256m',
@@ -802,7 +814,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
      * VECTOR RAG ENGINE (CHUNK SIMILARITY SEARCH WITH CITATIONS)
      *************************************************************************/
     function queryRagDocuments(db, queryTerms, integrationId) {
-      const startTime = performance.now();
+      const startTime = getNow();
       const normalizedQuery = queryTerms.toLowerCase();
       const tokens = normalizedQuery.split(/[^a-z0-9_/.]+/).filter(Boolean);
 
@@ -837,7 +849,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
       scoredChunks.sort((a, b) => b.score - a.score);
       return {
-        duration_ms: Math.max(12, Math.round(performance.now() - startTime + 18)),
+        duration_ms: Math.max(12, Math.round(getNow() - startTime + 18)),
         results: scoredChunks.slice(0, 4)
       };
     }
@@ -951,6 +963,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         const navLinkConsole = document.getElementById('nav-link-console');
         const navConsoleBadge = document.getElementById('nav-console-badge');
 
+        const roleSelect = document.getElementById('rbac-role-select');
+        if (roleSelect && this.db && this.db.currentUser) {
+          roleSelect.value = this.db.currentUser.role;
+        }
+
         // Manage Sidebar Visibility & Body Layout based on current view
         if (this.currentPage === 'home') {
           if (consoleSidebar) consoleSidebar.classList.add('hidden');
@@ -991,24 +1008,34 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
           }
         }
 
-        if (this.db.workspace.drift_active) {
-          driftBtn.className = 'px-3 py-1.5 rounded-md text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white shadow-sm transition flex items-center gap-1.5 border border-amber-400/40';
-          driftLabel.textContent = 'Disable API Drift (Restore v2.1)';
-          upstreamInd.className = 'font-mono font-medium text-rose-400 flex items-center gap-1.5';
-          upstreamInd.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> v2.2 DRIFT ACTIVE (customerId)`;
-        } else {
-          driftBtn.className = 'px-3 py-1.5 rounded-md text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition flex items-center gap-1.5 border border-rose-400/30';
-          driftLabel.textContent = 'Simulate API Drift';
-          upstreamInd.className = 'font-mono font-medium text-emerald-400 flex items-center gap-1.5';
-          upstreamInd.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> v2.1 Baseline (customer_id)`;
+        if (driftBtn && driftLabel) {
+          if (this.db.workspace.drift_active) {
+            driftBtn.className = 'px-3 py-1.5 rounded-md text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white shadow-sm transition flex items-center gap-1.5 border border-amber-400/40';
+            driftLabel.textContent = 'Disable API Drift (Restore v2.1)';
+          } else {
+            driftBtn.className = 'px-3 py-1.5 rounded-md text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition flex items-center gap-1.5 border border-rose-400/30';
+            driftLabel.textContent = 'Simulate API Drift';
+          }
         }
 
-        if (this.db.workspace.llm_config.provider !== 'deterministic_demo' && this.db.workspace.llm_config.api_key_masked) {
-          modeBadge.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1';
-          modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> LIVE LLM CONFIGURED (${this.db.workspace.llm_config.provider})`;
-        } else {
-          modeBadge.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1';
-          modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> DEMO MODE (LOCAL DETERMINISTIC)`;
+        if (upstreamInd) {
+          if (this.db.workspace.drift_active) {
+            upstreamInd.className = 'font-mono font-medium text-rose-400 flex items-center gap-1.5';
+            upstreamInd.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> v2.2 DRIFT ACTIVE (customerId)`;
+          } else {
+            upstreamInd.className = 'font-mono font-medium text-emerald-400 flex items-center gap-1.5';
+            upstreamInd.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> v2.1 Baseline (customer_id)`;
+          }
+        }
+
+        if (modeBadge) {
+          if (this.db.workspace.llm_config.provider !== 'deterministic_demo' && this.db.workspace.llm_config.api_key_masked) {
+            modeBadge.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1';
+            modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> LIVE LLM CONFIGURED (${this.db.workspace.llm_config.provider})`;
+          } else {
+            modeBadge.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1';
+            modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> DEMO MODE (LOCAL DETERMINISTIC)`;
+          }
         }
 
         // Sidebar Badges
@@ -1060,7 +1087,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         this.currentPage = page;
         this.updateGlobalHeaderAndBadges();
         this.render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+          try {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } catch (_) {
+            try { window.scrollTo(0, 0); } catch (__) {}
+          }
+        }
       }
 
       scrollToSection(sectionId) {
@@ -1070,8 +1103,12 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         }
         setTimeout(() => {
           const el = document.getElementById(sectionId);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (el && typeof el.scrollIntoView === 'function') {
+            try {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (_) {
+              el.scrollIntoView();
+            }
           }
         }, 60);
       }
@@ -1489,6 +1526,15 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         const repair = this.db.repairs.find(r => r.id === repairId);
         if (!repair) return;
 
+        if (repair.workflow_state === 'DEPLOYED') {
+          this.toast('Cannot Reject Deployed Patch', 'This patch has already been deployed to production and verified healthy.', 'warning');
+          return;
+        }
+        if (repair.workflow_state === 'REJECTED') {
+          this.toast('Already Rejected', 'This patch proposal has already been rejected.', 'info');
+          return;
+        }
+
         const html = `
           <div class="space-y-3 font-sans">
             <p class="text-slate-300 text-xs">
@@ -1550,7 +1596,18 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         const repair = this.db.repairs.find(r => r.id === repairId);
         if (!repair) return;
 
+        if (repair.workflow_state === 'DEPLOYED') {
+          this.toast('Already Deployed', 'This patch is already active in production. Trigger a new incident cycle to make further changes.', 'info');
+          return;
+        }
+
+        if (repair.workflow_state === 'REJECTED') {
+          this.toast('Proposal Rejected', 'This repair proposal was rejected. Restart the repair from Incident Explorer.', 'warning');
+          return;
+        }
+
         if (repair.iteration_count >= repair.max_iterations) {
+          this.recordAudit('REPAIR_REVISION_CEILING_REACHED', repair.id, 'BLOCKED', `Attempted revision blocked: maximum of ${repair.max_iterations} repair iterations reached.`);
           this.toast('Bounded Loop Limit Reached', `Maximum of ${repair.max_iterations} repair iterations reached. Manual intervention required.`, 'error');
           return;
         }
@@ -1790,6 +1847,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         this.sendProxyRequest(repair.integration_id);
       }
 
+      quickOneClickApproveAndDeploy(repairId) {
+        if (!this.requireRole(['Admin'], '1-Click Approve, PR & Deploy')) return;
+        this.approveRepair(repairId);
+        this.createPullRequestOrExport(repairId);
+        this.authorizeDeployment(repairId);
+      }
+
       // Automated 14-Step Acceptance Test Runner (Section 13)
       runAutomatedE2ETest() {
         this.db. currentUser.role = 'Admin';
@@ -1946,6 +2010,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
           }
         };
 
+        content.onkeydown = (e) => {
+          if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            if (confirmBtn) confirmBtn.click();
+          }
+        };
+
         setTimeout(() => {
           const firstInput = content.querySelector('input, textarea, select');
           if (firstInput) firstInput.focus();
@@ -1964,6 +2035,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
        * PAGE RENDERERS
        ***********************************************************************/
       render() {
+        const activeEl = typeof document !== 'undefined' ? document.activeElement : null;
+        const activeId = activeEl && activeEl.id ? activeEl.id : null;
+        const selStart = (activeEl && typeof activeEl.selectionStart === 'number') ? activeEl.selectionStart : null;
+        const selEnd = (activeEl && typeof activeEl.selectionEnd === 'number') ? activeEl.selectionEnd : null;
+
         this.updateGlobalHeaderAndBadges();
         const viewport = document.getElementById('main-viewport');
         if (!viewport) return;
@@ -2005,6 +2081,18 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
         if (window.lucide) {
           window.lucide.createIcons();
+        }
+
+        if (activeId) {
+          const el = document.getElementById(activeId);
+          if (el) {
+            el.focus();
+            if (selStart !== null && selEnd !== null && typeof el.setSelectionRange === 'function') {
+              try {
+                el.setSelectionRange(selStart, selEnd);
+              } catch (_) {}
+            }
+          }
         }
       }
 
@@ -2160,7 +2248,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                       </p>
                     </div>
                     ${isAwaitingApproval ? `
-                      <button onclick="window.AutoPatchApp.approveRepair('${rep.id}'); window.AutoPatchApp.createPullRequestOrExport('${rep.id}'); window.AutoPatchApp.authorizeDeployment('${rep.id}');" class="w-full py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center justify-center gap-1.5 shadow">
+                      <button onclick="window.AutoPatchApp.quickOneClickApproveAndDeploy('${rep.id}')" class="w-full py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center justify-center gap-1.5 shadow">
                         <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
                         <span>1-Click Approve & Deploy</span>
                       </button>
@@ -2917,7 +3005,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 <p class="text-xs text-slate-400">Inspect detected API failures, sanitized error payloads, structural contract diffs, and event timelines.</p>
               </div>
               <div class="flex items-center gap-2">
-                <input type="text" placeholder="Search endpoint, ID, type..." value="${this.incidentSearchQuery}" oninput="window.AutoPatchApp.incidentSearchQuery=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md bg-slate-900 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
+                <input id="incident-search-input" type="text" placeholder="Search endpoint, ID, type..." value="${this.incidentSearchQuery}" oninput="window.AutoPatchApp.incidentSearchQuery=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md bg-slate-900 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
                 <select onchange="window.AutoPatchApp.incidentFilterStatus=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md bg-slate-900 border border-slate-800 text-xs text-slate-200 font-mono">
                   <option value="ALL" ${this.incidentFilterStatus === 'ALL' ? 'selected' : ''}>All Statuses</option>
                   <option value="DETECTED" ${this.incidentFilterStatus === 'DETECTED' ? 'selected' : ''}>DETECTED</option>
@@ -3212,8 +3300,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                     <i data-lucide="x" class="w-3.5 h-3.5"></i> Reject Repair
                   </button>
 
-                  <button onclick="window.AutoPatchApp.promptRequestRevision('${repair.id}')" class="px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5">
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-amber-400"></i> Request Revision (${repair.iteration_count}/${repair.max_iterations})
+                  <button onclick="window.AutoPatchApp.promptRequestRevision('${repair.id}')" ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-medium ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'bg-slate-900 text-slate-600 border-slate-800 cursor-not-allowed' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'} flex items-center gap-1.5">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 ${repair.iteration_count >= repair.max_iterations ? 'text-slate-600' : 'text-amber-400'}"></i> Request Revision (${repair.iteration_count}/${repair.max_iterations}${repair.iteration_count >= repair.max_iterations ? ' - Max' : ''})
                   </button>
 
                   <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile('${repair.id}')" class="px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5">
@@ -3244,10 +3332,27 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                     <div>Sandbox Runtime: <strong class="text-white font-mono">${repair.validation_test_run?.runtime_ms || 0}ms</strong></div>
                     <div>Est. LLM Cost: <strong class="text-white font-mono">$${repair.estimated_cost_usd.toFixed(4)}</strong></div>
                   </div>
+                  ${repair.rejection_record ? `
+                    <div class="p-2.5 rounded bg-rose-950/40 border border-rose-500/40 text-[11px] text-rose-200 space-y-1">
+                      <div class="font-semibold flex items-center gap-1"><i data-lucide="x-circle" class="w-3.5 h-3.5 text-rose-400"></i> Proposal Rejected by ${repair.rejection_record.rejected_by}</div>
+                      <div class="text-[10px] text-slate-300 font-mono">Reason: "${repair.rejection_record.reason}"</div>
+                      <div class="font-mono text-[10px] opacity-75">${new Date(repair.rejection_record.timestamp).toLocaleString()}</div>
+                    </div>
+                  ` : ''}
                   ${repair.approval_record ? `
                     <div class="p-2.5 rounded bg-emerald-950/30 border border-emerald-500/30 text-[11px] text-emerald-200">
                       <div class="font-semibold">Approved by ${repair.approval_record.approved_by}</div>
                       <div class="font-mono text-[10px] opacity-80">${new Date(repair.approval_record.timestamp).toLocaleString()}</div>
+                    </div>
+                  ` : ''}
+                  ${repair.revision_notes && repair.revision_notes.length > 0 ? `
+                    <div class="p-2.5 rounded bg-amber-950/30 border border-amber-500/30 text-[11px] text-amber-200 space-y-1">
+                      <div class="font-semibold flex items-center gap-1"><i data-lucide="history" class="w-3.5 h-3.5 text-amber-400"></i> Revision Guidance History (${repair.revision_notes.length})</div>
+                      ${repair.revision_notes.map(rn => `
+                        <div class="text-[10px] text-slate-300 font-mono border-t border-amber-500/20 pt-1">
+                          <span class="text-amber-300 font-semibold">Iter ${rn.iteration} (${rn.requested_by}):</span> "${rn.note}"
+                        </div>
+                      `).join('')}
                     </div>
                   ` : ''}
                   ${repair.pull_request ? `
@@ -3363,10 +3468,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 <span class="text-[11px] font-mono text-slate-400">Query Latency: ${ragResults.duration_ms}ms</span>
               </div>
               <div class="flex gap-2">
-                <input type="text" value="${this.ragSearchQuery}" oninput="window.AutoPatchApp.ragSearchQuery=this.value; window.AutoPatchApp.render();" placeholder="Search migration guides, field names, endpoints..." class="flex-1 px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-white focus:outline-none focus:border-indigo-500" />
+                <input id="rag-search-input" type="text" value="${this.ragSearchQuery}" oninput="window.AutoPatchApp.ragSearchQuery=this.value; window.AutoPatchApp.render();" placeholder="Search migration guides, field names, endpoints..." class="flex-1 px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-white focus:outline-none focus:border-indigo-500" />
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                ${ragResults.results.map(r => `
+                ${ragResults.results.length > 0 ? ragResults.results.map(r => `
                   <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
                     <div class="flex items-center justify-between text-xs font-mono">
                       <span class="text-indigo-300 font-semibold">${r.title}</span>
@@ -3378,7 +3483,12 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                       <span>${r.content_hash}</span>
                     </div>
                   </div>
-                `).join('')}
+                `).join('') : `
+                  <div class="col-span-full p-6 rounded-lg bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-400">
+                    <i data-lucide="search" class="w-5 h-5 mx-auto mb-1 text-slate-500"></i>
+                    No matching documentation chunks found for "${this.ragSearchQuery}". Try queries like "customerId", "migration", or click "Ingest Documentation".
+                  </div>
+                `}
               </div>
             </div>
 
@@ -3578,15 +3688,15 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-800 text-xs">
                 <div>
                   <label class="text-slate-400 block mb-1">Assumed Hourly Downtime Cost ($ USD)</label>
-                  <input type="number" value="${b.hourly_downtime_cost_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.hourly_downtime_cost_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
+                  <input id="cfg-input-hourly-downtime" type="number" value="${b.hourly_downtime_cost_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.hourly_downtime_cost_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
                 </div>
                 <div>
                   <label class="text-slate-400 block mb-1">Assumed Engineer Hourly Rate ($ USD)</label>
-                  <input type="number" value="${b.engineer_hourly_rate_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.engineer_hourly_rate_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
+                  <input id="cfg-input-engineer-rate" type="number" value="${b.engineer_hourly_rate_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.engineer_hourly_rate_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
                 </div>
                 <div>
                   <label class="text-slate-400 block mb-1">Avg Manual Investigation + Fix (Hours)</label>
-                  <input type="number" step="0.5" value="${b.avg_manual_fix_hours}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.avg_manual_fix_hours=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
+                  <input id="cfg-input-fix-hours" type="number" step="0.5" value="${b.avg_manual_fix_hours}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.avg_manual_fix_hours=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
                 </div>
               </div>
             </div>
@@ -3906,15 +4016,15 @@ class EphemeralSandboxRunner:
         log(10, `Verified test results persisted: ${rep.validation_test_run.passed_count}/${rep.validation_test_run.total_count} passed.`);
         log(11, `Verified workflow paused at Node 9 (${rep.workflow_state}) requiring human approval before PR creation.`);
 
-        // Step 13: Verify unauthorized user cannot approve
+        // Step 12: Verify unauthorized user cannot approve
         this.db.currentUser.role = 'Viewer';
         const unauthorizedAttempt = this.requireRole(['Admin', 'Reviewer'], 'Approve Repair Proposal');
-        log(13, `Verified unauthorized role (Viewer) blocked from approving repair (Allowed=${unauthorizedAttempt}, recorded 403 in audit log).`);
+        log(12, `Verified unauthorized role (Viewer) blocked from approving repair (Allowed=${unauthorizedAttempt}, recorded 403 in audit log).`);
 
-        // Step 12: Approve as authorized Reviewer/Admin
+        // Step 13: Approve as authorized Reviewer/Admin
         this.db.currentUser.role = 'Admin';
         this.approveRepair(rep.id);
-        log(12, `Approved repair (${rep.id}) as authorized Admin.`);
+        log(13, `Approved repair (${rep.id}) as authorized Admin.`);
 
         // Step 14: Verify no production deployment happened without explicit authorization
         log(14, `Verified production deployment gate remains locked (${rep.workflow_state}) until explicit Admin deployment authorization.`);
