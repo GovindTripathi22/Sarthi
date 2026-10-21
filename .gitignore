@@ -41,3 +41,8 @@ Thumbs.db
 # Docker
 *.log
 docker-volumes/
+ 
+# Databases
+*.db
+*.sqlite
+*.sqlite3
