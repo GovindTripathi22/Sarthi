@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sarthi-middleware"
+version = "1.4.0"
+description = "AI-Powered Self-Healing API & Integration Middleware"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Govind Tripathi", email = "govindtripathi62@gmail.com" }
+]
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn>=0.30.0",
+    "pydantic>=2.7.0",
+    "langgraph>=0.0.60",
+    "qdrant-client>=1.9.0",
+    "docker>=7.1.0",
+    "pytest>=8.2.0"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py"]
