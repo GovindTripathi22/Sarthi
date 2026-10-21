@@ -1,9 +1,13 @@
 # backend/app/sandbox/runner.py — Ephemeral Docker Sandbox Runner
-import docker
 import tempfile
 import shutil
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+
+try:
+    import docker
+except ImportError:
+    docker = None
 
 ALLOWED_COMMANDS = {
     "pytest": ["pytest", "-q", "--tb=short", "--disable-warnings"],
@@ -12,9 +16,17 @@ ALLOWED_COMMANDS = {
 
 class EphemeralSandboxRunner:
     """Executes generated adapter patches inside a network-disabled, non-root container."""
-    def __init__(self, image: str = "autopatch/sandbox-py312:1.4"):
-        self.client = docker.from_env()
+    def __init__(self, image: str = "autopatch/sandbox-py312:1.4", docker_client: Optional[Any] = None):
+        self._client = docker_client
         self.image = image
+
+    @property
+    def client(self):
+        if self._client is None:
+            if docker is None:
+                raise RuntimeError("The 'docker' Python library is not installed in this environment.")
+            self._client = docker.from_env()
+        return self._client
 
     def validate_patch(self, repo_snapshot: Path, planned_files: List[str], modified_files: Dict[str, str]) -> Dict[str, Any]:
         # 1. Explicit Change-Scope Verification
@@ -29,6 +41,7 @@ class EphemeralSandboxRunner:
                 target = (work_path / "repo" / rel_path).resolve()
                 if not str(target).startswith(str((work_path / "repo").resolve())):
                     raise PermissionError("Path traversal blocked.")
+                target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text(content, encoding="utf-8")
 
             container = self.client.containers.run(

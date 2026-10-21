@@ -202,72 +202,6 @@
         </div>
       </div>
 
-      <!-- Quick Interactive Guide -->
-      <div class="p-3 m-3 rounded-lg bg-slate-900/90 border border-slate-800 text-xs space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="font-semibold text-slate-200 flex items-center gap-1.5">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> E2E Demo Guide
-          </span>
-          <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/40 transition">
-            Auto-Run
-          </button>
-        </div>
-        <ol class="text-[11px] text-slate-400 space-y-1 list-decimal list-inside">
-          <li>Simulate API Drift</li>
-          <li>LangGraph Diagnosis</li>
-          <li>Isolated Pytest Sandbox</li>
-          <li>Human PR / Export</li>
-        </ol>
-      </div>
-    </aside>
-      <div class="p-3 space-y-1 overflow-y-auto">
-        <div class="px-2.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-500">Workspace: ws_prod_01</div>
-        
-        <button onclick="window.AutoPatchApp.navigate('dashboard')" data-nav="dashboard" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Overview Dashboard</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('integrations')" data-nav="integrations" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="network" class="w-4 h-4"></i> Integrations & Proxy</span>
-          <span id="nav-badge-integrations" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">3</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('incidents')" data-nav="incidents" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Incident Explorer</span>
-          <span id="nav-badge-incidents" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 hidden">0</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('workbench')" data-nav="workbench" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="cpu" class="w-4 h-4"></i> AI Repair Workbench</span>
-          <span id="nav-badge-workbench" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">LangGraph</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('review')" data-nav="review" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="git-pull-request" class="w-4 h-4"></i> Code Review & Gate</span>
-          <span id="nav-badge-review" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hidden">Pending</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('contracts')" data-nav="contracts" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="book-open" class="w-4 h-4"></i> Docs & API Contracts</span>
-          <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">RAG</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('analytics')" data-nav="analytics" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Analytics & Cost</span>
-        </button>
-
-        <button onclick="window.AutoPatchApp.navigate('settings')" data-nav="settings" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-          <span class="flex items-center gap-2.5"><i data-lucide="settings" class="w-4 h-4"></i> Settings & Audit Log</span>
-        </button>
-
-        <div class="pt-3 mt-3 border-t border-slate-800/80">
-          <div class="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-slate-500">System Verification</div>
-          <button onclick="window.AutoPatchApp.navigate('blueprint')" data-nav="blueprint" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition">
-            <span class="flex items-center gap-2.5"><i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400"></i> E2E Tests & Backend Code</span>
-          </button>
-        </div>
-      </div>
-
       <!-- Interactive Guided E2E Walkthrough Widget -->
       <div class="p-3 m-3 rounded-lg bg-slate-900/90 border border-slate-800 text-xs space-y-2">
         <div class="flex items-center justify-between">
@@ -1552,40 +1486,63 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
       promptRejectRepair(repairId) {
         if (!this.requireRole(['Admin', 'Reviewer'], 'Reject Repair Proposal')) return;
-        const reason = prompt('Enter mandatory rejection reason for audit log:', 'Prefer handling version transformation inside API gateway serializer instead of adapter.');
-        if (!reason || !reason.trim()) {
-          this.toast('Rejection Cancelled', 'A rejection reason is required by workspace governance policy.', 'warning');
-          return;
-        }
-
         const repair = this.db.repairs.find(r => r.id === repairId);
         if (!repair) return;
 
-        const nowIso = new Date().toISOString();
-        repair.workflow_state = 'REJECTED';
-        repair.updated_at = nowIso;
-        repair.rejection_record = {
-          rejected_by: `${this.db.currentUser.name} (${this.db.currentUser.role})`,
-          timestamp: nowIso,
-          reason: reason.trim()
-        };
-        repair.nodes[8].status = 'FAILED';
-        repair.nodes[8].detail = `Rejected by ${this.db.currentUser.name}: "${reason.trim()}"`;
+        const html = `
+          <div class="space-y-3 font-sans">
+            <p class="text-slate-300 text-xs">
+              Rejecting this repair proposal will halt the LangGraph repair workflow for <strong>${repair.id}</strong>.
+              A mandatory rejection reason is required for the immutable security audit log.
+            </p>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Rejection Reason (Required)</label>
+              <textarea id="modal-reject-reason" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono text-xs focus:outline-none focus:border-rose-500">Prefer handling version transformation inside API gateway serializer instead of adapter.</textarea>
+            </div>
+          </div>
+        `;
 
-        const incident = this.db.incidents.find(i => i.id === repair.incident_id);
-        if (incident) {
-          incident.status = 'REJECTED';
-          incident.workflow_state = 'REJECTED';
-          incident.timeline.unshift({
-            timestamp: nowIso,
-            event: `Repair ${repair.id} REJECTED by ${this.db.currentUser.name}. Reason: ${reason.trim()}`
-          });
-        }
+        this.openModal(
+          '<i data-lucide="alert-octagon" class="w-4 h-4 text-rose-400"></i> Reject Repair Proposal',
+          html,
+          () => {
+            const reasonInput = document.getElementById('modal-reject-reason');
+            const reason = reasonInput ? reasonInput.value.trim() : '';
+            if (!reason) {
+              this.toast('Rejection Cancelled', 'A rejection reason is required by workspace governance policy.', 'warning');
+              return false;
+            }
 
-        this.recordAudit('REPAIR_REJECTED', repair.id, 'SUCCESS', `Reason: ${reason.trim()}`);
-        this.toast('Repair Rejected', 'Workflow halted and recorded in immutable audit log.', 'warning');
-        this.saveState();
-        this.render();
+            const nowIso = new Date().toISOString();
+            repair.workflow_state = 'REJECTED';
+            repair.updated_at = nowIso;
+            repair.rejection_record = {
+              rejected_by: `${this.db.currentUser.name} (${this.db.currentUser.role})`,
+              timestamp: nowIso,
+              reason
+            };
+            repair.nodes[8].status = 'FAILED';
+            repair.nodes[8].detail = `Rejected by ${this.db.currentUser.name}: "${reason}"`;
+
+            const incident = this.db.incidents.find(i => i.id === repair.incident_id);
+            if (incident) {
+              incident.status = 'REJECTED';
+              incident.workflow_state = 'REJECTED';
+              incident.timeline.unshift({
+                timestamp: nowIso,
+                event: `Repair ${repair.id} REJECTED by ${this.db.currentUser.name}. Reason: ${reason}`
+              });
+            }
+
+            this.recordAudit('REPAIR_REJECTED', repair.id, 'SUCCESS', `Reason: ${reason}`);
+            this.toast('Repair Rejected', 'Workflow halted and recorded in immutable audit log.', 'warning');
+            this.saveState();
+            this.render();
+            return true;
+          },
+          'Confirm Rejection',
+          'danger'
+        );
       }
 
       promptRequestRevision(repairId) {
@@ -1598,30 +1555,57 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
           return;
         }
 
-        const note = prompt('Enter revision guidance for the LangGraph agent (Max 3 bounded iterations):', 'Add explicit logging or preserve strict string stripping on customerId.');
-        if (!note || !note.trim()) return;
+        const html = `
+          <div class="space-y-3 font-sans">
+            <p class="text-slate-300 text-xs">
+              Requesting a revision triggers a bounded loop in the LangGraph agent
+              (Iteration <strong>${repair.iteration_count + 1}</strong> of <strong>${repair.max_iterations}</strong> max).
+              The updated code will be re-tested in the isolated Docker sandbox before returning for review.
+            </p>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Revision Guidance / Requirements</label>
+              <textarea id="modal-revision-note" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono text-xs focus:outline-none focus:border-amber-500">Add explicit logging or preserve strict string stripping on customerId.</textarea>
+            </div>
+          </div>
+        `;
 
-        repair.iteration_count += 1;
-        repair.revision_notes.push({
-          iteration: repair.iteration_count,
-          requested_by: this.db.currentUser.name,
-          note: note.trim(),
-          timestamp: new Date().toISOString()
-        });
+        this.openModal(
+          '<i data-lucide="refresh-cw" class="w-4 h-4 text-amber-400"></i> Request Patch Revision (Iteration ' + (repair.iteration_count + 1) + '/' + repair.max_iterations + ')',
+          html,
+          () => {
+            const noteInput = document.getElementById('modal-revision-note');
+            const note = noteInput ? noteInput.value.trim() : '';
+            if (!note) {
+              this.toast('Revision Cancelled', 'Revision guidance is required.', 'warning');
+              return false;
+            }
 
-        // Re-run isolated sandbox tests on revised code
-        repair.proposed_code = PATCHED_ADAPTER_CODE.replace(
-          'id=str(customer_id),',
-          'id=str(customer_id).strip(),  # Revision #' + repair.iteration_count + ': strip whitespace'
+            repair.iteration_count += 1;
+            repair.revision_notes.push({
+              iteration: repair.iteration_count,
+              requested_by: this.db.currentUser.name,
+              note,
+              timestamp: new Date().toISOString()
+            });
+
+            // Re-run isolated sandbox tests on revised code
+            repair.proposed_code = PATCHED_ADAPTER_CODE.replace(
+              'id=str(customer_id),',
+              'id=str(customer_id).strip(),  # Revision #' + repair.iteration_count + ': strip whitespace'
+            );
+            repair.validation_test_run = executeIsolatedSandboxTests(repair.proposed_code, true);
+            repair.workflow_state = 'AWAITING_APPROVAL';
+            repair.nodes[6].detail = `sandbox (${repair.validation_test_run.sandbox_id}): 4/4 passed on Iteration ${repair.iteration_count}/${repair.max_iterations}.`;
+
+            this.recordAudit('REPAIR_REVISION_ITERATION', repair.id, 'SUCCESS', `Iteration ${repair.iteration_count}/${repair.max_iterations} triggered with note: "${note}"`);
+            this.toast(`Revision Iteration ${repair.iteration_count}/${repair.max_iterations} Validated`, 'Updated patch passed all 4 sandbox regression tests and awaits approval.', 'info');
+            this.saveState();
+            this.render();
+            return true;
+          },
+          'Submit Revision Guidance',
+          'warning'
         );
-        repair.validation_test_run = executeIsolatedSandboxTests(repair.proposed_code, true);
-        repair.workflow_state = 'AWAITING_APPROVAL';
-        repair.nodes[6].detail = `sandbox (${repair.validation_test_run.sandbox_id}): 4/4 passed on Iteration ${repair.iteration_count}/${repair.max_iterations}.`;
-
-        this.recordAudit('REPAIR_REVISION_ITERATION', repair.id, 'SUCCESS', `Iteration ${repair.iteration_count}/${repair.max_iterations} triggered with note: "${note.trim()}"`);
-        this.toast(`Revision Iteration ${repair.iteration_count}/${repair.max_iterations} Validated`, 'Updated patch passed all 4 sandbox regression tests and awaits approval.', 'info');
-        this.saveState();
-        this.render();
       }
 
       async createPullRequestOrExport(repairId) {
@@ -1696,10 +1680,20 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         this.render();
       }
 
-      downloadUnifiedPatchFile(repair) {
+      downloadUnifiedPatchFile(repairOrId) {
+        let repair = repairOrId;
+        if (typeof repairOrId === 'string') {
+          repair = this.db.repairs.find(r => r.id === repairOrId) || this.db.repairs[0];
+        } else if (!repair) {
+          repair = this.db.repairs.find(r => r.id === this.selectedRepairId) || this.db.repairs[0];
+        }
+        if (!repair) {
+          this.toast('Export Failed', 'No repair artifact available to export.', 'error');
+          return;
+        }
         const unifiedDiff = [
           `From ${computeContentHash(repair.proposed_code).replace('sha256:', '')} Mon Sep 17 00:00:00 2001`,
-          `From: AutoPatch Self-Healing Bot <autopatch@acme.internal>`,
+          `From: Sarthi Self-Healing Bot <sarthi@enterprise.internal>`,
           `Date: ${new Date().toUTCString()}`,
           `Subject: [PATCH] fix(commerce-adapter): support v2.2 camelCase customerId field (${repair.incident_id})`,
           ``,
@@ -1894,6 +1888,78 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         }, 5500);
       }
 
+      openModal(titleHtml, contentHtml, onConfirm, confirmText = 'Confirm', confirmStyle = 'primary') {
+        const backdrop = document.getElementById('modal-backdrop');
+        const content = document.getElementById('modal-content');
+        if (!backdrop || !content) return;
+
+        const confirmBtnClass = confirmStyle === 'danger'
+          ? 'bg-rose-600 hover:bg-rose-500 text-white'
+          : confirmStyle === 'warning'
+            ? 'bg-amber-600 hover:bg-amber-500 text-white'
+            : 'bg-indigo-600 hover:bg-indigo-500 text-white';
+
+        content.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <h3 class="text-sm font-bold text-white tracking-tight flex items-center gap-2">
+              ${titleHtml}
+            </h3>
+            <button type="button" onclick="window.AutoPatchApp.closeModal()" class="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div class="space-y-4 text-xs text-slate-300">
+            ${contentHtml}
+          </div>
+          <div class="flex items-center justify-end gap-2.5 pt-4 mt-5 border-t border-slate-800">
+            <button type="button" onclick="window.AutoPatchApp.closeModal()" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition text-xs">
+              Cancel
+            </button>
+            <button type="button" id="modal-confirm-btn" class="px-4 py-2 rounded-lg font-semibold shadow-sm transition text-xs ${confirmBtnClass}">
+              ${confirmText}
+            </button>
+          </div>
+        `;
+
+        backdrop.classList.remove('hidden');
+        backdrop.classList.add('flex');
+
+        if (window.lucide) window.lucide.createIcons();
+
+        const confirmBtn = document.getElementById('modal-confirm-btn');
+        if (confirmBtn) {
+          confirmBtn.onclick = () => {
+            if (onConfirm) {
+              const res = onConfirm();
+              if (res !== false) {
+                this.closeModal();
+              }
+            } else {
+              this.closeModal();
+            }
+          };
+        }
+
+        backdrop.onclick = (e) => {
+          if (e.target === backdrop) {
+            this.closeModal();
+          }
+        };
+
+        setTimeout(() => {
+          const firstInput = content.querySelector('input, textarea, select');
+          if (firstInput) firstInput.focus();
+        }, 50);
+      }
+
+      closeModal() {
+        const backdrop = document.getElementById('modal-backdrop');
+        if (backdrop) {
+          backdrop.classList.add('hidden');
+          backdrop.classList.remove('flex');
+        }
+      }
+
       /***********************************************************************
        * PAGE RENDERERS
        ***********************************************************************/
@@ -1965,13 +2031,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.12]">
                 When external APIs break, <br class="hidden sm:inline" />
                 <span class="bg-gradient-to-r from-indigo-400 via-violet-300 to-sky-400 bg-clip-text text-transparent">
-                  AutoPatch heals your code in seconds.
+                  Sarthi heals your code in seconds.
                 </span>
               </h1>
 
               <!-- Subtitle -->
               <p class="mt-5 text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-                Never get paged for an unexpected API schema change again. AutoPatch sits between your microservices and external vendors to detect contract drift, generate backwards-compatible adapter fixes from official docs, run isolated sandbox tests, and hand your team a verified patch.
+                Never get paged for an unexpected API schema change again. <strong>Sarthi</strong> (सारथी — powered by the AutoPatch engine) sits transparently between your microservices and external vendors to detect contract drift in &lt;180ms, synthesize backward-compatible adapter patches from official docs, run isolated non-root sandbox regression tests, and deliver verified Pull Requests ready to merge.
               </p>
 
               <!-- HERO ACTION BUTTONS (Only 2 Clean Buttons) -->
@@ -2747,36 +2813,86 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
       openAddIntegrationModal() {
         if (!this.requireRole(['Admin'], 'Register New Integration')) return;
-        const name = prompt('Integration Name:', 'Twilio SMS Dispatch API');
-        if (!name) return;
-        const provider = prompt('Provider Name:', 'Twilio');
-        const baseUrl = prompt('Upstream Base URL:', 'https://api.twilio.com');
-        const newId = 'int_custom_' + (this.db.integrations.length + 1);
 
-        this.db.integrations.push({
-          id: newId,
-          workspace_id: this.db.workspace.id,
-          name,
-          provider: provider || 'CustomProvider',
-          base_url: baseUrl || 'https://api.example.com',
-          proxy_route: `/proxy/${newId}/v1/messages`,
-          health_route: '/v1/health',
-          auth_method: 'Bearer Token (Vault Ref: sec_cust_801)',
-          repository: 'acme-corp/notifications-service',
-          target_adapter_file: 'src/adapters/notification_adapter.py',
-          status: 'HEALTHY',
-          monitoring_paused: false,
-          latency_threshold_ms: 500,
-          error_rate_threshold_pct: 5.0,
-          active_contract_version: 'v1.0.0',
-          doc_ingestion_status: 'INDEXED',
-          last_success_at: new Date().toISOString(),
-          last_incident_at: null
-        });
-        this.recordAudit('INTEGRATION_REGISTERED', newId, 'SUCCESS', `Registered ${name} (${baseUrl})`);
-        this.toast('Integration Registered', `Proxy route /proxy/${newId}/v1/messages is now active.`, 'success');
-        this.saveState();
-        this.render();
+        const html = `
+          <div class="space-y-3 font-sans">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Integration Name</label>
+              <input id="modal-int-name" type="text" value="Twilio SMS Dispatch API" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Provider</label>
+                <input id="modal-int-provider" type="text" value="Twilio" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              </div>
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Contract Version</label>
+                <input id="modal-int-version" type="text" value="v1.0.0" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Upstream Base URL</label>
+              <input id="modal-int-baseurl" type="text" value="https://api.twilio.com" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Target Adapter File</label>
+              <input id="modal-int-adapter" type="text" value="src/adapters/notification_adapter.py" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+            </div>
+          </div>
+        `;
+
+        this.openModal(
+          '<i data-lucide="plus-circle" class="w-4 h-4 text-indigo-400"></i> Register New API Integration',
+          html,
+          () => {
+            const nameEl = document.getElementById('modal-int-name');
+            const providerEl = document.getElementById('modal-int-provider');
+            const baseUrlEl = document.getElementById('modal-int-baseurl');
+            const versionEl = document.getElementById('modal-int-version');
+            const adapterEl = document.getElementById('modal-int-adapter');
+
+            const name = nameEl ? nameEl.value.trim() : '';
+            const provider = providerEl ? providerEl.value.trim() || 'CustomProvider' : 'CustomProvider';
+            const baseUrl = baseUrlEl ? baseUrlEl.value.trim() || 'https://api.example.com' : 'https://api.example.com';
+            const version = versionEl ? versionEl.value.trim() || 'v1.0.0' : 'v1.0.0';
+            const adapterFile = adapterEl ? adapterEl.value.trim() || 'src/adapters/custom_adapter.py' : 'src/adapters/custom_adapter.py';
+
+            if (!name) {
+              this.toast('Validation Error', 'Integration name is required.', 'error');
+              return false;
+            }
+
+            const newId = 'int_custom_' + (this.db.integrations.length + 1);
+            this.db.integrations.push({
+              id: newId,
+              workspace_id: this.db.workspace.id,
+              name,
+              provider,
+              base_url: baseUrl,
+              proxy_route: `/proxy/${newId}/v1/messages`,
+              health_route: '/v1/health',
+              auth_method: 'Bearer Token (Vault Ref: sec_cust_801)',
+              repository: 'acme-corp/notifications-service',
+              target_adapter_file: adapterFile,
+              status: 'HEALTHY',
+              monitoring_paused: false,
+              latency_threshold_ms: 500,
+              error_rate_threshold_pct: 5.0,
+              active_contract_version: version,
+              doc_ingestion_status: 'INDEXED',
+              last_success_at: new Date().toISOString(),
+              last_incident_at: null
+            });
+
+            this.recordAudit('INTEGRATION_REGISTERED', newId, 'SUCCESS', `Registered ${name} (${baseUrl})`);
+            this.toast('Integration Registered', `Proxy route /proxy/${newId}/v1/messages is now active.`, 'success');
+            this.saveState();
+            this.render();
+            return true;
+          },
+          'Register Integration',
+          'primary'
+        );
       }
 
       // PAGE 3: INCIDENT EXPLORER
@@ -3100,7 +3216,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                     <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-amber-400"></i> Request Revision (${repair.iteration_count}/${repair.max_iterations})
                   </button>
 
-                  <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile(window.AutoPatchApp.db.repairs.find(r=>r.id==='${repair.id}'))" class="px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile('${repair.id}')" class="px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5">
                     <i data-lucide="download" class="w-3.5 h-3.5 text-sky-400"></i> Export .patch
                   </button>
 
@@ -3325,42 +3441,89 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
       openIngestDocModal() {
         if (!this.requireRole(['Admin', 'Operator'], 'Ingest Documentation Source')) return;
-        const title = prompt('Documentation Title:', 'CommerceCore v2.3 Webhook Deprecation Notice');
-        if (!title) return;
-        const content = prompt('Paste Markdown or OpenAPI excerpt:', 'In v2.3, customerId remains primary key and loyalty_tier is promoted to required.');
-        if (!content) return;
 
-        const hash = computeContentHash(content);
-        const existing = this.db.documentation_sources.find(d => d.content_hash === hash);
-        if (existing) {
-          this.toast('Deduplication Guard Triggered', `Document hash ${hash} is unchanged. Skipped redundant embedding generation.`, 'info');
-          return;
-        }
+        const html = `
+          <div class="space-y-3 font-sans">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Documentation Title</label>
+              <input id="modal-doc-title" type="text" value="CommerceCore v2.3 Webhook Deprecation Notice" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Document Type</label>
+                <select id="modal-doc-type" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500">
+                  <option value="MIGRATION_GUIDE">MIGRATION_GUIDE</option>
+                  <option value="OPENAPI_SPEC">OPENAPI_SPEC</option>
+                  <option value="RELEASE_NOTES">RELEASE_NOTES</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Target Version</label>
+                <input id="modal-doc-version" type="text" value="v2.3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Markdown / OpenAPI Specification Content</label>
+              <textarea id="modal-doc-content" rows="4" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono text-xs focus:outline-none focus:border-indigo-500">In API v2.3, customerId remains the primary key and loyalty_tier is promoted to required enum: [TIER_1, TIER_2, VIP]. Dual compatibility fallback must be retained.</textarea>
+            </div>
+          </div>
+        `;
 
-        this.db.documentation_sources.unshift({
-          id: 'doc_custom_' + (this.db.documentation_sources.length + 1),
-          integration_id: 'int_commerce_01',
-          provider: 'CommerceCore',
-          title,
-          source_url: 'https://docs.commercecore.internal/custom-upload',
-          doc_type: 'MIGRATION_GUIDE',
-          version: 'v2.3',
-          ingested_at: new Date().toISOString(),
-          content,
-          content_hash: hash,
-          chunks: [
-            {
-              chunk_id: 'chk_cust_' + Date.now(),
-              text: content,
-              keywords: content.toLowerCase().split(/\W+/).filter(Boolean)
+        this.openModal(
+          '<i data-lucide="upload-cloud" class="w-4 h-4 text-sky-400"></i> Ingest Documentation Source into Qdrant RAG',
+          html,
+          () => {
+            const titleEl = document.getElementById('modal-doc-title');
+            const docTypeEl = document.getElementById('modal-doc-type');
+            const versionEl = document.getElementById('modal-doc-version');
+            const contentEl = document.getElementById('modal-doc-content');
+
+            const title = titleEl ? titleEl.value.trim() : '';
+            const docType = docTypeEl ? docTypeEl.value : 'MIGRATION_GUIDE';
+            const version = versionEl ? versionEl.value.trim() || 'v1.0' : 'v1.0';
+            const content = contentEl ? contentEl.value.trim() : '';
+
+            if (!title || !content) {
+              this.toast('Validation Error', 'Title and content are required.', 'error');
+              return false;
             }
-          ]
-        });
 
-        this.recordAudit('DOCUMENTATION_INGESTED', title, 'SUCCESS', `Ingested and embedded with content hash ${hash}`);
-        this.toast('Documentation Indexed into Qdrant', `Chunked and embedded with hash ${hash}.`, 'success');
-        this.saveState();
-        this.render();
+            const hash = computeContentHash(content);
+            const existing = this.db.documentation_sources.find(d => d.content_hash === hash);
+            if (existing) {
+              this.toast('Deduplication Guard Triggered', `Document hash ${hash} is already indexed. Skipped redundant embedding generation.`, 'info');
+              return true;
+            }
+
+            this.db.documentation_sources.unshift({
+              id: 'doc_custom_' + (this.db.documentation_sources.length + 1),
+              integration_id: 'int_commerce_01',
+              provider: 'CommerceCore',
+              title,
+              source_url: 'https://docs.commercecore.internal/custom-upload',
+              doc_type: docType,
+              version,
+              ingested_at: new Date().toISOString(),
+              content,
+              content_hash: hash,
+              chunks: [
+                {
+                  chunk_id: 'chk_cust_' + Date.now(),
+                  text: content,
+                  keywords: content.toLowerCase().split(/\W+/).filter(Boolean)
+                }
+              ]
+            });
+
+            this.recordAudit('DOCUMENTATION_INGESTED', title, 'SUCCESS', `Ingested and embedded into Qdrant collection with hash ${hash}`);
+            this.toast('Documentation Indexed into Qdrant', `Chunked and embedded with hash ${hash}.`, 'success');
+            this.saveState();
+            this.render();
+            return true;
+          },
+          'Ingest & Vectorize',
+          'primary'
+        );
       }
 
       // PAGE 7: ANALYTICS & COST
@@ -3571,7 +3734,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 <p class="text-xs text-slate-400">Run the automated 14-step acceptance test suite directly in the browser and inspect the modular Python/FastAPI/LangGraph/Docker implementation.</p>
               </div>
               <button onclick="window.AutoPatchApp.execute14StepAcceptanceVerification()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow">
-                <i data-lucide="check-Check" class="w-4 h-4"></i> Run 14-Step Acceptance Test Suite
+                <i data-lucide="check-check" class="w-4 h-4"></i> Run 14-Step Acceptance Test Suite
               </button>
             </div>
 
@@ -3769,6 +3932,12 @@ class EphemeralSandboxRunner:
     window.addEventListener('DOMContentLoaded', () => {
       window.AutoPatchApp = new AutoPatchController();
       window.AutoPatchApp.render();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && window.AutoPatchApp) {
+        window.AutoPatchApp.closeModal();
+      }
     });
   </script>
 </body>
