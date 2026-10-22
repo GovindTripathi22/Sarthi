@@ -108,6 +108,13 @@ async def root(request: Request):
     }
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    # Return 204 No Content for favicon requests
+    from fastapi import Response
+    return Response(status_code=204)
+
+
 @app.get("/app", include_in_schema=False)
 @app.get("/ui", include_in_schema=False)
 @app.get("/index.html", include_in_schema=False)
