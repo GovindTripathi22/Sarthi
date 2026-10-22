@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" fill="none">
+  <defs>
+    <linearGradient id="sarthiLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#E4E4E7"/>
+      <stop offset="100%" stop-color="#71717A"/>
+    </linearGradient>
+    <linearGradient id="sarthiBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.08)"/>
+    </linearGradient>
+    <filter id="sarthiGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.5" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="36" height="36" rx="9" fill="#09090B"/>
+  <rect x="0.6" y="0.6" width="34.8" height="34.8" rx="8.4" stroke="url(#sarthiBorderGrad)" stroke-width="1.2"/>
+  <!-- Dynamic Sarthi Charioteer S Curve -->
+  <path d="M25 10.5C23.2 8.5 20.2 7.5 17.5 7.5C13 7.5 10 10.2 10 13.8C10 17.8 15 18.8 18 19.8C22 20.8 26 22 26 26.2C26 29.8 22.2 32.5 17.5 32.5C13.5 32.5 10.5 31 8.8 28.5" stroke="url(#sarthiLogoGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Guidance Forward Vector Tip -->
+  <path d="M21.5 6.5L26.5 10.5L21.5 14.5" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Self-Healing Pulse Quantum Core -->
+  <circle cx="18" cy="19.8" r="2.8" fill="#10B981" filter="url(#sarthiGlow)"/>
+  <circle cx="18" cy="19.8" r="1.2" fill="#FFFFFF"/>
+</svg>

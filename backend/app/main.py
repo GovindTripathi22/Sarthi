@@ -121,9 +121,19 @@ async def root(request: Request):
     return response
 
 
+from fastapi.staticfiles import StaticFiles
+
+static_dir = Path(__file__).resolve().parent.parent.parent / "static"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+
+
 @app.get("/favicon.ico", include_in_schema=False)
+@app.get("/logo.svg", include_in_schema=False)
 async def favicon():
-    # Return 204 No Content for favicon requests
+    svg_path = static_dir / "logo.svg"
+    if svg_path.exists():
+        return FileResponse(svg_path, media_type="image/svg+xml")
     from fastapi import Response
     return Response(status_code=204)
 
