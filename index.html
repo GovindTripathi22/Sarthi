@@ -8,6 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%2309090B'/%3E%3Crect x='0.6' y='0.6' width='34.8' height='34.8' rx='8.4' stroke='rgba(255,255,255,0.3)' stroke-width='1.2'/%3E%3Cpath d='M25 10.5C23.2 8.5 20.2 7.5 17.5 7.5C13 7.5 10 10.2 10 13.8C10 17.8 15 18.8 18 19.8C22 20.8 26 22 26 26.2C26 29.8 22.2 32.5 17.5 32.5C13.5 32.5 10.5 31 8.8 28.5' stroke='%23FFFFFF' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M21.5 6.5L26.5 10.5L21.5 14.5' stroke='%23FFFFFF' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='18' cy='19.8' r='2.8' fill='%2310B981'/%3E%3Ccircle cx='18' cy='19.8' r='1.2' fill='%23FFFFFF'/%3E%3C/svg%3E" />
   <title>Sarthi — AI-Powered Self-Healing API & Integration Middleware</title>
   <script>
     // Clean up any stale ServiceWorkers and cached assets from other projects on localhost:8000
@@ -291,8 +292,37 @@
   <header class="sticky top-0 z-40 h-16 bg-[#050507]/90 backdrop-blur-xl border-b border-white/[0.08] px-4 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 select-none">
     <!-- Brand Logo -->
     <div class="flex items-center gap-3 cursor-pointer group" onclick="window.AutoPatchApp.navigate('home')">
-      <div class="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 group-hover:shadow-[0_0_22px_rgba(255,255,255,0.4)] transition-all duration-200">
-        <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
+      <!-- Custom Sarthi Vector Emblem -->
+      <div class="relative flex items-center justify-center">
+        <svg class="w-8 h-8 shrink-0 group-hover:scale-105 transition-all duration-200 drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sarthiLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="60%" stop-color="#E4E4E7"/>
+              <stop offset="100%" stop-color="#71717A"/>
+            </linearGradient>
+            <linearGradient id="sarthiBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.08)"/>
+            </linearGradient>
+            <filter id="sarthiGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="1.5" result="glow"/>
+              <feMerge>
+                <feMergeNode in="glow"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <rect width="36" height="36" rx="9" fill="#09090B"/>
+          <rect x="0.6" y="0.6" width="34.8" height="34.8" rx="8.4" stroke="url(#sarthiBorderGrad)" stroke-width="1.2"/>
+          <!-- Dynamic Sarthi Charioteer S Curve -->
+          <path d="M25 10.5C23.2 8.5 20.2 7.5 17.5 7.5C13 7.5 10 10.2 10 13.8C10 17.8 15 18.8 18 19.8C22 20.8 26 22 26 26.2C26 29.8 22.2 32.5 17.5 32.5C13.5 32.5 10.5 31 8.8 28.5" stroke="url(#sarthiLogoGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Guidance Forward Vector Tip -->
+          <path d="M21.5 6.5L26.5 10.5L21.5 14.5" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Self-Healing Pulse Quantum Core -->
+          <circle cx="18" cy="19.8" r="2.8" fill="#10B981" filter="url(#sarthiGlow)"/>
+          <circle cx="18" cy="19.8" r="1.2" fill="#FFFFFF"/>
+        </svg>
       </div>
       <div>
         <div class="flex items-center gap-2">
