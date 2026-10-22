@@ -364,19 +364,14 @@
 
       <div class="p-3 space-y-1 overflow-y-auto">
 
-        <!-- Return to Website Button -->
-
-        <button onclick="window.AutoPatchApp.navigate('home')" class="w-full mb-2.5 px-3 py-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-200 text-xs font-semibold flex items-center gap-2 transition-all duration-200 hover:-translate-y-0.5">
-
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
-
-          <span>← Back to Website</span>
-
-        </button>
-
-
-
-        <div class="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500">Workspace: ws_prod_01</div>
+        <!-- Workspace Identifier Header -->
+        <div class="p-3 mb-2 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-semibold text-white tracking-tight">Acme FinTech Core</span>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-zinc-400 border border-white/10 font-medium">ws_prod_01</span>
+        </div>
 
         
 
@@ -2082,21 +2077,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
         if (modeBadge) {
-
           if (this.db.workspace.llm_config.provider !== 'deterministic_demo' && this.db.workspace.llm_config.api_key_masked) {
-
-            modeBadge.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1';
-
-            modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> LIVE LLM CONFIGURED (${this.db.workspace.llm_config.provider})`;
-
+            modeBadge.className = 'hidden xl:flex text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 items-center gap-1.5';
+            modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live LLM`;
           } else {
-
-            modeBadge.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1';
-
-            modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> DEMO MODE (LOCAL DETERMINISTIC)`;
-
+            modeBadge.className = 'hidden xl:flex text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-white/[0.04] text-zinc-400 border border-white/10 items-center gap-1.5';
+            modeBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span> Demo Mode`;
           }
-
         }
 
 
@@ -2176,15 +2163,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         // Highlight active nav item
 
         document.querySelectorAll('.nav-btn').forEach(btn => {
-
           const isTarget = btn.getAttribute('data-nav') === this.currentPage;
-
           btn.className = isTarget
-
-            ? 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-200'
-
-            : 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all duration-200';
-
+            ? 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold bg-white/[0.08] text-white border border-white/15 shadow-[0_0_15px_rgba(255,255,255,0.06)] transition-all duration-200'
+            : 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03] transition-all duration-200 border border-transparent';
         });
 
       }
@@ -5022,496 +5004,267 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
       // PAGE 1: OVERVIEW DASHBOARD
 
       renderDashboardPage() {
-
         const m = this.computeMetrics();
-
         const recentEvents = this.db.request_events.slice(0, 8);
 
-
-
         return `
-
-          <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
-
+          <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8 select-text">
             <!-- Top Header & Time Filter -->
-
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
               <div>
-
-                <h1 class="text-lg font-bold text-white tracking-tight">Infrastructure & Self-Healing Overview</h1>
-
-                <p class="text-xs text-slate-400">Live telemetry computed from persisted proxy gateway events, contract validators, and LangGraph checkpoints.</p>
-
+                <h1 class="text-xl font-bold text-white tracking-tight">System Telemetry & Self-Healing Overview</h1>
+                <p class="text-xs text-zinc-400 mt-0.5">Real-time gateway event logging, contract drift detection, and LangGraph autonomous repair telemetry.</p>
               </div>
-
               <div class="flex items-center gap-2">
-
-                <div class="inline-flex rounded-md bg-slate-900 border border-slate-800 p-0.5 text-xs font-mono">
-
+                <div class="inline-flex rounded-lg bg-zinc-950/80 border border-white/10 p-1 text-xs font-mono shadow-sm">
                   ${['1h', '24h', '7d', '30d'].map(rng => `
-
-                    <button onclick="window.AutoPatchApp.selectedTimeRange='${rng}'; window.AutoPatchApp.render();" class="px-2.5 py-1 rounded ${this.selectedTimeRange === rng ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-400 hover:text-slate-200'}">${rng}</button>
-
+                    <button onclick="window.AutoPatchApp.selectedTimeRange='${rng}'; window.AutoPatchApp.render();" class="px-3 py-1 rounded-md transition-all duration-200 ${this.selectedTimeRange === rng ? 'bg-white text-black font-semibold shadow-[0_0_12px_rgba(255,255,255,0.25)]' : 'text-zinc-400 hover:text-white hover:bg-white/[0.04]'}">${rng}</button>
                   `).join('')}
-
                 </div>
-
               </div>
-
             </div>
-
-
 
             <!-- Interactive Alert Banner when Drift is Active or Incident Open -->
-
             ${this.db.incidents.some(i => i.status !== 'DEPLOYED') ? `
-
-              <div class="p-4 rounded-xl bg-rose-950/30 border border-rose-500/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-
-                <div class="flex items-start gap-3">
-
-                  <div class="p-2 rounded-lg bg-rose-500/20 text-rose-400 mt-0.5">
-
+              <div class="p-4 sm:p-5 rounded-2xl border border-rose-500/30 bg-gradient-to-r from-rose-950/20 via-zinc-950 to-zinc-950 shadow-xl shadow-rose-950/20 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-start gap-3.5">
+                  <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
                     <i data-lucide="alert-octagon" class="w-5 h-5"></i>
-
                   </div>
-
-                  <div>
-
-                    <div class="text-xs font-mono uppercase tracking-wider text-rose-300 font-semibold">Active Integration Incident Detected (${this.db.incidents[0].id})</div>
-
-                    <div class="text-sm font-semibold text-white mt-0.5">${this.db.incidents[0].integration_name} — ${this.db.incidents[0].failure_type} on <code class="font-mono text-rose-300">${this.db.incidents[0].endpoint}</code></div>
-
-                    <p class="text-xs text-slate-300 mt-1">${this.db.incidents[0].error_trace}</p>
-
+                  <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-rose-300 bg-rose-500/20 px-2.5 py-0.5 rounded-full border border-rose-500/30">Active Incident • ${this.db.incidents[0].id}</span>
+                      <span class="text-xs font-mono text-zinc-400">${this.db.incidents[0].failure_type}</span>
+                    </div>
+                    <div class="text-sm font-semibold text-white">
+                      ${this.db.incidents[0].integration_name} <span class="text-zinc-500">→</span> <code class="font-mono text-rose-300 text-xs px-1.5 py-0.5 rounded bg-zinc-900 border border-white/10">${this.db.incidents[0].endpoint}</code>
+                    </div>
+                    <p class="text-xs text-zinc-400 font-mono">${this.db.incidents[0].error_trace}</p>
                   </div>
-
                 </div>
-
-                <div class="flex items-center gap-2 shrink-0">
-
-                  <button onclick="window.AutoPatchApp.startOrResumeRepair('${this.db.incidents[0].id}')" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow flex items-center gap-1.5">
-
-                    <i data-lucide="cpu" class="w-4 h-4"></i>
-
-                    <span>${this.db.repairs.length > 0 ? 'Open AI Repair Workbench' : 'Launch LangGraph Diagnosis & Repair'}</span>
-
+                <div class="flex items-center gap-2.5 shrink-0">
+                  <button onclick="window.AutoPatchApp.startOrResumeRepair('${this.db.incidents[0].id}')" class="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-semibold shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-2">
+                    <i data-lucide="cpu" class="w-4 h-4 text-black"></i>
+                    <span>${this.db.repairs.length > 0 ? 'Open AI Repair Workbench' : 'Run LangGraph Self-Healing'}</span>
                   </button>
-
                 </div>
-
               </div>
-
             ` : `
-
-              <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-
-                <div class="flex items-center gap-3">
-
-                  <div class="p-2 rounded-lg bg-emerald-500/15 text-emerald-400">
-
+              <div class="p-4 sm:p-5 rounded-2xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
                     <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-
                   </div>
-
                   <div>
-
                     <div class="text-sm font-semibold text-white">All ${m.monitoredIntegrations} Registered API Integrations Operating Within Contract Thresholds</div>
-
-                    <p class="text-xs text-slate-400">Click <strong class="text-rose-400">Simulate API Drift</strong> in the top bar to inject a realistic v2.2 breaking schema change (<code class="font-mono">customer_id</code> → <code class="font-mono">customerId</code>) and trigger AutoPatch.</p>
-
+                    <p class="text-xs text-zinc-400 mt-0.5">Proxy gateway actively validating responses against registered OpenAPI schemas in &lt;180ms.</p>
                   </div>
-
                 </div>
-
-                <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-3.5 py-2 rounded-lg bg-rose-600/90 hover:bg-rose-500 text-white text-xs font-semibold shrink-0 flex items-center gap-1.5">
-
-                  <i data-lucide="zap" class="w-4 h-4"></i> Trigger Schema Drift Now
-
+                <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 text-xs font-semibold shrink-0 flex items-center gap-2 transition-all duration-200 hover:-translate-y-0.5">
+                  <i data-lucide="zap" class="w-4 h-4 text-zinc-300"></i>
+                  <span>Inject Test Schema Drift</span>
                 </button>
-
               </div>
-
             `}
 
-
-
-            <!-- Primary KPI Grid (12 Persisted Metrics) -->
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-
-              <div class="p-3.5 rounded-lg bg-slate-900/90 border border-slate-800">
-
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-
-                  <span>Integrations Health</span>
-
-                  <i data-lucide="network" class="w-3.5 h-3.5 text-indigo-400"></i>
-
+            <!-- Primary KPI Grid (6 Cohesive Cards with Breathable Spacing) -->
+            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
+              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
+                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
+                  <span>Integrations</span>
+                  <i data-lucide="network" class="w-3.5 h-3.5 text-zinc-400"></i>
                 </div>
-
-                <div class="text-xl font-bold font-mono text-white mt-1.5">${m.healthyIntegrations}/${m.monitoredIntegrations}</div>
-
-                <div class="text-[10px] font-mono text-emerald-400 mt-1">Explicit Proxy Routes</div>
-
+                <div class="text-2xl font-bold font-mono text-white mt-2">${m.healthyIntegrations}/${m.monitoredIntegrations}</div>
+                <div class="text-[11px] font-mono text-emerald-400 mt-1.5 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Active Routes
+                </div>
               </div>
 
-
-
-              <div class="p-3.5 rounded-lg bg-slate-900/90 border border-slate-800">
-
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-
+              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
+                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
                   <span>Requests (${this.selectedTimeRange})</span>
-
-                  <i data-lucide="activity" class="w-3.5 h-3.5 text-sky-400"></i>
-
+                  <i data-lucide="activity" class="w-3.5 h-3.5 text-zinc-400"></i>
                 </div>
-
-                <div class="text-xl font-bold font-mono text-white mt-1.5">${m.totalRequests}</div>
-
-                <div class="text-[10px] font-mono ${m.failedRequests > 0 ? 'text-rose-400' : 'text-slate-400'} mt-1">${m.failedRequests} failed (${m.failureRatePct}%)</div>
-
+                <div class="text-2xl font-bold font-mono text-white mt-2">${m.totalRequests}</div>
+                <div class="text-[11px] font-mono ${m.failedRequests > 0 ? 'text-rose-400' : 'text-zinc-400'} mt-1.5 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full ${m.failedRequests > 0 ? 'bg-rose-400' : 'bg-zinc-400'}"></span> ${m.failedRequests} drifted (${m.failureRatePct}%)
+                </div>
               </div>
 
-
-
-              <div class="p-3.5 rounded-lg bg-slate-900/90 border border-slate-800">
-
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-
-                  <span>Schema-Drift Events</span>
-
-                  <i data-lucide="file-warning" class="w-3.5 h-3.5 text-amber-400"></i>
-
+              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
+                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
+                  <span>Drift Incidents</span>
+                  <i data-lucide="file-warning" class="w-3.5 h-3.5 ${m.schemaDriftEvents > 0 ? 'text-amber-400' : 'text-zinc-400'}"></i>
                 </div>
-
-                <div class="text-xl font-bold font-mono ${m.schemaDriftEvents > 0 ? 'text-amber-400' : 'text-white'} mt-1.5">${m.schemaDriftEvents}</div>
-
-                <div class="text-[10px] font-mono text-slate-400 mt-1">${m.openIncidents} Open Incident(s)</div>
-
+                <div class="text-2xl font-bold font-mono ${m.schemaDriftEvents > 0 ? 'text-amber-400' : 'text-white'} mt-2">${m.schemaDriftEvents}</div>
+                <div class="text-[11px] font-mono text-zinc-400 mt-1.5">${m.openIncidents} Open Incident(s)</div>
               </div>
 
-
-
-              <div class="p-3.5 rounded-lg bg-slate-900/90 border border-slate-800">
-
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-
-                  <span>Awaiting Approval</span>
-
-                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-indigo-400"></i>
-
+              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
+                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
+                  <span>Human Gate</span>
+                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-zinc-400"></i>
                 </div>
-
-                <div class="text-xl font-bold font-mono ${m.awaitingApproval > 0 ? 'text-indigo-400' : 'text-white'} mt-1.5">${m.awaitingApproval}</div>
-
-                <div class="text-[10px] font-mono text-slate-400 mt-1">${m.deployedRepairs} Deployed / ${m.rejectedRepairs} Rejected</div>
-
+                <div class="text-2xl font-bold font-mono ${m.awaitingApproval > 0 ? 'text-amber-300' : 'text-white'} mt-2">${m.awaitingApproval}</div>
+                <div class="text-[11px] font-mono text-zinc-400 mt-1.5">${m.deployedRepairs} Deployed • ${m.rejectedRepairs} Declined</div>
               </div>
 
-
-
-              <div class="p-3.5 rounded-lg bg-slate-900/90 border border-slate-800">
-
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-
-                  <span>Latency (p50 / p95)</span>
-
-                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-emerald-400"></i>
-
+              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
+                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
+                  <span>Latency (p50)</span>
+                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-zinc-400"></i>
                 </div>
-
-                <div class="text-xl font-bold font-mono text-white mt-1.5">${m.p50}ms <span class="text-xs text-slate-400">/ ${m.p95}ms</span></div>
-
-                <div class="text-[10px] font-mono text-slate-400 mt-1">p99: ${m.p99}ms</div>
-
+                <div class="text-2xl font-bold font-mono text-white mt-2">${m.p50}ms</div>
+                <div class="text-[11px] font-mono text-zinc-400 mt-1.5">p95: ${m.p95}ms • p99: ${m.p99}ms</div>
               </div>
 
-
-
-              <div class="p-3.5 rounded-lg bg-slate-900/90 border border-slate-800">
-
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-
+              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
+                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
                   <span>MTTD / MTTR</span>
-
-                  <i data-lucide="clock" class="w-3.5 h-3.5 text-violet-400"></i>
-
+                  <i data-lucide="clock" class="w-3.5 h-3.5 text-zinc-400"></i>
                 </div>
-
-                <div class="text-xl font-bold font-mono text-white mt-1.5">${m.mttdMs}ms <span class="text-xs text-emerald-400">/ ${m.mttrVerifiedSec ? m.mttrVerifiedSec + 's' : 'Pending'}</span></div>
-
-                <div class="text-[10px] font-mono text-slate-400 mt-1">Est Spend: $${m.totalSpendUsd.toFixed(4)}</div>
-
+                <div class="text-2xl font-bold font-mono text-white mt-2">${m.mttdMs}ms</div>
+                <div class="text-[11px] font-mono text-emerald-400 mt-1.5">Diagnosis: ${m.mttDiagSec}s</div>
               </div>
-
             </div>
 
-
-
-            <!-- Charts Row: Request Telemetry & Latency Percentiles -->
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
+            <!-- Charts Row: Request Telemetry & Pipeline Funnel -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
               <!-- Live Request Event Stream Chart -->
-
-              <div class="lg:col-span-2 p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between">
-
-                <div class="flex items-center justify-between mb-3">
-
+              <div class="lg:col-span-2 p-5 rounded-2xl stitch-card flex flex-col justify-between">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                   <div>
-
-                    <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Proxy Request Volume & Schema Validation Outcomes</h2>
-
-                    <p class="text-[11px] text-slate-400">Each bar represents an actual persisted request event routed through <code class="font-mono">/proxy/{integration_id}/*</code></p>
-
+                    <h2 class="text-sm font-semibold text-white tracking-tight">Proxy Request Telemetry & Contract Outcomes</h2>
+                    <p class="text-xs text-zinc-400">Real-time requests routed through <code class="font-mono text-zinc-300">/proxy/{integration_id}/*</code></p>
                   </div>
-
                   <div class="flex items-center gap-3 text-[11px] font-mono">
-
-                    <span class="flex items-center gap-1 text-emerald-400"><span class="w-2 h-2 rounded-xs bg-emerald-500"></span> 200 Valid</span>
-
-                    <span class="flex items-center gap-1 text-sky-400"><span class="w-2 h-2 rounded-xs bg-sky-500"></span> 200 Patched</span>
-
-                    <span class="flex items-center gap-1 text-rose-400"><span class="w-2 h-2 rounded-xs bg-rose-500"></span> Drift / Error</span>
-
+                    <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 200 Valid</span>
+                    <span class="flex items-center gap-1.5 text-sky-400"><span class="w-2 h-2 rounded-full bg-sky-400"></span> 200 Patched</span>
+                    <span class="flex items-center gap-1.5 text-rose-400"><span class="w-2 h-2 rounded-full bg-rose-400"></span> Drift / Error</span>
                   </div>
-
                 </div>
 
-
-
-                <!-- Dynamic SVG Bar Chart built from real persisted request_events -->
-
-                <div class="h-44 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-slate-800/80">
-
+                <!-- Dynamic SVG/CSS Bar Chart with refined rounded bars and glow hover -->
+                <div class="h-44 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-white/[0.08]">
                   ${this.db.request_events.slice(0, 14).reverse().map(ev => {
-
-                    const heightPct = Math.min(100, Math.max(22, Math.round((ev.duration_ms / 260) * 100)));
-
+                    const heightPct = Math.min(100, Math.max(20, Math.round((ev.duration_ms / 260) * 100)));
                     const barColor = ev.error_classification !== 'NONE'
-
-                      ? 'bg-rose-500/80 border-rose-400'
-
+                      ? 'bg-rose-500/80 border-rose-400/80 hover:bg-rose-400'
                       : ev.schema_validation_result === 'PASS_COMPAT_PATCHED'
-
-                        ? 'bg-sky-500/80 border-sky-400'
-
-                        : 'bg-emerald-500/75 border-emerald-400';
-
+                        ? 'bg-sky-500/80 border-sky-400/80 hover:bg-sky-400'
+                        : 'bg-emerald-500/80 border-emerald-400/80 hover:bg-emerald-400';
                     return `
-
-                      <div class="flex-1 flex flex-col items-center gap-1 group relative">
-
-                        <div class="opacity-0 group-hover:opacity-100 transition bg-slate-950 border border-slate-700 text-[10px] font-mono p-1.5 rounded shadow-lg absolute -top-12 whitespace-nowrap z-20">
-
-                          ${ev.id}: ${ev.duration_ms}ms (${ev.schema_validation_result})
-
+                      <div class="flex-1 flex flex-col items-center gap-1.5 group relative">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-zinc-950 border border-white/20 text-[10px] font-mono p-2 rounded-lg shadow-xl absolute -top-14 whitespace-nowrap z-20 pointer-events-none">
+                          <span class="text-white font-semibold">${ev.id}</span> • ${ev.duration_ms}ms • ${ev.status_code} (${ev.schema_validation_result})
                         </div>
-
-                        <div class="w-full max-w-[34px] rounded-t border-t ${barColor} transition-all" style="height: ${heightPct * 1.2}px"></div>
-
-                        <span class="text-[9px] font-mono text-slate-500 truncate max-w-[44px]">${ev.id.replace('req_', '#')}</span>
-
+                        <div class="w-full max-w-[28px] rounded-t-md border-t ${barColor} transition-all duration-200" style="height: ${heightPct * 1.2}px"></div>
+                        <span class="text-[9px] font-mono text-zinc-500 truncate max-w-[40px]">${ev.id.replace('req_', '#')}</span>
                       </div>
-
                     `;
-
                   }).join('')}
-
                 </div>
 
-                <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2">
-
-                  <span>Showing ${Math.min(14, this.db.request_events.length)} most recent persisted gateway events</span>
-
-                  <button onclick="window.AutoPatchApp.sendProxyRequest()" class="text-indigo-400 hover:text-indigo-300 font-mono text-xs">+ Emit Live Proxy Request</button>
-
+                <div class="flex items-center justify-between text-xs text-zinc-400 pt-3">
+                  <span>Showing ${Math.min(14, this.db.request_events.length)} most recent persisted gateway requests</span>
+                  <button onclick="window.AutoPatchApp.sendProxyRequest()" class="text-zinc-200 hover:text-white font-medium flex items-center gap-1 transition-colors">
+                    <i data-lucide="play" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    <span>Emit Live Proxy Request</span>
+                  </button>
                 </div>
-
               </div>
 
-
-
-              <!-- Incident & Repair Pipeline Summary Card -->
-
-              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between space-y-4">
-
+              <!-- Pipeline Funnel Card -->
+              <div class="p-5 rounded-2xl stitch-card flex flex-col justify-between space-y-4">
                 <div>
-
-                  <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Self-Healing Pipeline Funnel</h2>
-
-                  <p class="text-[11px] text-slate-400">Real-time distribution of incidents across LangGraph checkpoints</p>
-
+                  <h2 class="text-sm font-semibold text-white tracking-tight">Self-Healing Pipeline Stages</h2>
+                  <p class="text-xs text-zinc-400">Incident lifecycle across LangGraph checkpoints</p>
                 </div>
-
-
 
                 <div class="space-y-2.5 text-xs">
-
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-950/60 border border-slate-800/80">
-
-                    <span class="text-slate-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-400"></span> Detected / Investigating</span>
-
-                    <span class="font-mono font-bold text-white">${this.db.incidents.filter(i => i.status === 'DETECTED').length}</span>
-
+                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-400"></span> 1. Drift Interception</span>
+                    <span class="font-mono font-bold text-rose-300">${this.db.incidents.filter(i => i.status !== 'DEPLOYED').length}</span>
                   </div>
 
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-950/60 border border-slate-800/80">
-
-                    <span class="text-slate-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Awaiting Human Approval (Node 9)</span>
-
+                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span> 2. Awaiting Human Gate</span>
                     <span class="font-mono font-bold text-amber-300">${this.db.repairs.filter(r => r.workflow_state === 'AWAITING_APPROVAL').length}</span>
-
                   </div>
 
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-950/60 border border-slate-800/80">
-
-                    <span class="text-slate-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-400"></span> Approved / PR Created (Node 10)</span>
-
-                    <span class="font-mono font-bold text-indigo-300">${this.db.repairs.filter(r => r.workflow_state === 'APPROVED_READY_FOR_PR' || r.workflow_state === 'PR_CREATED').length}</span>
-
+                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-sky-400"></span> 3. Approved / PR Created</span>
+                    <span class="font-mono font-bold text-sky-300">${this.db.repairs.filter(r => r.workflow_state === 'PR_CREATED' || r.pr_number).length}</span>
                   </div>
 
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-950/60 border border-slate-800/80">
-
-                    <span class="text-slate-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Production Deployed & Verified</span>
-
+                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
+                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 4. Deployed & Verified</span>
                     <span class="font-mono font-bold text-emerald-400">${this.db.repairs.filter(r => r.workflow_state === 'DEPLOYED').length}</span>
-
                   </div>
-
                 </div>
 
-
-
-                <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-
-                  <span>Mean Time To Diagnose: <strong class="text-slate-200 font-mono">${m.mttDiagSec}s</strong></span>
-
+                <div class="pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] text-zinc-400">
+                  <span>Mean Diagnosis: <strong class="text-zinc-200 font-mono">${m.mttDiagSec}s</strong></span>
                   <span>Sandbox Pass Rate: <strong class="text-emerald-400 font-mono">100%</strong></span>
-
                 </div>
-
               </div>
-
             </div>
-
-
 
             <!-- Live Gateway Observability Stream Table -->
-
-            <div class="rounded-xl bg-slate-900/90 border border-slate-800 overflow-hidden">
-
-              <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-
+            <div class="rounded-2xl stitch-card overflow-hidden">
+              <div class="px-5 py-4 border-b border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-
-                  <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Recent API Gateway Request Events (Sanitized Telemetry)</h2>
-
-                  <p class="text-[11px] text-slate-400">Authorization headers, API keys, and tokens are automatically redacted prior to persistence.</p>
-
+                  <h2 class="text-sm font-semibold text-white tracking-tight">Recent Gateway Request Telemetry (Sanitized)</h2>
+                  <p class="text-xs text-zinc-400">Authorization headers, tokens, and secrets are automatically redacted before persistence.</p>
                 </div>
-
-                <span class="text-[11px] font-mono text-slate-400">Route: /proxy/{integration_id}/{path}</span>
-
+                <span class="text-xs font-mono text-zinc-400 bg-white/[0.04] px-2.5 py-1 rounded-md border border-white/10">Route: /proxy/{id}/*</span>
               </div>
-
               <div class="overflow-x-auto">
-
                 <table class="w-full text-left border-collapse text-xs">
-
                   <thead>
-
-                    <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-slate-950/50">
-
-                      <th class="py-2.5 px-3">Correlation ID</th>
-
-                      <th class="py-2.5 px-3">Integration & Route</th>
-
-                      <th class="py-2.5 px-3">Status</th>
-
-                      <th class="py-2.5 px-3">Latency</th>
-
-                      <th class="py-2.5 px-3">Contract Validation</th>
-
-                      <th class="py-2.5 px-3">Redacted Sample</th>
-
-                      <th class="py-2.5 px-3 text-right">Timestamp</th>
-
+                    <tr class="border-b border-white/[0.08] text-[11px] font-mono uppercase text-zinc-400 bg-white/[0.02]">
+                      <th class="py-3 px-4">Correlation ID</th>
+                      <th class="py-3 px-4">Integration & Route</th>
+                      <th class="py-3 px-4">Status</th>
+                      <th class="py-3 px-4">Latency</th>
+                      <th class="py-3 px-4">Contract Validation</th>
+                      <th class="py-3 px-4">Redacted Sample</th>
+                      <th class="py-3 px-4 text-right">Timestamp</th>
                     </tr>
-
                   </thead>
-
-                  <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
-
+                  <tbody class="divide-y divide-white/[0.06] font-mono text-[11px]">
                     ${recentEvents.map(ev => `
-
-                      <tr class="hover:bg-slate-800/40 transition">
-
-                        <td class="py-2.5 px-3 text-indigo-300">${ev.correlation_id}</td>
-
-                        <td class="py-2.5 px-3">
-
-                          <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-200 mr-1">${ev.method}</span>
-
-                          <span class="text-slate-300">${ev.normalized_route}</span>
-
+                      <tr class="hover:bg-white/[0.03] transition-colors duration-150">
+                        <td class="py-3 px-4 text-zinc-200">${ev.correlation_id}</td>
+                        <td class="py-3 px-4">
+                          <span class="px-1.5 py-0.5 rounded bg-white/[0.08] text-white mr-1.5">${ev.method}</span>
+                          <span class="text-zinc-300">${ev.normalized_route}</span>
                         </td>
-
-                        <td class="py-2.5 px-3">
-
-                          <span class="px-2 py-0.5 rounded ${ev.status_code >= 400 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/15 text-emerald-300'}">${ev.status_code}</span>
-
+                        <td class="py-3 px-4">
+                          <span class="px-2 py-0.5 rounded-full ${ev.status_code >= 400 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/15 text-emerald-300'}">${ev.status_code}</span>
                         </td>
-
-                        <td class="py-2.5 px-3 text-slate-300">${ev.duration_ms}ms</td>
-
-                        <td class="py-2.5 px-3">
-
+                        <td class="py-3 px-4 text-zinc-300">${ev.duration_ms}ms</td>
+                        <td class="py-3 px-4">
                           ${ev.schema_validation_result === 'FAIL_DRIFT'
-
-                            ? `<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">SCHEMA_DRIFT (${ev.incident_id})</span>`
-
+                            ? `<span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">SCHEMA_DRIFT (${ev.incident_id})</span>`
                             : ev.schema_validation_result === 'PASS_COMPAT_PATCHED'
-
-                              ? `<span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30">PASS (DUAL-COMPAT PATCH)</span>`
-
+                              ? `<span class="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">PASS (DUAL-COMPAT)</span>`
                               : ev.schema_validation_result === 'PASS'
-
-                                ? `<span class="text-emerald-400">PASS (v2.1.0)</span>`
-
+                                ? `<span class="text-emerald-400">PASS (v2.1)</span>`
                                 : `<span class="text-amber-400">${ev.error_classification}</span>`
-
                           }
-
                         </td>
-
-                        <td class="py-2.5 px-3 text-slate-400 max-w-xs truncate">${JSON.stringify(ev.sanitized_payload)}</td>
-
-                        <td class="py-2.5 px-3 text-right text-slate-400">${new Date(ev.timestamp).toLocaleTimeString()}</td>
-
+                        <td class="py-3 px-4 text-zinc-400 max-w-xs truncate">${JSON.stringify(ev.sanitized_payload)}</td>
+                        <td class="py-3 px-4 text-right text-zinc-500">${new Date(ev.timestamp).toLocaleTimeString()}</td>
                       </tr>
-
                     `).join('')}
-
                   </tbody>
-
                 </table>
-
               </div>
-
             </div>
-
           </div>
-
         `;
-
       }
-
-
 
       // PAGE 2: INTEGRATIONS & PROXY GATEWAY
 
