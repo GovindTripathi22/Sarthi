@@ -172,8 +172,7 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
     }
     .stitch-boost-btn:active {
-      transform: translateY(0);
-      transform: scale(0.98);
+      transform: translateY(0) scale(0.98);
     }
     .stitch-goal-track {
       height: 6px;
@@ -244,28 +243,6 @@
       filter: blur(50px);
       pointer-events: none;
       z-index: 0;
-    }
-
-    .stitch-card {
-
-      background: rgba(16, 16, 20, 0.72);
-
-      backdrop-filter: blur(20px);
-
-      border: 1px solid rgba(255, 255, 255, 0.09);
-
-      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-
-    }
-
-    .stitch-card:hover {
-
-      border-color: rgba(255, 255, 255, 0.25);
-
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 255, 255, 0.04);
-
-      transform: translateY(-2px);
-
     }
 
     html {
@@ -428,36 +405,36 @@
         <span id="console-active-tab-title" class="text-white font-medium">Overview Dashboard</span>
       </div>
       <!-- Horizontal Quick Nav Pills for Instant 1-Click Switch -->
-      <div class="hidden 2xl:flex items-center gap-1 bg-black/40 p-1 rounded-lg border border-white/[0.06] text-[11px]">
-        <button onclick="window.AutoPatchApp.navigate('dashboard')" data-quick-nav="dashboard" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="layout-dashboard" class="w-3 h-3"></i> <span>Overview</span> <span class="stitch-kbd">1</span>
+      <div class="hidden xl:flex items-center gap-0.5 2xl:gap-1 bg-black/40 p-1 rounded-lg border border-white/[0.06] text-[11px]">
+        <button onclick="window.AutoPatchApp.navigate('dashboard')" data-quick-nav="dashboard" title="Overview Dashboard (1)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="layout-dashboard" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Overview</span> <span class="stitch-kbd">1</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('integrations')" data-quick-nav="integrations" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="network" class="w-3 h-3"></i> <span>Proxy</span> <span class="stitch-kbd">2</span>
+        <button onclick="window.AutoPatchApp.navigate('integrations')" data-quick-nav="integrations" title="Proxy Gateway (2)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="network" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Proxy</span> <span class="stitch-kbd">2</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('incidents')" data-quick-nav="incidents" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="alert-triangle" class="w-3 h-3"></i> <span>Incidents</span> <span class="stitch-kbd">3</span>
+        <button onclick="window.AutoPatchApp.navigate('incidents')" data-quick-nav="incidents" title="Incident Explorer (3)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="alert-triangle" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Incidents</span> <span class="stitch-kbd">3</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('workbench')" data-quick-nav="workbench" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="cpu" class="w-3 h-3"></i> <span>Workbench</span> <span class="stitch-kbd">4</span>
+        <button onclick="window.AutoPatchApp.navigate('workbench')" data-quick-nav="workbench" title="AI Repair Workbench (4)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="cpu" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Workbench</span> <span class="stitch-kbd">4</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('review')" data-quick-nav="review" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="git-pull-request" class="w-3 h-3"></i> <span>Review</span> <span class="stitch-kbd">5</span>
+        <button onclick="window.AutoPatchApp.navigate('review')" data-quick-nav="review" title="Code Review Gate (5)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="git-pull-request" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Review</span> <span class="stitch-kbd">5</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('contracts')" data-quick-nav="contracts" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="book-open" class="w-3 h-3"></i> <span>Docs RAG</span> <span class="stitch-kbd">6</span>
+        <button onclick="window.AutoPatchApp.navigate('contracts')" data-quick-nav="contracts" title="Docs & Contracts RAG (6)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="book-open" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Docs RAG</span> <span class="stitch-kbd">6</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('analytics')" data-quick-nav="analytics" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="bar-chart-3" class="w-3 h-3"></i> <span>Cost</span> <span class="stitch-kbd">7</span>
+        <button onclick="window.AutoPatchApp.navigate('analytics')" data-quick-nav="analytics" title="Analytics & Cost (7)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="bar-chart-3" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Cost</span> <span class="stitch-kbd">7</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('settings')" data-quick-nav="settings" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="settings" class="w-3 h-3"></i> <span>Settings</span> <span class="stitch-kbd">8</span>
+        <button onclick="window.AutoPatchApp.navigate('settings')" data-quick-nav="settings" title="Settings & Audit (8)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="settings" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Settings</span> <span class="stitch-kbd">8</span>
         </button>
-        <button onclick="window.AutoPatchApp.navigate('blueprint')" data-quick-nav="blueprint" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="terminal-square" class="w-3 h-3 text-emerald-400"></i> <span>E2E</span> <span class="stitch-kbd">9</span>
+        <button onclick="window.AutoPatchApp.navigate('blueprint')" data-quick-nav="blueprint" title="E2E Blueprint (9)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="terminal-square" class="w-3 h-3 text-emerald-400"></i> <span class="hidden 2xl:inline">E2E</span> <span class="stitch-kbd">9</span>
         </button>
       </div>
-      <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-zinc-400 text-[11px]">
+      <div class="hidden 2xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-zinc-400 text-[11px]">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         <span>Self-Healing Engine Armed</span>
       </div>
@@ -535,32 +512,35 @@
         </div>
 
         <!-- Autonomous Goal Progression Card (Live Dynamic Tracker) -->
-        <div id="sidebar-goal-tracker-card" class="p-3 mb-2 rounded-xl bg-zinc-950/90 border border-white/[0.09] text-xs space-y-2">
+        <div id="sidebar-goal-tracker-card" onclick="window.AutoPatchApp.openGoalsModal()" title="View Autonomous Production Goals Breakdown (Press G)" class="p-3 mb-2 rounded-xl bg-zinc-950/90 hover:bg-zinc-950 border border-white/[0.09] hover:border-emerald-500/30 text-xs space-y-2 cursor-pointer transition-all duration-200">
           <div class="flex items-center justify-between">
             <span class="font-bold text-white flex items-center gap-1.5 tracking-tight text-[11px]">
               <i data-lucide="target" class="w-3.5 h-3.5 text-emerald-400"></i> Self-Healing Goals
             </span>
-            <span id="sidebar-goal-badge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold">2/4 Goals (50%)</span>
+            <div class="flex items-center gap-1">
+              <span id="sidebar-goal-badge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/15 font-semibold">1/4 Goals (25%)</span>
+              <span class="stitch-kbd text-[9px]">G</span>
+            </div>
           </div>
           <div class="stitch-goal-track">
-            <div id="sidebar-goal-fill" class="stitch-goal-fill" style="width: 50%;"></div>
+            <div id="sidebar-goal-fill" class="stitch-goal-fill" style="width: 25%;"></div>
           </div>
           <div class="space-y-1 text-[10px] font-mono pt-1">
             <div id="sidebar-goal-item-1" class="flex items-center justify-between text-zinc-400">
               <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-1" class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> 1. Drift Interception</span>
-              <span class="text-zinc-500">&lt;180ms</span>
+              <span id="sidebar-goal-badge-1" class="text-zinc-500 font-medium">&lt;180ms</span>
             </div>
             <div id="sidebar-goal-item-2" class="flex items-center justify-between text-zinc-400">
               <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-2" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 2. Qdrant RAG Grounding</span>
-              <span class="text-emerald-400">Ready</span>
+              <span id="sidebar-goal-badge-2" class="text-emerald-400 font-medium">Ready</span>
             </div>
             <div id="sidebar-goal-item-3" class="flex items-center justify-between text-zinc-400">
-              <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-3" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 3. Docker Sandbox Pass</span>
-              <span class="text-emerald-400">4/4</span>
+              <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-3" class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> 3. Docker Sandbox Pass</span>
+              <span id="sidebar-goal-badge-3" class="text-zinc-500 font-medium">Pending</span>
             </div>
             <div id="sidebar-goal-item-4" class="flex items-center justify-between text-zinc-400">
               <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-4" class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> 4. Governed Deploy Gate</span>
-              <span class="text-amber-400">Gate</span>
+              <span id="sidebar-goal-badge-4" class="text-zinc-500 font-medium">Locked</span>
             </div>
           </div>
         </div>
@@ -2351,9 +2331,14 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         }
         for (let i = 1; i <= 4; i++) {
           const dot = document.getElementById(`sidebar-goal-dot-${i}`);
+          const badgeSpan = document.getElementById(`sidebar-goal-badge-${i}`);
           const goal = g.goals[i - 1];
           if (dot && goal) {
             dot.className = goal.achieved ? 'w-1.5 h-1.5 rounded-full bg-emerald-400' : 'w-1.5 h-1.5 rounded-full bg-zinc-600';
+          }
+          if (badgeSpan && goal) {
+            badgeSpan.textContent = goal.badge;
+            badgeSpan.className = goal.achieved ? 'text-emerald-400 font-medium' : 'text-zinc-500 font-medium';
           }
         }
       }
@@ -2468,14 +2453,95 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         this.openModal('<div class="flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-amber-400"></i><span>Turbo Boost Controls</span></div>', contentHtml, () => true, 'Close', 'bg-white text-black');
       }
 
+      openGoalsModal() {
+        const g = this.getGoalsState();
+        const contentHtml = `
+          <div class="space-y-4">
+            <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/20 via-zinc-950 to-cyan-950/20 border border-emerald-500/30">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full ${g.isAllComplete ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}"></span>
+                  <span class="text-xs font-bold text-white tracking-tight">Sarthi Autonomous Production Goals</span>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${g.isAllComplete ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-zinc-300 border border-white/15'} font-semibold">
+                  ${g.completedCount}/${g.totalCount} Goals Satisfied (${g.pct}%)
+                </span>
+              </div>
+              <p class="text-xs text-zinc-300">Four non-negotiable architectural milestones verifying end-to-end self-healing resilience and enterprise governance.</p>
+              <div class="stitch-goal-track mt-3">
+                <div class="stitch-goal-fill" style="width: ${Math.max(10, g.pct)}%;"></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              ${g.goals.map(goal => `
+                <div class="p-3.5 rounded-xl bg-zinc-950/80 border ${goal.achieved ? 'border-emerald-500/30 bg-emerald-950/10' : 'border-white/10'} space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-white flex items-center gap-1.5">
+                      <span class="w-5 h-5 rounded-full ${goal.achieved ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/10 text-zinc-400'} flex items-center justify-center text-[10px] font-mono">${goal.id}</span>
+                      <span>${goal.title}</span>
+                    </span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${goal.achieved ? 'bg-emerald-500/20 text-emerald-300 font-semibold' : 'bg-zinc-800 text-zinc-400'}">${goal.badge}</span>
+                  </div>
+                  <p class="text-[11px] text-zinc-400">${goal.detail}</p>
+                  <div class="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono">
+                    <span class="text-zinc-500">Status: <strong class="${goal.achieved ? 'text-emerald-400' : 'text-amber-400'}">${goal.achieved ? 'PASSED' : 'ACTION REQUIRED'}</strong></span>
+                    ${goal.id === 1 ? `<button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.toggleApiDrift();" class="text-rose-400 hover:text-white underline">Toggle Drift (D)</button>` : ''}
+                    ${goal.id === 2 ? `<button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('contracts');" class="text-sky-400 hover:text-white underline">View Docs RAG (6)</button>` : ''}
+                    ${goal.id === 3 ? `<button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.runAutomatedE2ETest();" class="text-emerald-400 hover:text-white underline">Run Sandbox (4)</button>` : ''}
+                    ${goal.id === 4 ? `<button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('review');" class="text-violet-400 hover:text-white underline">Review Gate (5)</button>` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="pt-2 border-t border-white/[0.08] flex items-center justify-between text-xs">
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.openBoostActionsModal();" class="text-amber-300 hover:text-white font-medium flex items-center gap-1">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i> Turbo Boost Controls (B)
+              </button>
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.openInterviewDemoModal();" class="text-emerald-300 hover:text-white font-medium flex items-center gap-1">
+                <i data-lucide="mic" class="w-3.5 h-3.5"></i> Interview Pitch Cheatsheet (H/?) ➔
+              </button>
+            </div>
+          </div>
+        `;
+        this.openModal('<div class="flex items-center gap-2"><i data-lucide="target" class="w-5 h-5 text-emerald-400"></i><span>Autonomous Production Goals</span></div>', contentHtml, () => true, 'Close', 'bg-white text-black');
+      }
+
+      copyPitchToClipboard() {
+        const text = `Sarthi - Autonomous Self-Healing API Middleware\n\n` +
+          `ELEVATOR PITCH (30s):\n` +
+          `"When third-party APIs (Stripe, Twilio, Shopify, CommerceCore) push unannounced breaking changes, consumer adapters throw fatal KeyError crashes. Sarthi is an autonomous, self-healing API middleware that sits transparently between your microservices and upstream vendors. In <180ms, it intercepts schema drift, grounds a backward-compatible adapter patch using official documentation via Qdrant RAG, verifies it in an isolated non-root Docker container, and delivers a tested Pull Request behind a strict two-stage RBAC human review gate—slashing enterprise MTTR from 3.5 hours to under 2 minutes with zero uncontrolled production drops."\n\n` +
+          `LIVE DEMONSTRATION RUNBOOK:\n` +
+          `1. Baseline Health Check: Press 1 -> Healthy CommerceCore proxy traffic <180ms, 0 open incidents.\n` +
+          `2. Simulate Schema Drift: Press D -> CommerceCore switches to v2.2 camelCase customerId, intercepted in <180ms.\n` +
+          `3. LangGraph Repair: Press 4 -> 11-node state machine, Qdrant RAG docs (score 0.92), AST security scan, 4/4 pytest sandbox.\n` +
+          `4. RBAC Gate: Press 5 -> Switch to Viewer (403 Forbidden denied), switch to Admin (approved, PR created).\n` +
+          `5. Deploy & Proof: Authorize deployment -> 200 OK verified for both v2.1 and v2.2 payloads, MTTR <2m!`;
+        if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          navigator.clipboard.writeText(text).then(() => {
+            this.toast('Copied to Clipboard', 'Interview pitch and 5-phase demonstration runbook copied!', 'success');
+          }).catch(() => {
+            this.toast('Pitch Ready', 'You can copy the pitch directly from the modal.', 'info');
+          });
+        } else {
+          this.toast('Pitch Ready', 'You can copy the pitch directly from the modal.', 'info');
+        }
+      }
+
       openInterviewDemoModal() {
         const contentHtml = `
           <div class="space-y-5 text-xs text-zinc-300 max-h-[72vh] overflow-y-auto pr-1">
             <!-- 1. The 30-Second Elevator Pitch -->
             <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/30 via-zinc-950 to-zinc-950 border border-emerald-500/30">
-              <div class="flex items-center gap-2 text-emerald-300 font-bold text-sm mb-1">
-                <i data-lucide="sparkles" class="w-4 h-4"></i>
-                <span>The 30-Second Elevator Pitch (Deliver This First)</span>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2 text-emerald-300 font-bold text-sm">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span>The 30-Second Elevator Pitch (Deliver This First)</span>
+                </div>
+                <button type="button" onclick="window.AutoPatchApp.copyPitchToClipboard()" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono flex items-center gap-1 transition-all">
+                  <i data-lucide="copy" class="w-3 h-3"></i> Copy Pitch
+                </button>
               </div>
               <p class="text-zinc-200 leading-relaxed italic text-xs">
                 "When third-party APIs (Stripe, Twilio, Shopify, CommerceCore) push unannounced breaking changes, consumer adapters throw fatal KeyError crashes. <strong>Sarthi</strong> is an autonomous, self-healing API middleware that sits transparently between your microservices and upstream vendors. In &lt;180ms, it intercepts schema drift, grounds a backward-compatible adapter patch using official documentation via Qdrant RAG, verifies it in an isolated non-root Docker container, and delivers a tested Pull Request behind a strict two-stage RBAC human review gate—slashing enterprise MTTR from 3.5 hours to under 2 minutes with zero uncontrolled production drops."
@@ -2493,7 +2559,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="p-3.5 rounded-xl bg-zinc-950 border border-white/10 space-y-1.5">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-mono">1</span> Baseline Health Check</span>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Phase 1</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Phase 1</span>
+                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('dashboard');" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono flex items-center gap-1">Jump (1) ➔</button>
+                  </div>
                 </div>
                 <div class="text-[11px] text-zinc-400">
                   <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">1</kbd> or click <strong>Overview Dashboard</strong>.
@@ -2510,7 +2579,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="p-3.5 rounded-xl bg-zinc-950 border border-rose-500/20 space-y-1.5">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center text-[10px] font-mono">2</span> Upstream API Schema Drift Interception</span>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">Phase 2</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">Phase 2</span>
+                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.toggleApiDrift();" class="px-2 py-0.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[10px] font-mono flex items-center gap-1">Drift (D) ➔</button>
+                  </div>
                 </div>
                 <div class="text-[11px] text-zinc-400">
                   <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">D</kbd> or click <strong>Simulate Drift</strong> in top navbar.
@@ -2527,7 +2599,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="p-3.5 rounded-xl bg-zinc-950 border border-sky-500/20 space-y-1.5">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center text-[10px] font-mono">3</span> LangGraph Orchestration & Docker Sandbox</span>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">Phase 3</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">Phase 3</span>
+                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('workbench'); if (window.AutoPatchApp.db.incidents[0]) window.AutoPatchApp.startOrResumeRepair(window.AutoPatchApp.db.incidents[0].id);" class="px-2 py-0.5 rounded bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[10px] font-mono flex items-center gap-1">Repair (4) ➔</button>
+                  </div>
                 </div>
                 <div class="text-[11px] text-zinc-400">
                   <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">4</kbd> to open <strong>AI Repair Workbench</strong>, then click <strong>Run LangGraph Self-Healing</strong>.
@@ -2544,7 +2619,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="p-3.5 rounded-xl bg-zinc-950 border border-amber-500/20 space-y-1.5">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center text-[10px] font-mono">4</span> Two-Stage RBAC & Code Review Gate</span>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Phase 4</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Phase 4</span>
+                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('review');" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[10px] font-mono flex items-center gap-1">Review (5) ➔</button>
+                  </div>
                 </div>
                 <div class="text-[11px] text-zinc-400">
                   <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">5</kbd> to open <strong>Code Review & Gate</strong>. Switch role dropdown to <strong>Viewer</strong> and click <strong>Approve Repair</strong>.
@@ -2561,7 +2639,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="p-3.5 rounded-xl bg-zinc-950 border border-emerald-500/20 space-y-1.5">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-[10px] font-mono">5</span> Deployment Authorization & Zero-Downtime Proof</span>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Phase 5</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Phase 5</span>
+                    <button type="button" onclick="window.AutoPatchApp.closeModal(); if (window.AutoPatchApp.db.repairs[0]) { window.AutoPatchApp.switchRole('Admin'); window.AutoPatchApp.quickOneClickApproveAndDeploy(window.AutoPatchApp.db.repairs[0].id); } else { window.AutoPatchApp.runAutomatedE2ETest(); }" class="px-2 py-0.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-mono flex items-center gap-1">1-Click Ship ➔</button>
+                  </div>
                 </div>
                 <div class="text-[11px] text-zinc-400">
                   <span class="text-emerald-400 font-semibold font-mono">Click:</span> Switch role to <strong>Admin</strong>, click <strong>Approve Repair</strong> ➔ <strong>Create GitHub PR</strong> ➔ <strong>Authorize Deployment</strong>.
@@ -2581,12 +2662,42 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 <i data-lucide="layers" class="w-4 h-4 text-violet-400"></i>
                 <span>Architectural Tradeoffs (Interview Discussion Points)</span>
               </h3>
-              <ul class="list-disc list-inside space-y-1 text-zinc-300 text-[11px]">
-                <li><strong>Reverse Proxy vs Envoy Sidecar:</strong> Sarthi runs as a transparent reverse proxy at the edge, but can also be deployed as a WebAssembly filter inside an Envoy service mesh.</li>
+              <ul class="list-disc list-inside space-y-1.5 text-zinc-300 text-[11px]">
+                <li><strong>Reverse Proxy vs Envoy Sidecar:</strong> Sarthi runs as a transparent reverse proxy at the edge, but can also be deployed as a WebAssembly filter inside an Envoy service mesh for ultra-low latency (<2ms).</li>
                 <li><strong>AST Defense-in-Depth:</strong> We parse proposed code with Python's <code class="text-zinc-200">ast.parse</code> to reject <code class="text-rose-300">eval</code>, <code class="text-rose-300">exec</code>, <code class="text-rose-300">subprocess</code>, and dangerous imports before container execution.</li>
                 <li><strong>LangGraph State Checkpointing:</strong> Each node checkpoint is saved in PostgreSQL with a deterministic hash so long-running repairs can resume safely after restarts.</li>
                 <li><strong>Two-Stage Governance:</strong> Reviewers sign off on code correctness; Admins authorize deployment. Solves enterprise SOC2 compliance.</li>
               </ul>
+            </div>
+
+            <!-- 4. Top 5 Hard System Design Interview Questions & Senior Answers -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-violet-950/20 via-zinc-950 to-zinc-950 border border-violet-500/30 space-y-3">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
+                <span>Top 5 Hard Interview Questions & Staff-Level Answers</span>
+              </h3>
+              <div class="space-y-2.5 text-[11px]">
+                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <p class="font-bold text-amber-300 mb-1">Q1: How do you prevent LLMs from hallucinating or introducing malicious code?</p>
+                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> Three independent security perimeters: (1) Python AST analysis via <code class="text-zinc-200">ast.parse</code> statically blacklists eval/exec/subprocess/network sockets before code touches disk; (2) Docker runner with <code class="text-zinc-200">--net=none</code>, read-only rootfs, non-root user, and strict memory/CPU limits; (3) Mandatory human approval gate before production merge.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <p class="font-bold text-amber-300 mb-1">Q2: What happens during upstream 401 Unauthorized or 429 Rate Limit errors?</p>
+                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> The fault classifier isolates HTTP protocol status from JSON payload schema drift. 401s route to credential vault alerts, 429s trigger exponential backoff with jitter. Code generation is strictly forbidden for operational/auth failures.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <p class="font-bold text-amber-300 mb-1">Q3: How do you guarantee backward compatibility for in-flight requests?</p>
+                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> Sarthi synthesizes non-destructive fallback logic: <code class="text-emerald-300">payload.get('customerId') or payload.get('customer_id')</code>. Both legacy stored messages and drifted upstream payloads parse smoothly, preventing downstream data pipeline corruptions.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <p class="font-bold text-amber-300 mb-1">Q4: How does this scale to 100,000 requests per second?</p>
+                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> The critical path uses compiled schema validators in C++/Rust (or Envoy WASM filter) with cached contracts in Redis (<3ms overhead). Incident capture is fully decoupled: drift telemetry streams asynchronously over Kafka to offline LangGraph repair workers without blocking consumer traffic.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
+                  <p class="font-bold text-amber-300 mb-1">Q5: How do you prevent duplicate repair runs during high-volume failure bursts?</p>
+                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> We compute a deterministic error hash: <code class="text-zinc-200">sha256(integration_id + endpoint + sorted_missing_keys)</code>. Concurrent requests with matching signatures increment incident frequency counters and attach to the active repair run rather than spawning duplicate agents.</p>
+                </div>
+              </div>
             </div>
           </div>
         `;
@@ -5455,11 +5566,12 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
             <!-- GOAL PROGRESSION & BOOST ACCELERATOR HUD (STITCH AESTHETIC) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
               <!-- Goal Progression Card (Left 7 Cols) -->
-              <div class="lg:col-span-7 p-4 rounded-2xl stitch-card border border-white/10 space-y-3">
+              <div onclick="window.AutoPatchApp.openGoalsModal()" title="View Autonomous Production Goals Breakdown (Press G)" class="lg:col-span-7 p-4 rounded-2xl stitch-card border border-white/10 space-y-3 cursor-pointer hover:border-emerald-500/30 transition-all">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full ${this.getGoalsState().isAllComplete ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}"></span>
                     <h2 class="text-xs font-bold text-white tracking-tight">Autonomous Production Goals</h2>
+                    <span class="stitch-kbd text-[9px]">G</span>
                   </div>
                   <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${this.getGoalsState().isAllComplete ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-zinc-300 border border-white/15'} font-semibold">
                     ${this.getGoalsState().completedCount}/4 Goals Achieved (${this.getGoalsState().pct}%)
@@ -8188,14 +8300,24 @@ class EphemeralSandboxRunner:
     window.addEventListener('keydown', (e) => {
       if (!window.AutoPatchApp) return;
 
+      // Escape always closes any open modal
       if (e.key === 'Escape') {
         window.AutoPatchApp.closeModal();
         return;
       }
 
-      // Do not trigger navigation shortcuts when typing in form inputs
-      const activeTag = document.activeElement ? document.activeElement.tagName : '';
-      if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+      // If user is holding Ctrl, Alt, or Meta/Command, do not hijack browser shortcuts (e.g. Ctrl+1..9 tab switch, Ctrl+D bookmark, Alt+D URL bar)
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+      // If a modal is currently open, do not execute background shortcuts
+      const modalBackdrop = document.getElementById('modal-backdrop');
+      const isModalOpen = modalBackdrop && !modalBackdrop.classList.contains('hidden');
+      if (isModalOpen) return;
+
+      // Do not trigger navigation shortcuts when typing in form inputs or editable content
+      const activeEl = document.activeElement;
+      const tag = (activeEl && activeEl.tagName ? activeEl.tagName : '').toUpperCase();
+      if (activeEl && (activeEl.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(tag))) return;
 
       const key = e.key;
       const numMap = {
@@ -8215,6 +8337,8 @@ class EphemeralSandboxRunner:
         window.AutoPatchApp.navigate(numMap[key]);
       } else if (key === 'b' || key === 'B') {
         window.AutoPatchApp.openBoostActionsModal();
+      } else if (key === 'g' || key === 'G') {
+        window.AutoPatchApp.openGoalsModal();
       } else if (key === 'd' || key === 'D') {
         window.AutoPatchApp.toggleApiDrift();
       } else if (key === '?' || key === 'h' || key === 'H') {
