@@ -303,8 +303,8 @@
       </div>
     </div>
 
-    <!-- Center Website Navigation Links (Clean & Aesthetic) -->
-    <nav class="hidden md:flex items-center gap-1.5 text-xs font-medium">
+    <!-- Center Website Navigation Links (Shown on Home View) -->
+    <nav id="website-nav-container" class="hidden md:flex items-center gap-1.5 text-xs font-medium">
       <button onclick="window.AutoPatchApp.navigate('home')" id="nav-link-home" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Product</button>
       <button onclick="window.AutoPatchApp.scrollToSection('how-it-works')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Architecture</button>
       <button onclick="window.AutoPatchApp.scrollToSection('live-showcase')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Interactive Demo</button>
@@ -313,6 +313,19 @@
         <span id="nav-console-badge" class="hidden text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">!</span>
       </button>
     </nav>
+
+    <!-- Center Console Breadcrumb & Telemetry Indicator (Shown in Developer Console) -->
+    <div id="console-nav-container" class="hidden items-center gap-3 text-xs font-mono">
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08]">
+        <span class="text-zinc-500">Console</span>
+        <span class="text-zinc-600">/</span>
+        <span id="console-active-tab-title" class="text-white font-medium">Overview Dashboard</span>
+      </div>
+      <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-zinc-400 text-[11px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span>Self-Healing Engine Armed</span>
+      </div>
+    </div>
 
     <!-- Right Actions: Unified, Clean & Balanced -->
     <div class="flex items-center gap-2 sm:gap-2.5">
@@ -361,9 +374,7 @@
     <!-- LEFT SIDEBAR NAVIGATION (Visible only when in Console mode) -->
 
     <aside id="console-sidebar" class="hidden w-64 bg-[#050507] border-r border-white/[0.08] flex flex-col justify-between shrink-0 select-none">
-
       <div class="p-3 space-y-1 overflow-y-auto">
-
         <!-- Workspace Identifier Header -->
         <div class="p-3 mb-2 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -373,132 +384,71 @@
           <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-zinc-400 border border-white/10 font-medium">ws_prod_01</span>
         </div>
 
-        
-
+        <!-- Section 1: Operations -->
+        <div class="px-2.5 pt-2 pb-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">Operations</div>
         <button onclick="window.AutoPatchApp.navigate('dashboard')" data-nav="dashboard" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Overview Dashboard</span>
-
         </button>
-
-
 
         <button onclick="window.AutoPatchApp.navigate('integrations')" data-nav="integrations" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="network" class="w-4 h-4"></i> Integrations & Proxy</span>
-
-          <span id="nav-badge-integrations" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300">3</span>
-
+          <span id="nav-badge-integrations" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-300 border border-white/10">3</span>
         </button>
-
-
 
         <button onclick="window.AutoPatchApp.navigate('incidents')" data-nav="incidents" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Incident Explorer</span>
-
-          <span id="nav-badge-incidents" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 hidden">0</span>
-
+          <span id="nav-badge-incidents" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 hidden">0</span>
         </button>
 
-
-
+        <!-- Section 2: Autonomous Engine -->
+        <div class="px-2.5 pt-3 pb-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">Autonomous Engine</div>
         <button onclick="window.AutoPatchApp.navigate('workbench')" data-nav="workbench" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="cpu" class="w-4 h-4"></i> AI Repair Workbench</span>
-
-          <span id="nav-badge-workbench" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/10 text-zinc-300 border border-white/15">LangGraph</span>
-
+          <span id="nav-badge-workbench" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/15">LangGraph</span>
         </button>
-
-
 
         <button onclick="window.AutoPatchApp.navigate('review')" data-nav="review" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="git-pull-request" class="w-4 h-4"></i> Code Review & Gate</span>
-
-          <span id="nav-badge-review" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hidden">Pending</span>
-
+          <span id="nav-badge-review" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 hidden">Pending</span>
         </button>
-
-
 
         <button onclick="window.AutoPatchApp.navigate('contracts')" data-nav="contracts" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
-          <span class="flex items-center gap-2.5"><i data-lucide="book-open" class="w-4 h-4"></i> Docs & API Contracts</span>
-
-          <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400">RAG</span>
-
+          <span class="flex items-center gap-2.5"><i data-lucide="book-open" class="w-4 h-4"></i> Docs & Contracts</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-400 border border-white/10">RAG</span>
         </button>
 
-
-
+        <!-- Section 3: Governance & Verification -->
+        <div class="px-2.5 pt-3 pb-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">Governance & Quality</div>
         <button onclick="window.AutoPatchApp.navigate('analytics')" data-nav="analytics" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Analytics & Cost</span>
-
         </button>
-
-
 
         <button onclick="window.AutoPatchApp.navigate('settings')" data-nav="settings" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
           <span class="flex items-center gap-2.5"><i data-lucide="settings" class="w-4 h-4"></i> Settings & Audit Log</span>
-
         </button>
 
-
-
-        <div class="pt-3 mt-3 border-t border-white/[0.08]">
-
-          <div class="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500">System Verification</div>
-
-          <button onclick="window.AutoPatchApp.navigate('blueprint')" data-nav="blueprint" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-
-            <span class="flex items-center gap-2.5"><i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400"></i> E2E Tests & Backend Code</span>
-
-          </button>
-
-        </div>
-
+        <button onclick="window.AutoPatchApp.navigate('blueprint')" data-nav="blueprint" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
+          <span class="flex items-center gap-2.5"><i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400"></i> E2E Tests & Backend</span>
+        </button>
       </div>
-
-
 
       <!-- Interactive Guided E2E Walkthrough Widget -->
-
-      <div class="p-3 m-3 rounded-lg bg-zinc-950/80 border border-white/[0.08] text-xs space-y-2">
-
+      <div class="p-3 m-3 rounded-xl bg-zinc-950/80 border border-white/[0.08] text-xs space-y-2">
         <div class="flex items-center justify-between">
-
-          <span class="font-semibold text-zinc-200 flex items-center gap-1.5">
-
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-zinc-300"></i> E2E Quick Guide
-
+          <span class="font-semibold text-white flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-zinc-300"></i> E2E Quick Tour
           </span>
-
-          <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 border border-white/10 transition-all duration-200 hover:-translate-y-0.5">
-
-            Auto-Run E2E
-
+          <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white text-black font-semibold hover:bg-zinc-200 transition-all hover:-translate-y-0.5">
+            Auto-Run
           </button>
-
         </div>
-
-        <ol class="text-[11px] text-zinc-400 space-y-1 list-decimal list-inside">
-
-          <li id="step-guide-1">Click <strong class="text-rose-300">Simulate API Drift</strong></li>
-
-          <li id="step-guide-2">Inspect incident in <strong class="text-zinc-200">Workbench</strong></li>
-
-          <li id="step-guide-3">Run <strong class="text-zinc-200">LangGraph Repair</strong> & Sandbox</li>
-
-          <li id="step-guide-4">Approve & Export/PR in <strong class="text-emerald-300">Review</strong></li>
-
+        <ol class="text-[11px] text-zinc-400 space-y-1 list-decimal list-inside font-mono">
+          <li id="step-guide-1">Simulate API Drift</li>
+          <li id="step-guide-2">Inspect in Workbench</li>
+          <li id="step-guide-3">Run LangGraph Repair</li>
+          <li id="step-guide-4">Approve in Review Gate</li>
         </ol>
-
       </div>
-
     </aside>
 
 
@@ -1976,44 +1926,47 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
         // Manage Sidebar Visibility & Body Layout based on current view
+        const websiteNav = document.getElementById('website-nav-container');
+        const consoleNav = document.getElementById('console-nav-container');
+        const consoleTabTitle = document.getElementById('console-active-tab-title');
 
         if (this.currentPage === 'home') {
-
           if (consoleSidebar) consoleSidebar.classList.add('hidden');
-
+          if (websiteNav) websiteNav.classList.remove('hidden');
+          if (consoleNav) consoleNav.classList.add('hidden');
           document.body.classList.remove('h-screen', 'overflow-hidden');
-
           document.body.classList.add('min-h-screen');
-
           if (headerCtaLabel) headerCtaLabel.textContent = 'Open Console';
-
           if (headerCtaBtn) {
-
             headerCtaBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-[0_0_18px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5';
-
           }
-
           if (navLinkHome) {
-
             navLinkHome.className = 'px-3 py-1.5 rounded-lg text-white font-semibold bg-white/[0.08] border border-white/10 transition-all duration-200';
-
           }
-
           if (navLinkConsole) {
-
             navLinkConsole.className = 'px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all duration-200 flex items-center gap-1.5';
-
           }
-
         } else {
-
           if (consoleSidebar) consoleSidebar.classList.remove('hidden');
-
+          if (websiteNav) websiteNav.classList.add('hidden');
+          if (consoleNav) consoleNav.classList.remove('hidden');
+          if (consoleTabTitle) {
+            const titles = {
+              dashboard: 'Overview Dashboard',
+              integrations: 'Integrations & Proxy Gateway',
+              incidents: 'Incident Explorer',
+              workbench: 'AI Repair Workbench',
+              review: 'Code Review & Deployment Gate',
+              contracts: 'Docs & API Contracts (RAG)',
+              analytics: 'Analytics & Cost',
+              settings: 'Settings & Audit Log',
+              blueprint: 'E2E Tests & Backend Code'
+            };
+            consoleTabTitle.textContent = titles[this.currentPage] || this.currentPage;
+          }
           document.body.classList.add('h-screen', 'overflow-hidden');
-
           document.body.classList.remove('min-h-screen');
-
-          if (headerCtaLabel) headerCtaLabel.textContent = '← Back to Website';
+          if (headerCtaLabel) headerCtaLabel.textContent = 'Exit to Website';
 
           if (headerCtaBtn) {
 
@@ -3081,7 +3034,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="space-y-3 font-sans">
 
-            <p class="text-slate-300 text-xs">
+            <p class="text-zinc-300 text-xs">
 
               Rejecting this repair proposal will halt the LangGraph repair workflow for <strong>${repair.id}</strong>.
 
@@ -3091,9 +3044,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Rejection Reason (Required)</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Rejection Reason (Required)</label>
 
-              <textarea id="modal-reject-reason" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono text-xs focus:outline-none focus:border-rose-500">Prefer handling version transformation inside API gateway serializer instead of adapter.</textarea>
+              <textarea id="modal-reject-reason" rows="3" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-rose-500">Prefer handling version transformation inside API gateway serializer instead of adapter.</textarea>
 
             </div>
 
@@ -3235,7 +3188,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="space-y-3 font-sans">
 
-            <p class="text-slate-300 text-xs">
+            <p class="text-zinc-300 text-xs">
 
               Requesting a revision triggers a bounded loop in the LangGraph agent
 
@@ -3247,9 +3200,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Revision Guidance / Requirements</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Revision Guidance / Requirements</label>
 
-              <textarea id="modal-revision-note" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono text-xs focus:outline-none focus:border-amber-500">Add explicit logging or preserve strict string stripping on customerId.</textarea>
+              <textarea id="modal-revision-note" rows="3" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-amber-500">Add explicit logging or preserve strict string stripping on customerId.</textarea>
 
             </div>
 
@@ -3867,13 +3820,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
         const colors = {
 
-          success: 'border-emerald-500/50 bg-slate-900/95 text-emerald-300',
+          success: 'border-emerald-500/50 stitch-card text-emerald-300',
 
-          error: 'border-rose-500/60 bg-slate-900/95 text-rose-300',
+          error: 'border-rose-500/60 stitch-card text-rose-300',
 
-          warning: 'border-amber-500/50 bg-slate-900/95 text-amber-300',
+          warning: 'border-amber-500/50 stitch-card text-amber-300',
 
-          info: 'border-indigo-500/50 bg-slate-900/95 text-indigo-300'
+          info: 'border-white/25 stitch-card text-zinc-200'
 
         };
 
@@ -3889,11 +3842,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <div class="text-xs font-bold tracking-tight">${title}</div>
 
-              <div class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">${message}</div>
+              <div class="text-[11px] text-zinc-300 mt-0.5 leading-relaxed">${message}</div>
 
             </div>
 
-            <button onclick="this.parentElement.parentElement.remove()" class="text-slate-500 hover:text-slate-300 text-xs">✕</button>
+            <button onclick="this.parentElement.parentElement.remove()" class="text-zinc-500 hover:text-white text-xs">✕</button>
 
           </div>
 
@@ -5274,13 +5227,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">Registered API Integrations & Proxy Gateway</h1>
 
-                <p class="text-xs text-slate-400">AutoPatch only intercepts traffic for explicitly registered workspace integrations routed through <code class="font-mono text-indigo-300">/proxy/{integration_id}/{path}</code>.</p>
+                <p class="text-xs text-zinc-400">AutoPatch only intercepts traffic for explicitly registered workspace integrations routed through <code class="font-mono text-zinc-200">/proxy/{integration_id}/{path}</code>.</p>
 
               </div>
 
@@ -5300,13 +5253,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <!-- Fault Injection / Classification Test Bar (Proves Node 2 Doesn't Assume Everything is Schema Drift) -->
 
-            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+            <div class="p-4 rounded-xl stitch-card border border-white/[0.08] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
 
               <div>
 
-                <div class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Proxy Fault-Classification Simulator (CommerceCore Integration)</div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-zinc-200">Proxy Fault-Classification Simulator (CommerceCore Integration)</div>
 
-                <p class="text-xs text-slate-400 mt-0.5">Verify that AutoPatch accurately distinguishes <strong class="text-slate-200">Schema Drift</strong> from operational <strong class="text-slate-200">401 Auth Failures</strong> or <strong class="text-slate-200">429 Rate Limits</strong> (where code patching is unsafe and abstained).</p>
+                <p class="text-xs text-zinc-400 mt-0.5">Verify that AutoPatch accurately distinguishes <strong class="text-zinc-200">Schema Drift</strong> from operational <strong class="text-zinc-200">401 Auth Failures</strong> or <strong class="text-zinc-200">429 Rate Limits</strong> (where code patching is unsafe and abstained).</p>
 
               </div>
 
@@ -5356,7 +5309,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 return `
 
-                  <div class="p-5 rounded-xl bg-slate-900/90 border ${intg.status === 'HEALTHY' ? 'border-slate-800' : 'border-rose-500/50'} flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                  <div class="p-5 rounded-xl stitch-card border ${intg.status === 'HEALTHY' ? 'border-white/[0.08]' : 'border-rose-500/50'} flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
 
                     <div class="space-y-1.5">
 
@@ -5366,33 +5319,33 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                         <h3 class="text-sm font-bold text-white">${intg.name}</h3>
 
-                        <span class="text-xs font-mono text-slate-400">(${intg.provider})</span>
+                        <span class="text-xs font-mono text-zinc-400">(${intg.provider})</span>
 
                         ${intg.monitoring_paused ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-300">PAUSED</span>` : ''}
 
                       </div>
 
-                      <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 font-mono">
+                      <div class="flex flex-wrap items-center gap-4 text-xs text-zinc-400 font-mono">
 
-                        <span>Upstream: <strong class="text-slate-200">${intg.base_url}</strong></span>
+                        <span>Upstream: <strong class="text-zinc-200">${intg.base_url}</strong></span>
 
-                        <span>Proxy Route: <strong class="text-indigo-300">${intg.proxy_route}</strong></span>
+                        <span>Proxy Route: <strong class="text-zinc-200">${intg.proxy_route}</strong></span>
 
                         <span>Contract: <strong class="text-emerald-300">${intg.active_contract_version}</strong></span>
 
-                        <span>Repo: <strong class="text-slate-300">${intg.repository}</strong></span>
+                        <span>Repo: <strong class="text-zinc-300">${intg.repository}</strong></span>
 
                       </div>
 
-                      <div class="flex flex-wrap items-center gap-4 text-[11px] text-slate-400 pt-1">
+                      <div class="flex flex-wrap items-center gap-4 text-[11px] text-zinc-400 pt-1">
 
-                        <span>Error Rate: <strong class="font-mono ${parseFloat(errRate) > 0 ? 'text-rose-400' : 'text-slate-200'}">${errRate}%</strong> (Threshold: ${intg.error_rate_threshold_pct}%)</span>
+                        <span>Error Rate: <strong class="font-mono ${parseFloat(errRate) > 0 ? 'text-rose-400' : 'text-zinc-200'}">${errRate}%</strong> (Threshold: ${intg.error_rate_threshold_pct}%)</span>
 
-                        <span>Latency Threshold: <strong class="font-mono text-slate-200">${intg.latency_threshold_ms}ms</strong></span>
+                        <span>Latency Threshold: <strong class="font-mono text-zinc-200">${intg.latency_threshold_ms}ms</strong></span>
 
                         <span>RAG Docs: <strong class="font-mono text-emerald-400">${intg.doc_ingestion_status}</strong></span>
 
-                        <span>Adapter: <code class="font-mono text-slate-300">${intg.target_adapter_file}</code></span>
+                        <span>Adapter: <code class="font-mono text-zinc-300">${intg.target_adapter_file}</code></span>
 
                       </div>
 
@@ -5402,19 +5355,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <div class="flex flex-wrap items-center gap-2 shrink-0">
 
-                      <button onclick="window.AutoPatchApp.sendProxyRequest('${intg.id}')" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium flex items-center gap-1.5">
+                      <button onclick="window.AutoPatchApp.sendProxyRequest('${intg.id}')" class="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 border border-white/15 text-xs font-medium flex items-center gap-1.5">
 
                         <i data-lucide="play" class="w-3.5 h-3.5 text-emerald-400"></i> Test Connectivity
 
                       </button>
 
-                      <button onclick="window.AutoPatchApp.navigate('contracts')" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium flex items-center gap-1.5">
+                      <button onclick="window.AutoPatchApp.navigate('contracts')" class="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 border border-white/15 text-xs font-medium flex items-center gap-1.5">
 
-                        <i data-lucide="file-json" class="w-3.5 h-3.5 text-indigo-400"></i> Contract Diff
+                        <i data-lucide="file-json" class="w-3.5 h-3.5 text-zinc-300"></i> Contract Diff
 
                       </button>
 
-                      <button onclick="window.AutoPatchApp.togglePauseIntegration('${intg.id}')" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-medium">
+                      <button onclick="window.AutoPatchApp.togglePauseIntegration('${intg.id}')" class="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 border border-white/15 text-xs font-medium">
 
                         ${intg.monitoring_paused ? 'Resume' : 'Pause'}
 
@@ -5470,9 +5423,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Integration Name</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Integration Name</label>
 
-              <input id="modal-int-name" type="text" value="Twilio SMS Dispatch API" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              <input id="modal-int-name" type="text" value="Twilio SMS Dispatch API" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
             </div>
 
@@ -5480,17 +5433,17 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <div>
 
-                <label class="block text-slate-400 font-semibold mb-1">Provider</label>
+                <label class="block text-zinc-400 font-semibold mb-1">Provider</label>
 
-                <input id="modal-int-provider" type="text" value="Twilio" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+                <input id="modal-int-provider" type="text" value="Twilio" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
               </div>
 
               <div>
 
-                <label class="block text-slate-400 font-semibold mb-1">Contract Version</label>
+                <label class="block text-zinc-400 font-semibold mb-1">Contract Version</label>
 
-                <input id="modal-int-version" type="text" value="v1.0.0" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+                <input id="modal-int-version" type="text" value="v1.0.0" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
               </div>
 
@@ -5498,17 +5451,17 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Upstream Base URL</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Upstream Base URL</label>
 
-              <input id="modal-int-baseurl" type="text" value="https://api.twilio.com" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              <input id="modal-int-baseurl" type="text" value="https://api.twilio.com" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
             </div>
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Target Adapter File</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Target Adapter File</label>
 
-              <input id="modal-int-adapter" type="text" value="src/adapters/notification_adapter.py" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              <input id="modal-int-adapter" type="text" value="src/adapters/notification_adapter.py" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
             </div>
 
@@ -5520,7 +5473,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
         this.openModal(
 
-          '<i data-lucide="plus-circle" class="w-4 h-4 text-indigo-400"></i> Register New API Integration',
+          '<i data-lucide="plus-circle" class="w-4 h-4 text-zinc-300"></i> Register New API Integration',
 
           html,
 
@@ -5658,21 +5611,21 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">Incident Explorer & Contract Drift Forensics</h1>
 
-                <p class="text-xs text-slate-400">Inspect detected API failures, sanitized error payloads, structural contract diffs, and event timelines.</p>
+                <p class="text-xs text-zinc-400">Inspect detected API failures, sanitized error payloads, structural contract diffs, and event timelines.</p>
 
               </div>
 
               <div class="flex items-center gap-2">
 
-                <input id="incident-search-input" type="text" placeholder="Search endpoint, ID, type..." value="${this.incidentSearchQuery}" oninput="window.AutoPatchApp.incidentSearchQuery=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md bg-slate-900 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
+                <input id="incident-search-input" type="text" placeholder="Search endpoint, ID, type..." value="${this.incidentSearchQuery}" oninput="window.AutoPatchApp.incidentSearchQuery=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md stitch-card border border-white/[0.08] text-xs text-zinc-200 focus:outline-none focus:border-white/40" />
 
-                <select onchange="window.AutoPatchApp.incidentFilterStatus=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md bg-slate-900 border border-slate-800 text-xs text-slate-200 font-mono">
+                <select onchange="window.AutoPatchApp.incidentFilterStatus=this.value; window.AutoPatchApp.render();" class="px-3 py-1.5 rounded-md stitch-card border border-white/[0.08] text-xs text-zinc-200 font-mono">
 
                   <option value="ALL" ${this.incidentFilterStatus === 'ALL' ? 'selected' : ''}>All Statuses</option>
 
@@ -5696,9 +5649,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             ${filtered.length === 0 ? `
 
-              <div class="p-12 rounded-xl bg-slate-900/60 border border-slate-800 text-center space-y-3">
+              <div class="p-12 rounded-xl bg-zinc-950/70 border border-white/[0.08] text-center space-y-3">
 
-                <div class="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+                <div class="w-10 h-10 rounded-full bg-white/[0.06] text-zinc-400 flex items-center justify-center mx-auto">
 
                   <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
 
@@ -5706,7 +5659,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <div class="text-sm font-semibold text-white">No Incidents Recorded Matching Filter</div>
 
-                <p class="text-xs text-slate-400 max-w-md mx-auto">AutoPatch does not fabricate incidents. Click <strong>Simulate API Drift</strong> to trigger an actual contract validation failure through the proxy gateway.</p>
+                <p class="text-xs text-zinc-400 max-w-md mx-auto">AutoPatch does not fabricate incidents. Click <strong>Simulate API Drift</strong> to trigger an actual contract validation failure through the proxy gateway.</p>
 
                 <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold">Simulate API Drift</button>
 
@@ -5722,11 +5675,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   ${filtered.map(inc => `
 
-                    <div onclick="window.AutoPatchApp.selectedIncidentId='${inc.id}'; window.AutoPatchApp.render();" class="p-4 rounded-xl border cursor-pointer transition ${selected && selected.id === inc.id ? 'bg-slate-900 border-indigo-500/60 shadow-lg' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}">
+                    <div onclick="window.AutoPatchApp.selectedIncidentId='${inc.id}'; window.AutoPatchApp.render();" class="p-4 rounded-xl border cursor-pointer transition ${selected && selected.id === inc.id ? 'stitch-card border-white/30 shadow-lg' : 'bg-zinc-950/70 border-white/[0.08] hover:border-white/20'}">
 
                       <div class="flex items-center justify-between">
 
-                        <span class="font-mono text-xs font-bold text-indigo-300">${inc.id}</span>
+                        <span class="font-mono text-xs font-bold text-zinc-200">${inc.id}</span>
 
                         <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${inc.status === 'DEPLOYED' ? 'bg-emerald-500/20 text-emerald-300' : inc.status === 'AWAITING_APPROVAL' ? 'bg-amber-500/20 text-amber-300' : 'bg-rose-500/20 text-rose-300'}">${inc.status}</span>
 
@@ -5736,7 +5689,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                       <div class="text-xs font-mono text-rose-300 mt-0.5">${inc.failure_type} • ${inc.endpoint}</div>
 
-                      <div class="flex items-center justify-between text-[11px] text-slate-400 mt-3 pt-2 border-t border-slate-800/80 font-mono">
+                      <div class="flex items-center justify-between text-[11px] text-zinc-400 mt-3 pt-2 border-t border-white/[0.08] font-mono">
 
                         <span>Occurrences: ${inc.failure_count}</span>
 
@@ -5756,27 +5709,27 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 ${selected ? `
 
-                  <div class="lg:col-span-7 p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-5">
+                  <div class="lg:col-span-7 p-5 rounded-xl stitch-card border border-white/[0.08] space-y-5">
 
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
 
                       <div>
 
                         <div class="flex items-center gap-2">
 
-                          <span class="font-mono text-xs font-bold text-indigo-400">${selected.id}</span>
+                          <span class="font-mono text-xs font-bold text-zinc-300">${selected.id}</span>
 
                           <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-300 border border-rose-500/30">${selected.severity}</span>
 
-                          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">${selected.failure_type}</span>
+                          <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.06] text-zinc-300">${selected.failure_type}</span>
 
                         </div>
 
-                        <h2 class="text-base font-bold text-white mt-1">${selected.integration_name} — <code class="font-mono text-indigo-300">${selected.endpoint}</code></h2>
+                        <h2 class="text-base font-bold text-white mt-1">${selected.integration_name} — <code class="font-mono text-zinc-200">${selected.endpoint}</code></h2>
 
                       </div>
 
-                      <button onclick="window.AutoPatchApp.startOrResumeRepair('${selected.id}')" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shrink-0">
+                      <button onclick="window.AutoPatchApp.startOrResumeRepair('${selected.id}')" class="px-3.5 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold flex items-center gap-1.5 shrink-0">
 
                         <i data-lucide="cpu" class="w-4 h-4"></i>
 
@@ -5792,19 +5745,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                      <div class="p-3.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <div class="p-3.5 rounded-lg bg-zinc-950 border border-white/[0.08]">
 
                         <div class="text-[11px] font-mono uppercase text-rose-400 mb-1.5">Adapter Exception / Failure Trace</div>
 
-                        <pre class="text-xs font-mono text-slate-200 whitespace-pre-wrap">${selected.error_trace}</pre>
+                        <pre class="text-xs font-mono text-zinc-200 whitespace-pre-wrap">${selected.error_trace}</pre>
 
                       </div>
 
-                      <div class="p-3.5 rounded-lg bg-slate-950 border border-slate-800">
+                      <div class="p-3.5 rounded-lg bg-zinc-950 border border-white/[0.08]">
 
                         <div class="text-[11px] font-mono uppercase text-sky-400 mb-1.5">Sanitized Observed Upstream Payload</div>
 
-                        <pre class="text-xs font-mono text-slate-200 whitespace-pre-wrap">${JSON.stringify(selected.sanitized_payload, null, 2)}</pre>
+                        <pre class="text-xs font-mono text-zinc-200 whitespace-pre-wrap">${JSON.stringify(selected.sanitized_payload, null, 2)}</pre>
 
                       </div>
 
@@ -5814,13 +5767,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <!-- Deterministic Contract Diff Breakdown -->
 
-                    <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
+                    <div class="p-4 rounded-lg bg-zinc-950 border border-white/[0.08] space-y-2">
 
                       <div class="text-xs font-semibold text-white flex items-center justify-between">
 
                         <span>Contract Analysis: Confirmed Structural Diff vs. Suspected Field Rename</span>
 
-                        <span class="text-[11px] font-mono text-slate-400">Baseline: v2.1.0</span>
+                        <span class="text-[11px] font-mono text-zinc-400">Baseline: v2.1.0</span>
 
                       </div>
 
@@ -5846,7 +5799,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                       ` : `
 
-                        <div class="text-xs text-slate-400">${selected.contract_diff?.note || 'No structural schema differences recorded.'}</div>
+                        <div class="text-xs text-zinc-400">${selected.contract_diff?.note || 'No structural schema differences recorded.'}</div>
 
                       `}
 
@@ -5858,17 +5811,17 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <div>
 
-                      <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Persisted Incident Event Timeline</div>
+                      <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">Persisted Incident Event Timeline</div>
 
-                      <div class="space-y-2 border-l-2 border-slate-800 pl-3">
+                      <div class="space-y-2 border-l-2 border-white/[0.08] pl-3">
 
                         ${selected.timeline.map(t => `
 
                           <div class="text-xs">
 
-                            <span class="font-mono text-[10px] text-slate-500">${new Date(t.timestamp).toLocaleTimeString()}</span>
+                            <span class="font-mono text-[10px] text-zinc-500">${new Date(t.timestamp).toLocaleTimeString()}</span>
 
-                            <p class="text-slate-300">${t.event}</p>
+                            <p class="text-zinc-300">${t.event}</p>
 
                           </div>
 
@@ -5906,19 +5859,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">AI Self-Healing Workbench (11-Node LangGraph Orchestrator)</h1>
 
-                <p class="text-xs text-slate-400">Inspect persistent LangGraph workflow checkpoints, retrieved Qdrant evidence, isolated Docker sandbox test logs, and human review gates.</p>
+                <p class="text-xs text-zinc-400">Inspect persistent LangGraph workflow checkpoints, retrieved Qdrant evidence, isolated Docker sandbox test logs, and human review gates.</p>
 
               </div>
 
               ${this.db.incidents.length > 0 && !repair ? `
 
-                <button onclick="window.AutoPatchApp.startOrResumeRepair('${this.db.incidents[0].id}')" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
+                <button onclick="window.AutoPatchApp.startOrResumeRepair('${this.db.incidents[0].id}')" class="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold">
 
                   Execute LangGraph Repair for ${this.db.incidents[0].id}
 
@@ -5932,9 +5885,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             ${!repair ? `
 
-              <div class="p-12 rounded-xl bg-slate-900/60 border border-slate-800 text-center space-y-3">
+              <div class="p-12 rounded-xl bg-zinc-950/70 border border-white/[0.08] text-center space-y-3">
 
-                <div class="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto">
+                <div class="w-10 h-10 rounded-full bg-white/10 text-zinc-200 text-zinc-300 flex items-center justify-center mx-auto">
 
                   <i data-lucide="cpu" class="w-5 h-5"></i>
 
@@ -5942,9 +5895,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <div class="text-sm font-semibold text-white">No Active LangGraph Repair Run</div>
 
-                <p class="text-xs text-slate-400 max-w-md mx-auto">Simulate an API drift incident first, then launch the 11-node repair orchestrator to inspect real persisted checkpoints.</p>
+                <p class="text-xs text-zinc-400 max-w-md mx-auto">Simulate an API drift incident first, then launch the 11-node repair orchestrator to inspect real persisted checkpoints.</p>
 
-                <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
+                <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold">
 
                   Simulate Drift & Run LangGraph Now
 
@@ -5956,11 +5909,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <!-- Top Checkpoint Metadata Bar -->
 
-              <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs">
+              <div class="p-4 rounded-xl stitch-card border border-white/[0.08] flex flex-wrap items-center justify-between gap-4 text-xs">
 
                 <div class="flex flex-wrap items-center gap-4 font-mono">
 
-                  <span>Run ID: <strong class="text-indigo-300">${repair.id}</strong></span>
+                  <span>Run ID: <strong class="text-zinc-200">${repair.id}</strong></span>
 
                   <span>Incident: <strong class="text-rose-300">${repair.incident_id}</strong></span>
 
@@ -5974,7 +5927,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <div class="flex items-center gap-2">
 
-                  <button onclick="window.AutoPatchApp.navigate('review')" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.navigate('review')" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] font-semibold flex items-center gap-1.5">
 
                     <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> Open Code Review & Approval Gate
 
@@ -5994,7 +5947,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <div class="lg:col-span-5 space-y-2">
 
-                  <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">LangGraph State Machine Nodes</div>
+                  <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">LangGraph State Machine Nodes</div>
 
                   ${repair.nodes.map(n => {
 
@@ -6010,11 +5963,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                           ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
 
-                          : 'bg-slate-800 text-slate-400 border-slate-700';
+                          : 'bg-white/[0.06] text-zinc-400 border-white/15';
 
                     return `
 
-                      <div class="p-3 rounded-lg bg-slate-900/90 border ${n.status === 'AWAITING_ACTION' ? 'border-amber-500/60' : 'border-slate-800'} flex items-start justify-between gap-3">
+                      <div class="p-3 rounded-lg stitch-card border ${n.status === 'AWAITING_ACTION' ? 'border-amber-500/60' : 'border-white/[0.08]'} flex items-start justify-between gap-3">
 
                         <div class="flex items-start gap-2.5">
 
@@ -6026,11 +5979,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                               <span>${n.name}</span>
 
-                              ${n.duration_ms > 0 ? `<span class="text-[10px] font-mono text-slate-400">${n.duration_ms}ms</span>` : ''}
+                              ${n.duration_ms > 0 ? `<span class="text-[10px] font-mono text-zinc-400">${n.duration_ms}ms</span>` : ''}
 
                             </div>
 
-                            <p class="text-[11px] text-slate-400 mt-0.5">${n.detail}</p>
+                            <p class="text-[11px] text-zinc-400 mt-0.5">${n.detail}</p>
 
                           </div>
 
@@ -6054,11 +6007,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   <!-- Node 3 Root Cause Analysis -->
 
-                  <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                  <div class="p-4 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
                     <div class="flex items-center justify-between">
 
-                      <h3 class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Node 3 — Structured Root-Cause Analysis</h3>
+                      <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-200">Node 3 — Structured Root-Cause Analysis</h3>
 
                       <span class="text-xs font-mono text-emerald-400">Confidence: ${(repair.confidence_score * 100).toFixed(0)}%</span>
 
@@ -6066,11 +6019,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <p class="text-xs text-white font-medium leading-relaxed">${repair.root_cause_hypothesis.summary}</p>
 
-                    <div class="space-y-1 text-xs text-slate-300">
+                    <div class="space-y-1 text-xs text-zinc-300">
 
-                      <div class="text-[11px] font-mono uppercase text-slate-400">Supporting Evidence:</div>
+                      <div class="text-[11px] font-mono uppercase text-zinc-400">Supporting Evidence:</div>
 
-                      <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-300">
+                      <ul class="list-disc list-inside space-y-1 text-[11px] text-zinc-300">
 
                         ${repair.root_cause_hypothesis.supporting_evidence.map(ev => `<li>${ev}</li>`).join('')}
 
@@ -6078,7 +6031,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     </div>
 
-                    <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800 flex items-center justify-between">
+                    <div class="text-[11px] text-zinc-400 pt-1 border-t border-white/[0.08] flex items-center justify-between">
 
                       <span>Alternative considered: ${repair.root_cause_hypothesis.alternative_explanations[0]}</span>
 
@@ -6092,31 +6045,31 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   <!-- Node 4 Qdrant RAG Citations -->
 
-                  <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                  <div class="p-4 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
                     <div class="flex items-center justify-between">
 
                       <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-300">Node 4 — Retrieved Documentation & Migration Guide Evidence (Qdrant)</h3>
 
-                      <span class="text-[11px] font-mono text-slate-400">Untrusted Data Sanitized</span>
+                      <span class="text-[11px] font-mono text-zinc-400">Untrusted Data Sanitized</span>
 
                     </div>
 
                     ${repair.rag_retrieval.results.map(chunk => `
 
-                      <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                      <div class="p-3 rounded-lg bg-zinc-950 border border-white/[0.08] space-y-1">
 
                         <div class="flex items-center justify-between text-[11px] font-mono">
 
-                          <span class="text-indigo-300 font-semibold">${chunk.title} (${chunk.version})</span>
+                          <span class="text-zinc-200 font-semibold">${chunk.title} (${chunk.version})</span>
 
                           <span class="text-emerald-400">Cosine Score: ${chunk.score}</span>
 
                         </div>
 
-                        <p class="text-xs text-slate-300 font-mono leading-relaxed">"${chunk.excerpt}"</p>
+                        <p class="text-xs text-zinc-300 font-mono leading-relaxed">"${chunk.excerpt}"</p>
 
-                        <div class="text-[10px] font-mono text-slate-500 flex items-center justify-between pt-1">
+                        <div class="text-[10px] font-mono text-zinc-500 flex items-center justify-between pt-1">
 
                           <span>Source: ${chunk.source_url}</span>
 
@@ -6136,17 +6089,17 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   ${repair.validation_test_run ? `
 
-                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                    <div class="p-4 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
                       <div class="flex items-center justify-between">
 
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Node 7 — Ephemeral Docker Sandbox Test Runner</h3>
 
-                        <span class="text-[11px] font-mono text-slate-400">${repair.validation_test_run.container_profile}</span>
+                        <span class="text-[11px] font-mono text-zinc-400">${repair.validation_test_run.container_profile}</span>
 
                       </div>
 
-                      <pre class="p-3 rounded-lg bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300 overflow-x-auto leading-relaxed">${repair.validation_test_run.raw_log}</pre>
+                      <pre class="p-3 rounded-lg bg-zinc-950 border border-white/[0.08] text-[11px] font-mono text-emerald-300 overflow-x-auto leading-relaxed">${repair.validation_test_run.raw_log}</pre>
 
                     </div>
 
@@ -6178,21 +6131,21 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">Human Code Review, GitHub PR & Deployment Gate</h1>
 
-                <p class="text-xs text-slate-400">AutoPatch proposes and validates repairs; humans retain strict RBAC-enforced control over PR creation and production deployment.</p>
+                <p class="text-xs text-zinc-400">AutoPatch proposes and validates repairs; humans retain strict RBAC-enforced control over PR creation and production deployment.</p>
 
               </div>
 
               <div class="flex items-center gap-2 text-xs font-mono">
 
-                <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300">Active Role: <strong class="text-indigo-300">${this.db.currentUser.role}</strong></span>
+                <span class="px-2.5 py-1 rounded stitch-card border border-white/[0.08] text-zinc-300">Active Role: <strong class="text-zinc-200">${this.db.currentUser.role}</strong></span>
 
-                <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300">Policy: <strong class="text-emerald-300">${this.db.workspace.approval_policy}</strong></span>
+                <span class="px-2.5 py-1 rounded stitch-card border border-white/[0.08] text-zinc-300">Policy: <strong class="text-emerald-300">${this.db.workspace.approval_policy}</strong></span>
 
               </div>
 
@@ -6202,13 +6155,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             ${!repair || !repair.repair_plan ? `
 
-              <div class="p-12 rounded-xl bg-slate-900/60 border border-slate-800 text-center space-y-3">
+              <div class="p-12 rounded-xl bg-zinc-950/70 border border-white/[0.08] text-center space-y-3">
 
                 <div class="text-sm font-semibold text-white">No Validated Code Patch Awaiting Review</div>
 
-                <p class="text-xs text-slate-400 max-w-md mx-auto">Trigger the API drift scenario and run the LangGraph repair workflow to inspect the side-by-side adapter diff and approval controls.</p>
+                <p class="text-xs text-zinc-400 max-w-md mx-auto">Trigger the API drift scenario and run the LangGraph repair workflow to inspect the side-by-side adapter diff and approval controls.</p>
 
-                <button onclick="window.AutoPatchApp.runAutomatedE2ETest(); window.AutoPatchApp.navigate('review');" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
+                <button onclick="window.AutoPatchApp.runAutomatedE2ETest(); window.AutoPatchApp.navigate('review');" class="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold">
 
                   Generate & Validate Demo Patch Now
 
@@ -6220,21 +6173,21 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <!-- Action Control Bar (Enforces Backend RBAC Roles) -->
 
-              <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div class="p-4 rounded-xl stitch-card border border-white/[0.08] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
 
                 <div class="space-y-1">
 
                   <div class="flex items-center gap-2">
 
-                    <span class="text-xs font-mono font-bold text-indigo-300">${repair.id}</span>
+                    <span class="text-xs font-mono font-bold text-zinc-200">${repair.id}</span>
 
-                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${repair.workflow_state === 'DEPLOYED' ? 'bg-emerald-500/20 text-emerald-300' : repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-amber-500/20 text-amber-300' : 'bg-indigo-500/20 text-indigo-300'}">${repair.workflow_state}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${repair.workflow_state === 'DEPLOYED' ? 'bg-emerald-500/20 text-emerald-300' : repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-amber-500/20 text-amber-300' : 'bg-white/10 text-zinc-200 text-zinc-200'}">${repair.workflow_state}</span>
 
-                    <span class="text-xs text-slate-400 font-mono">Target: ${repair.target_file}</span>
+                    <span class="text-xs text-zinc-400 font-mono">Target: ${repair.target_file}</span>
 
                   </div>
 
-                  <p class="text-xs text-slate-300">${repair.repair_plan.behavioral_change}</p>
+                  <p class="text-xs text-zinc-300">${repair.repair_plan.behavioral_change}</p>
 
                 </div>
 
@@ -6244,7 +6197,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <div class="flex flex-wrap items-center gap-2 shrink-0">
 
-                  <button onclick="window.AutoPatchApp.approveRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.approveRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-white/[0.06] text-zinc-500 cursor-not-allowed'} flex items-center gap-1.5">
 
                     <i data-lucide="check" class="w-3.5 h-3.5"></i> Approve Repair
 
@@ -6252,7 +6205,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-                  <button onclick="window.AutoPatchApp.promptRejectRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-rose-600/80 hover:bg-rose-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.promptRejectRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-rose-600/80 hover:bg-rose-500 text-white' : 'bg-white/[0.06] text-zinc-500 cursor-not-allowed'} flex items-center gap-1.5">
 
                     <i data-lucide="x" class="w-3.5 h-3.5"></i> Reject Repair
 
@@ -6260,15 +6213,15 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-                  <button onclick="window.AutoPatchApp.promptRequestRevision('${repair.id}')" ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-medium ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'bg-slate-900 text-slate-600 border-slate-800 cursor-not-allowed' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.promptRequestRevision('${repair.id}')" ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-medium ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'stitch-card text-zinc-600 border-white/[0.08] cursor-not-allowed' : 'bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 border-white/15'} flex items-center gap-1.5">
 
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 ${repair.iteration_count >= repair.max_iterations ? 'text-slate-600' : 'text-amber-400'}"></i> Request Revision (${repair.iteration_count}/${repair.max_iterations}${repair.iteration_count >= repair.max_iterations ? ' - Max' : ''})
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 ${repair.iteration_count >= repair.max_iterations ? 'text-zinc-600' : 'text-amber-400'}"></i> Request Revision (${repair.iteration_count}/${repair.max_iterations}${repair.iteration_count >= repair.max_iterations ? ' - Max' : ''})
 
                   </button>
 
 
 
-                  <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile('${repair.id}')" class="px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile('${repair.id}')" class="px-3 py-1.5 rounded-md text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 border border-white/15 flex items-center gap-1.5">
 
                     <i data-lucide="download" class="w-3.5 h-3.5 text-sky-400"></i> Export .patch
 
@@ -6276,7 +6229,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-                  <button onclick="window.AutoPatchApp.createPullRequestOrExport('${repair.id}')" ${repair.workflow_state !== 'APPROVED_READY_FOR_PR' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'APPROVED_READY_FOR_PR' ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'bg-slate-800 text-slate-500 cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.createPullRequestOrExport('${repair.id}')" ${repair.workflow_state !== 'APPROVED_READY_FOR_PR' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'APPROVED_READY_FOR_PR' ? 'bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'bg-white/[0.06] text-zinc-500 cursor-not-allowed'} flex items-center gap-1.5">
 
                     <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> ${this.db.workspace.github_config.configured ? 'Create GitHub PR' : 'Finalize Local Patch PR'}
 
@@ -6284,7 +6237,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-                  <button onclick="window.AutoPatchApp.authorizeDeployment('${repair.id}')" ${repair.workflow_state !== 'PR_CREATED' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'PR_CREATED' ? 'bg-violet-600 hover:bg-violet-500 text-white shadow' : 'bg-slate-800 text-slate-500 cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.authorizeDeployment('${repair.id}')" ${repair.workflow_state !== 'PR_CREATED' ? 'disabled' : ''} class="px-3 py-1.5 rounded-md text-xs font-semibold ${repair.workflow_state === 'PR_CREATED' ? 'bg-violet-600 hover:bg-violet-500 text-white shadow' : 'bg-white/[0.06] text-zinc-500 cursor-not-allowed'} flex items-center gap-1.5">
 
                     <i data-lucide="rocket" class="w-3.5 h-3.5"></i> Authorize Deployment
 
@@ -6300,11 +6253,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div class="p-4 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
-                  <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Changed File Tree & Scope</div>
+                  <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Changed File Tree & Scope</div>
 
-                  <div class="p-2 rounded bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-300 flex items-center gap-2">
+                  <div class="p-2 rounded bg-zinc-950 border border-white/[0.08] font-mono text-xs text-emerald-300 flex items-center gap-2">
 
                     <i data-lucide="file-code" class="w-4 h-4 shrink-0"></i>
 
@@ -6312,7 +6265,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   </div>
 
-                  <div class="text-[11px] text-slate-400 space-y-1 pt-2 border-t border-slate-800">
+                  <div class="text-[11px] text-zinc-400 space-y-1 pt-2 border-t border-white/[0.08]">
 
                     <div>Change Scope Check: <strong class="text-emerald-400 font-mono">VERIFIED (1 file)</strong></div>
 
@@ -6330,7 +6283,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                       <div class="font-semibold flex items-center gap-1"><i data-lucide="x-circle" class="w-3.5 h-3.5 text-rose-400"></i> Proposal Rejected by ${repair.rejection_record.rejected_by}</div>
 
-                      <div class="text-[10px] text-slate-300 font-mono">Reason: "${repair.rejection_record.reason}"</div>
+                      <div class="text-[10px] text-zinc-300 font-mono">Reason: "${repair.rejection_record.reason}"</div>
 
                       <div class="font-mono text-[10px] opacity-75">${new Date(repair.rejection_record.timestamp).toLocaleString()}</div>
 
@@ -6358,7 +6311,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                       ${repair.revision_notes.map(rn => `
 
-                        <div class="text-[10px] text-slate-300 font-mono border-t border-amber-500/20 pt-1">
+                        <div class="text-[10px] text-zinc-300 font-mono border-t border-amber-500/20 pt-1">
 
                           <span class="text-amber-300 font-semibold">Iter ${rn.iteration} (${rn.requested_by}):</span> "${rn.note}"
 
@@ -6372,7 +6325,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   ${repair.pull_request ? `
 
-                    <div class="p-2.5 rounded bg-indigo-950/30 border border-indigo-500/30 text-[11px] text-indigo-200">
+                    <div class="p-2.5 rounded bg-white/[0.04] border border-white/20 text-[11px] text-white">
 
                       <div class="font-semibold">Mode: ${repair.pull_request.mode}</div>
 
@@ -6390,23 +6343,23 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <!-- Side-by-Side Syntax Diff Viewer -->
 
-                <div class="lg:col-span-3 rounded-xl bg-slate-900/90 border border-slate-800 overflow-hidden">
+                <div class="lg:col-span-3 rounded-xl stitch-card border border-white/[0.08] overflow-hidden">
 
-                  <div class="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
+                  <div class="px-4 py-2.5 bg-zinc-950 border-b border-white/[0.08] flex items-center justify-between text-xs font-mono">
 
-                    <span class="text-slate-300">Side-by-Side Diff: <strong>${repair.target_file}</strong></span>
+                    <span class="text-zinc-300">Side-by-Side Diff: <strong>${repair.target_file}</strong></span>
 
                     <span class="text-emerald-400">+5 additions / <span class="text-rose-400">-3 deletions</span></span>
 
                   </div>
 
-                  <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-800 font-mono text-[11px] leading-relaxed">
+                  <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/[0.06] font-mono text-[11px] leading-relaxed">
 
-                    <div class="p-3 bg-slate-950/60 overflow-x-auto">
+                    <div class="p-3 bg-zinc-950/80 overflow-x-auto">
 
                       <div class="text-[10px] uppercase text-rose-400 mb-2">Before (v2.1.0 Baseline Adapter — Fails on v2.2 Drift)</div>
 
-                      <pre class="text-slate-300"><code>from typing import Dict, Any
+                      <pre class="text-zinc-300"><code>from typing import Dict, Any
 
 from pydantic import BaseModel, Field
 
@@ -6442,11 +6395,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     </div>
 
-                    <div class="p-3 bg-slate-950/60 overflow-x-auto">
+                    <div class="p-3 bg-zinc-950/80 overflow-x-auto">
 
                       <div class="text-[10px] uppercase text-emerald-400 mb-2">After (AutoPatch Dual-Compatibility Adapter — 4/4 Tests Pass)</div>
 
-                      <pre class="text-slate-200"><code>from typing import Dict, Any
+                      <pre class="text-zinc-200"><code>from typing import Dict, Any
 
 from pydantic import BaseModel, Field
 
@@ -6492,31 +6445,31 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <!-- Generated Pull Request Description Preview (12 Mandatory Sections from Prompt Section 5) -->
 
-              <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+              <div class="p-5 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
-                <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <div class="flex items-center justify-between border-b border-white/[0.08] pb-2.5">
 
-                  <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Generated GitHub Pull Request Body (12-Point Reproducible Specification)</h3>
+                  <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">Generated GitHub Pull Request Body (12-Point Reproducible Specification)</h3>
 
-                  <span class="text-[11px] font-mono text-indigo-300">Branch: autopatch/fix-${repair.incident_id}-customer-id-drift</span>
+                  <span class="text-[11px] font-mono text-zinc-200">Branch: autopatch/fix-${repair.incident_id}-customer-id-drift</span>
 
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300 font-mono leading-relaxed">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-300 font-mono leading-relaxed">
 
                   <div class="space-y-1.5">
 
-                    <div><strong class="text-white">1. Summary:</strong> Resolve breaking <code class="text-indigo-300">KeyError: customer_id</code> on CommerceCore v2.2 upgrade.</div>
+                    <div><strong class="text-white">1. Summary:</strong> Resolve breaking <code class="text-zinc-200">KeyError: customer_id</code> on CommerceCore v2.2 upgrade.</div>
 
-                    <div><strong class="text-white">2. Affected Endpoint:</strong> <code class="text-indigo-300">GET /v2/customers/{id}</code> (<code class="text-slate-300">int_commerce_01</code>)</div>
+                    <div><strong class="text-white">2. Affected Endpoint:</strong> <code class="text-zinc-200">GET /v2/customers/{id}</code> (<code class="text-zinc-300">int_commerce_01</code>)</div>
 
                     <div><strong class="text-white">3. Observed Error:</strong> <code class="text-rose-300">KeyError: "Missing required contract field: 'customer_id'"</code></div>
 
-                    <div><strong class="text-white">4. Likely Root Cause:</strong> Upstream renamed <code class="text-indigo-300">customer_id</code> to <code class="text-indigo-300">customerId</code> in v2.2.</div>
+                    <div><strong class="text-white">4. Likely Root Cause:</strong> Upstream renamed <code class="text-zinc-200">customer_id</code> to <code class="text-zinc-200">customerId</code> in v2.2.</div>
 
-                    <div><strong class="text-white">5. Previous vs Expected:</strong> Previously required snake_case <code class="text-slate-300">customer_id</code>; now resolves <code class="text-emerald-300">customerId</code> with fallback to <code class="text-slate-300">customer_id</code>.</div>
+                    <div><strong class="text-white">5. Previous vs Expected:</strong> Previously required snake_case <code class="text-zinc-300">customer_id</code>; now resolves <code class="text-emerald-300">customerId</code> with fallback to <code class="text-zinc-300">customer_id</code>.</div>
 
-                    <div><strong class="text-white">6. Documentation Ref:</strong> <span class="text-indigo-300 underline">https://docs.commercecore.internal/migrations/v2.1-to-v2.2</span></div>
+                    <div><strong class="text-white">6. Documentation Ref:</strong> <span class="text-zinc-200 underline">https://docs.commercecore.internal/migrations/v2.1-to-v2.2</span></div>
 
                   </div>
 
@@ -6532,7 +6485,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <div><strong class="text-white">11. Rollback / Compatibility:</strong> 100% backward-compatible with v2.1 payloads; zero-downtime revert.</div>
 
-                    <div><strong class="text-white">12. AutoPatch Incident URL:</strong> <code class="text-indigo-300">https://autopatch.internal/workspaces/ws_prod_01/incidents/${repair.incident_id}</code></div>
+                    <div><strong class="text-white">12. AutoPatch Incident URL:</strong> <code class="text-zinc-200">https://autopatch.internal/workspaces/ws_prod_01/incidents/${repair.incident_id}</code></div>
 
                   </div>
 
@@ -6562,13 +6515,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">Documentation RAG Engine & API Contract Registry</h1>
 
-                <p class="text-xs text-slate-400">Ingest OpenAPI specs and migration guides with SHA-256 content-hash deduplication, test semantic vector retrieval, and compare contract revisions.</p>
+                <p class="text-xs text-zinc-400">Ingest OpenAPI specs and migration guides with SHA-256 content-hash deduplication, test semantic vector retrieval, and compare contract revisions.</p>
 
               </div>
 
@@ -6584,19 +6537,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <!-- Interactive Vector Search Tester -->
 
-            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+            <div class="p-4 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
 
-                <h2 class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Live Qdrant Semantic Evidence Retrieval Console</h2>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-200">Live Qdrant Semantic Evidence Retrieval Console</h2>
 
-                <span class="text-[11px] font-mono text-slate-400">Query Latency: ${ragResults.duration_ms}ms</span>
+                <span class="text-[11px] font-mono text-zinc-400">Query Latency: ${ragResults.duration_ms}ms</span>
 
               </div>
 
               <div class="flex gap-2">
 
-                <input id="rag-search-input" type="text" value="${this.ragSearchQuery}" oninput="window.AutoPatchApp.ragSearchQuery=this.value; window.AutoPatchApp.render();" placeholder="Search migration guides, field names, endpoints..." class="flex-1 px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-white focus:outline-none focus:border-indigo-500" />
+                <input id="rag-search-input" type="text" value="${this.ragSearchQuery}" oninput="window.AutoPatchApp.ragSearchQuery=this.value; window.AutoPatchApp.render();" placeholder="Search migration guides, field names, endpoints..." class="flex-1 px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-xs font-mono text-white focus:outline-none focus:border-white/40" />
 
               </div>
 
@@ -6604,19 +6557,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 ${ragResults.results.length > 0 ? ragResults.results.map(r => `
 
-                  <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                  <div class="p-3 rounded-lg bg-zinc-950 border border-white/[0.08] space-y-1">
 
                     <div class="flex items-center justify-between text-xs font-mono">
 
-                      <span class="text-indigo-300 font-semibold">${r.title}</span>
+                      <span class="text-zinc-200 font-semibold">${r.title}</span>
 
                       <span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Score: ${r.score}</span>
 
                     </div>
 
-                    <p class="text-xs text-slate-300 font-mono">"${r.excerpt}"</p>
+                    <p class="text-xs text-zinc-300 font-mono">"${r.excerpt}"</p>
 
-                    <div class="text-[10px] font-mono text-slate-500 flex items-center justify-between pt-1">
+                    <div class="text-[10px] font-mono text-zinc-500 flex items-center justify-between pt-1">
 
                       <span>${r.source_url}</span>
 
@@ -6628,9 +6581,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 `).join('') : `
 
-                  <div class="col-span-full p-6 rounded-lg bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-400">
+                  <div class="col-span-full p-6 rounded-lg bg-zinc-950/80 border border-white/[0.08] text-center text-xs text-zinc-400">
 
-                    <i data-lucide="search" class="w-5 h-5 mx-auto mb-1 text-slate-500"></i>
+                    <i data-lucide="search" class="w-5 h-5 mx-auto mb-1 text-zinc-500"></i>
 
                     No matching documentation chunks found for "${this.ragSearchQuery}". Try queries like "customerId", "migration", or click "Ingest Documentation".
 
@@ -6646,15 +6599,15 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <!-- Contract Version Comparison (v2.1.0 Baseline vs v2.2.0 Observed) -->
 
-            <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <div class="p-5 rounded-xl stitch-card border border-white/[0.08] space-y-4">
 
               <div class="flex items-center justify-between">
 
                 <div>
 
-                  <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">API Contract Registry Revision Comparison (CommerceCore Customer API)</h2>
+                  <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">API Contract Registry Revision Comparison (CommerceCore Customer API)</h2>
 
-                  <p class="text-[11px] text-slate-400">Distinguishes confirmed structural changes from suspected field renames.</p>
+                  <p class="text-[11px] text-zinc-400">Distinguishes confirmed structural changes from suspected field renames.</p>
 
                 </div>
 
@@ -6664,19 +6617,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
 
-                <div class="p-3.5 rounded-lg bg-slate-950 border border-slate-800">
+                <div class="p-3.5 rounded-lg bg-zinc-950 border border-white/[0.08]">
 
                   <div class="text-emerald-400 font-semibold mb-2">Revision v2.1.0 (Registered Baseline Contract)</div>
 
-                  <pre class="text-[11px] text-slate-300 overflow-x-auto">${JSON.stringify(this.db.contract_versions[0].schema, null, 2)}</pre>
+                  <pre class="text-[11px] text-zinc-300 overflow-x-auto">${JSON.stringify(this.db.contract_versions[0].schema, null, 2)}</pre>
 
                 </div>
 
-                <div class="p-3.5 rounded-lg bg-slate-950 border border-slate-800">
+                <div class="p-3.5 rounded-lg bg-zinc-950 border border-white/[0.08]">
 
                   <div class="text-amber-400 font-semibold mb-2">Revision v2.2.0-observed (Drifted Contract Schema)</div>
 
-                  <pre class="text-[11px] text-slate-300 overflow-x-auto">${JSON.stringify(this.db.contract_versions[1].schema, null, 2)}</pre>
+                  <pre class="text-[11px] text-zinc-300 overflow-x-auto">${JSON.stringify(this.db.contract_versions[1].schema, null, 2)}</pre>
 
                 </div>
 
@@ -6688,13 +6641,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <!-- Indexed Documentation Sources Table -->
 
-            <div class="rounded-xl bg-slate-900/90 border border-slate-800 overflow-hidden">
+            <div class="rounded-xl stitch-card border border-white/[0.08] overflow-hidden">
 
-              <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+              <div class="px-4 py-3 border-b border-white/[0.08] flex items-center justify-between">
 
-                <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Ingested Documentation Sources & SHA-256 Deduplication State</h2>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">Ingested Documentation Sources & SHA-256 Deduplication State</h2>
 
-                <span class="text-[11px] font-mono text-slate-400">${this.db.documentation_sources.length} Sources Indexed</span>
+                <span class="text-[11px] font-mono text-zinc-400">${this.db.documentation_sources.length} Sources Indexed</span>
 
               </div>
 
@@ -6702,7 +6655,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <thead>
 
-                  <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-slate-950/50">
+                  <tr class="border-b border-white/[0.08] text-[11px] font-mono uppercase text-zinc-400 bg-zinc-950/60">
 
                     <th class="py-2.5 px-3">Title & Provider</th>
 
@@ -6718,7 +6671,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 </thead>
 
-                <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
+                <tbody class="divide-y divide-white/[0.06] font-mono text-[11px]">
 
                   ${this.db.documentation_sources.map(doc => `
 
@@ -6728,17 +6681,17 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                         <div class="font-sans font-semibold text-white text-xs">${doc.title}</div>
 
-                        <div class="text-slate-400 text-[10px]">${doc.source_url}</div>
+                        <div class="text-zinc-400 text-[10px]">${doc.source_url}</div>
 
                       </td>
 
-                      <td class="py-2.5 px-3 text-indigo-300">${doc.doc_type} (${doc.version})</td>
+                      <td class="py-2.5 px-3 text-zinc-200">${doc.doc_type} (${doc.version})</td>
 
                       <td class="py-2.5 px-3 text-emerald-400">${doc.content_hash}</td>
 
-                      <td class="py-2.5 px-3 text-slate-300">${doc.chunks.length} chunks</td>
+                      <td class="py-2.5 px-3 text-zinc-300">${doc.chunks.length} chunks</td>
 
-                      <td class="py-2.5 px-3 text-right text-slate-400">${new Date(doc.ingested_at).toLocaleDateString()}</td>
+                      <td class="py-2.5 px-3 text-right text-zinc-400">${new Date(doc.ingested_at).toLocaleDateString()}</td>
 
                     </tr>
 
@@ -6770,9 +6723,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Documentation Title</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Documentation Title</label>
 
-              <input id="modal-doc-title" type="text" value="CommerceCore v2.3 Webhook Deprecation Notice" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+              <input id="modal-doc-title" type="text" value="CommerceCore v2.3 Webhook Deprecation Notice" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
             </div>
 
@@ -6780,9 +6733,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <div>
 
-                <label class="block text-slate-400 font-semibold mb-1">Document Type</label>
+                <label class="block text-zinc-400 font-semibold mb-1">Document Type</label>
 
-                <select id="modal-doc-type" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500">
+                <select id="modal-doc-type" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40">
 
                   <option value="MIGRATION_GUIDE">MIGRATION_GUIDE</option>
 
@@ -6796,9 +6749,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <div>
 
-                <label class="block text-slate-400 font-semibold mb-1">Target Version</label>
+                <label class="block text-zinc-400 font-semibold mb-1">Target Version</label>
 
-                <input id="modal-doc-version" type="text" value="v2.3" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono focus:outline-none focus:border-indigo-500" />
+                <input id="modal-doc-version" type="text" value="v2.3" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono focus:outline-none focus:border-white/40" />
 
               </div>
 
@@ -6806,9 +6759,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div>
 
-              <label class="block text-slate-400 font-semibold mb-1">Markdown / OpenAPI Specification Content</label>
+              <label class="block text-zinc-400 font-semibold mb-1">Markdown / OpenAPI Specification Content</label>
 
-              <textarea id="modal-doc-content" rows="4" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-white font-mono text-xs focus:outline-none focus:border-indigo-500">In API v2.3, customerId remains the primary key and loyalty_tier is promoted to required enum: [TIER_1, TIER_2, VIP]. Dual compatibility fallback must be retained.</textarea>
+              <textarea id="modal-doc-content" rows="4" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-white/[0.08] text-white font-mono text-xs focus:outline-none focus:border-white/40">In API v2.3, customerId remains the primary key and loyalty_tier is promoted to required enum: [TIER_1, TIER_2, VIP]. Dual compatibility fallback must be retained.</textarea>
 
             </div>
 
@@ -6950,11 +6903,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="border-b border-slate-800 pb-4">
+            <div class="border-b border-white/[0.08] pb-4">
 
               <h1 class="text-lg font-bold text-white tracking-tight">Operational Analytics, MTTR & LLM Cost Ledger</h1>
 
-              <p class="text-xs text-slate-400">Explicitly defined engineering metrics, sandbox runtimes, and configurable business-impact estimates.</p>
+              <p class="text-xs text-zinc-400">Explicitly defined engineering metrics, sandbox runtimes, and configurable business-impact estimates.</p>
 
             </div>
 
@@ -6962,43 +6915,43 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div class="p-4 rounded-xl stitch-card border border-white/[0.08]">
 
-                <div class="text-xs text-slate-400">MTTD (Detection Latency)</div>
+                <div class="text-xs text-zinc-400">MTTD (Detection Latency)</div>
 
                 <div class="text-2xl font-bold font-mono text-white mt-1">${m.mttdMs}ms</div>
 
-                <div class="text-[11px] text-slate-400 mt-1">Inline proxy schema validator</div>
+                <div class="text-[11px] text-zinc-400 mt-1">Inline proxy schema validator</div>
 
               </div>
 
-              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div class="p-4 rounded-xl stitch-card border border-white/[0.08]">
 
-                <div class="text-xs text-slate-400">Time to Validated Proposal</div>
+                <div class="text-xs text-zinc-400">Time to Validated Proposal</div>
 
-                <div class="text-2xl font-bold font-mono text-indigo-400 mt-1">${m.mttPropSec}s</div>
+                <div class="text-2xl font-bold font-mono text-zinc-300 mt-1">${m.mttPropSec}s</div>
 
-                <div class="text-[11px] text-slate-400 mt-1">Includes Qdrant RAG + Docker Sandbox</div>
+                <div class="text-[11px] text-zinc-400 mt-1">Includes Qdrant RAG + Docker Sandbox</div>
 
               </div>
 
-              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div class="p-4 rounded-xl stitch-card border border-white/[0.08]">
 
-                <div class="text-xs text-slate-400">Verified Production MTTR</div>
+                <div class="text-xs text-zinc-400">Verified Production MTTR</div>
 
                 <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">${m.mttrVerifiedSec ? m.mttrVerifiedSec + 's' : 'Awaiting Deploy'}</div>
 
-                <div class="text-[11px] text-slate-400 mt-1">Only counted after verified recovery</div>
+                <div class="text-[11px] text-zinc-400 mt-1">Only counted after verified recovery</div>
 
               </div>
 
-              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div class="p-4 rounded-xl stitch-card border border-white/[0.08]">
 
-                <div class="text-xs text-slate-400">Total LLM & Sandbox Spend</div>
+                <div class="text-xs text-zinc-400">Total LLM & Sandbox Spend</div>
 
                 <div class="text-2xl font-bold font-mono text-amber-300 mt-1">$${m.totalSpendUsd.toFixed(4)}</div>
 
-                <div class="text-[11px] text-slate-400 mt-1">${this.db.workspace.llm_config.provider === 'deterministic_demo' ? 'Demo Mode ($0.00 / Deterministic)' : 'Live Token Pricing'}</div>
+                <div class="text-[11px] text-zinc-400 mt-1">${this.db.workspace.llm_config.provider === 'deterministic_demo' ? 'Demo Mode ($0.00 / Deterministic)' : 'Live Token Pricing'}</div>
 
               </div>
 
@@ -7008,7 +6961,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <!-- Editable Business Impact Estimates (Explicitly labelled as Estimates per Section 8) -->
 
-            <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <div class="p-5 rounded-xl stitch-card border border-white/[0.08] space-y-4">
 
               <div class="flex items-center justify-between">
 
@@ -7022,37 +6975,37 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                 <div class="text-right font-mono">
 
-                  <div class="text-xs text-slate-400">Est. Engineering Time Saved: <strong class="text-emerald-400">${estimatedSavedHours.toFixed(1)} hrs</strong></div>
+                  <div class="text-xs text-zinc-400">Est. Engineering Time Saved: <strong class="text-emerald-400">${estimatedSavedHours.toFixed(1)} hrs</strong></div>
 
-                  <div class="text-xs text-slate-400">Est. Avoided Downtime Impact: <strong class="text-emerald-400">$${estimatedAvoidedDowntimeUsd.toLocaleString()}</strong></div>
+                  <div class="text-xs text-zinc-400">Est. Avoided Downtime Impact: <strong class="text-emerald-400">$${estimatedAvoidedDowntimeUsd.toLocaleString()}</strong></div>
 
                 </div>
 
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-800 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-white/[0.08] text-xs">
 
                 <div>
 
-                  <label class="text-slate-400 block mb-1">Assumed Hourly Downtime Cost ($ USD)</label>
+                  <label class="text-zinc-400 block mb-1">Assumed Hourly Downtime Cost ($ USD)</label>
 
-                  <input id="cfg-input-hourly-downtime" type="number" value="${b.hourly_downtime_cost_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.hourly_downtime_cost_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
+                  <input id="cfg-input-hourly-downtime" type="number" value="${b.hourly_downtime_cost_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.hourly_downtime_cost_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-zinc-950 border border-white/[0.08] font-mono text-white" />
 
                 </div>
 
                 <div>
 
-                  <label class="text-slate-400 block mb-1">Assumed Engineer Hourly Rate ($ USD)</label>
+                  <label class="text-zinc-400 block mb-1">Assumed Engineer Hourly Rate ($ USD)</label>
 
-                  <input id="cfg-input-engineer-rate" type="number" value="${b.engineer_hourly_rate_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.engineer_hourly_rate_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
+                  <input id="cfg-input-engineer-rate" type="number" value="${b.engineer_hourly_rate_usd}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.engineer_hourly_rate_usd=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-zinc-950 border border-white/[0.08] font-mono text-white" />
 
                 </div>
 
                 <div>
 
-                  <label class="text-slate-400 block mb-1">Avg Manual Investigation + Fix (Hours)</label>
+                  <label class="text-zinc-400 block mb-1">Avg Manual Investigation + Fix (Hours)</label>
 
-                  <input id="cfg-input-fix-hours" type="number" step="0.5" value="${b.avg_manual_fix_hours}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.avg_manual_fix_hours=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 font-mono text-white" />
+                  <input id="cfg-input-fix-hours" type="number" step="0.5" value="${b.avg_manual_fix_hours}" onchange="window.AutoPatchApp.db.workspace.business_assumptions.avg_manual_fix_hours=Number(this.value); window.AutoPatchApp.saveState(); window.AutoPatchApp.render();" class="w-full px-3 py-1.5 rounded bg-zinc-950 border border-white/[0.08] font-mono text-white" />
 
                 </div>
 
@@ -7082,13 +7035,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">Workspace Settings, Masked Secrets & Security Audit Log</h1>
 
-                <p class="text-xs text-slate-400">Configure LLM providers, GitHub repository credentials (masked after save), RBAC policies, or reset the demo environment.</p>
+                <p class="text-xs text-zinc-400">Configure LLM providers, GitHub repository credentials (masked after save), RBAC policies, or reset the demo environment.</p>
 
               </div>
 
@@ -7106,15 +7059,15 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <!-- LLM Provider Configuration -->
 
-              <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+              <div class="p-5 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
-                <h2 class="text-xs font-semibold uppercase tracking-wider text-indigo-300">LLM Provider & Model Configuration</h2>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-200">LLM Provider & Model Configuration</h2>
 
                 <div class="space-y-2 text-xs">
 
-                  <label class="block text-slate-400">Provider Mode</label>
+                  <label class="block text-zinc-400">Provider Mode</label>
 
-                  <select id="cfg-llm-provider" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-800 text-white font-mono">
+                  <select id="cfg-llm-provider" class="w-full px-3 py-2 rounded bg-zinc-950 border border-white/[0.08] text-white font-mono">
 
                     <option value="deterministic_demo" ${llm.provider === 'deterministic_demo' ? 'selected' : ''}>deterministic_demo (Local Fixture - No Key Required)</option>
 
@@ -7124,11 +7077,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   </select>
 
-                  <label class="block text-slate-400 pt-1">API Key (Write-Only — Masked on Save)</label>
+                  <label class="block text-zinc-400 pt-1">API Key (Write-Only — Masked on Save)</label>
 
-                  <input id="cfg-llm-key" type="password" placeholder="${llm.api_key_masked || 'Enter API key (never returned to UI after saving)'}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-800 text-white font-mono" />
+                  <input id="cfg-llm-key" type="password" placeholder="${llm.api_key_masked || 'Enter API key (never returned to UI after saving)'}" class="w-full px-3 py-2 rounded bg-zinc-950 border border-white/[0.08] text-white font-mono" />
 
-                  <button onclick="window.AutoPatchApp.saveLlmConfig()" class="mt-2 px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-semibold">Save LLM Settings</button>
+                  <button onclick="window.AutoPatchApp.saveLlmConfig()" class="mt-2 px-4 py-2 rounded bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] font-semibold">Save LLM Settings</button>
 
                 </div>
 
@@ -7138,7 +7091,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
               <!-- GitHub Integration Configuration -->
 
-              <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+              <div class="p-5 rounded-xl stitch-card border border-white/[0.08] space-y-3">
 
                 <h2 class="text-xs font-semibold uppercase tracking-wider text-emerald-300">GitHub App / Repository Integration</h2>
 
@@ -7148,25 +7101,25 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <div>
 
-                      <label class="block text-slate-400 mb-1">Owner / Org</label>
+                      <label class="block text-zinc-400 mb-1">Owner / Org</label>
 
-                      <input id="cfg-gh-owner" type="text" value="${gh.owner}" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 text-white font-mono" />
+                      <input id="cfg-gh-owner" type="text" value="${gh.owner}" class="w-full px-3 py-1.5 rounded bg-zinc-950 border border-white/[0.08] text-white font-mono" />
 
                     </div>
 
                     <div>
 
-                      <label class="block text-slate-400 mb-1">Repository</label>
+                      <label class="block text-zinc-400 mb-1">Repository</label>
 
-                      <input id="cfg-gh-repo" type="text" value="${gh.repo}" class="w-full px-3 py-1.5 rounded bg-slate-950 border border-slate-800 text-white font-mono" />
+                      <input id="cfg-gh-repo" type="text" value="${gh.repo}" class="w-full px-3 py-1.5 rounded bg-zinc-950 border border-white/[0.08] text-white font-mono" />
 
                     </div>
 
                   </div>
 
-                  <label class="block text-slate-400 pt-1">GitHub Personal Access Token / Installation Token (Write-Only)</label>
+                  <label class="block text-zinc-400 pt-1">GitHub Personal Access Token / Installation Token (Write-Only)</label>
 
-                  <input id="cfg-gh-token" type="password" placeholder="${gh.token_masked || 'ghp_... (Leave blank to use Local .patch Export)'}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-800 text-white font-mono" />
+                  <input id="cfg-gh-token" type="password" placeholder="${gh.token_masked || 'ghp_... (Leave blank to use Local .patch Export)'}" class="w-full px-3 py-2 rounded bg-zinc-950 border border-white/[0.08] text-white font-mono" />
 
                   <button onclick="window.AutoPatchApp.saveGithubConfig()" class="mt-2 px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-semibold">Save GitHub Settings</button>
 
@@ -7180,13 +7133,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             <!-- Immutable Security Audit Log -->
 
-            <div class="rounded-xl bg-slate-900/90 border border-slate-800 overflow-hidden">
+            <div class="rounded-xl stitch-card border border-white/[0.08] overflow-hidden">
 
-              <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+              <div class="px-4 py-3 border-b border-white/[0.08] flex items-center justify-between">
 
-                <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Workspace Security & Governance Audit Log</h2>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">Workspace Security & Governance Audit Log</h2>
 
-                <span class="text-[11px] font-mono text-slate-400">${this.db.audit_logs.length} Recorded Events</span>
+                <span class="text-[11px] font-mono text-zinc-400">${this.db.audit_logs.length} Recorded Events</span>
 
               </div>
 
@@ -7196,7 +7149,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   <thead>
 
-                    <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-slate-950/50">
+                    <tr class="border-b border-white/[0.08] text-[11px] font-mono uppercase text-zinc-400 bg-zinc-950/60">
 
                       <th class="py-2.5 px-3">Timestamp</th>
 
@@ -7214,19 +7167,19 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                   </thead>
 
-                  <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
+                  <tbody class="divide-y divide-white/[0.06] font-mono text-[11px]">
 
                     ${this.db.audit_logs.map(log => `
 
                       <tr>
 
-                        <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap">${new Date(log.timestamp).toLocaleTimeString()}</td>
+                        <td class="py-2.5 px-3 text-zinc-400 whitespace-nowrap">${new Date(log.timestamp).toLocaleTimeString()}</td>
 
-                        <td class="py-2.5 px-3 text-slate-200">${log.actor} <span class="text-indigo-400">[${log.role}]</span></td>
+                        <td class="py-2.5 px-3 text-zinc-200">${log.actor} <span class="text-zinc-300">[${log.role}]</span></td>
 
                         <td class="py-2.5 px-3 text-white font-semibold">${log.action}</td>
 
-                        <td class="py-2.5 px-3 text-indigo-300">${log.target}</td>
+                        <td class="py-2.5 px-3 text-zinc-200">${log.target}</td>
 
                         <td class="py-2.5 px-3">
 
@@ -7234,7 +7187,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                         </td>
 
-                        <td class="py-2.5 px-3 text-slate-300 font-sans text-xs">${log.details}</td>
+                        <td class="py-2.5 px-3 text-zinc-300 font-sans text-xs">${log.details}</td>
 
                       </tr>
 
@@ -7336,13 +7289,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
 
               <div>
 
                 <h1 class="text-lg font-bold text-white tracking-tight">Verification Suite, Production Backend Code & Final Delivery Report</h1>
 
-                <p class="text-xs text-slate-400">Run the automated 14-step acceptance test suite directly in the browser and inspect the modular Python/FastAPI/LangGraph/Docker implementation.</p>
+                <p class="text-xs text-zinc-400">Run the automated 14-step acceptance test suite directly in the browser and inspect the modular Python/FastAPI/LangGraph/Docker implementation.</p>
 
               </div>
 
@@ -7356,17 +7309,17 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-            <div id="e2e-verification-output" class="hidden p-4 rounded-xl bg-slate-950 border border-emerald-500/40 font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed"></div>
+            <div id="e2e-verification-output" class="hidden p-4 rounded-xl bg-zinc-950 border border-emerald-500/40 font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed"></div>
 
 
 
             <!-- Section 20: Final Delivery Report -->
 
-            <div class="p-6 rounded-xl bg-slate-900/90 border border-slate-800 space-y-5">
+            <div class="p-6 rounded-xl stitch-card border border-white/[0.08] space-y-5">
 
-              <div class="border-b border-slate-800 pb-3">
+              <div class="border-b border-white/[0.08] pb-3">
 
-                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Section 20 Deliverable</span>
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-white/10 text-zinc-200 text-zinc-200">Section 20 Deliverable</span>
 
                 <h2 class="text-base font-bold text-white mt-1">AutoPatch MVP — Final Engineering Delivery Report</h2>
 
@@ -7374,7 +7327,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-300">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-zinc-300">
 
                 <div class="space-y-3">
 
@@ -7382,9 +7335,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <h3 class="font-bold text-white">1. Features Fully Implemented</h3>
 
-                    <ul class="list-disc list-inside text-slate-400 space-y-0.5 mt-1">
+                    <ul class="list-disc list-inside text-zinc-400 space-y-0.5 mt-1">
 
-                      <li>Explicit API Proxy Gateway (<code class="font-mono text-slate-200">/proxy/{integration_id}/{path}</code>) with header/token redaction and correlation IDs.</li>
+                      <li>Explicit API Proxy Gateway (<code class="font-mono text-zinc-200">/proxy/{integration_id}/{path}</code>) with header/token redaction and correlation IDs.</li>
 
                       <li>Deterministic JSON Schema & OpenAPI contract validator distinguishing confirmed structural diffs from suspected camelCase renames.</li>
 
@@ -7394,9 +7347,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                       <li>Isolated Sandbox Test Runner executing static AST security checks, scope verification, and 4 functional regression tests.</li>
 
-                      <li>Backend-enforced RBAC (<code class="font-mono text-slate-200">Admin</code>, <code class="font-mono text-slate-200">Reviewer</code>, <code class="font-mono text-slate-200">Operator</code>, <code class="font-mono text-slate-200">Viewer</code>) and two-stage Human Review & Deployment gates.</li>
+                      <li>Backend-enforced RBAC (<code class="font-mono text-zinc-200">Admin</code>, <code class="font-mono text-zinc-200">Reviewer</code>, <code class="font-mono text-zinc-200">Operator</code>, <code class="font-mono text-zinc-200">Viewer</code>) and two-stage Human Review & Deployment gates.</li>
 
-                      <li>Downloadable unified Git <code class="font-mono text-slate-200">.patch</code> artifact export & GitHub REST PR integration.</li>
+                      <li>Downloadable unified Git <code class="font-mono text-zinc-200">.patch</code> artifact export & GitHub REST PR integration.</li>
 
                     </ul>
 
@@ -7408,9 +7361,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <h3 class="font-bold text-white">2. Features Partially Implemented / Browser-Sandboxed</h3>
 
-                    <ul class="list-disc list-inside text-slate-400 space-y-0.5 mt-1">
+                    <ul class="list-disc list-inside text-zinc-400 space-y-0.5 mt-1">
 
-                      <li>In this interactive single-file web environment, PostgreSQL, Qdrant, and the Docker container sandbox execute via an in-browser persistence and AST/functional sandbox engine so you can test the entire workflow immediately without external daemons. Full reference <code class="font-mono text-slate-200">docker-compose.yml</code>, FastAPI, SQLAlchemy 2.0, and Docker SDK runner modules are provided below.</li>
+                      <li>In this interactive single-file web environment, PostgreSQL, Qdrant, and the Docker container sandbox execute via an in-browser persistence and AST/functional sandbox engine so you can test the entire workflow immediately without external daemons. Full reference <code class="font-mono text-zinc-200">docker-compose.yml</code>, FastAPI, SQLAlchemy 2.0, and Docker SDK runner modules are provided below.</li>
 
                     </ul>
 
@@ -7422,7 +7375,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <h3 class="font-bold text-white">3. Commands to Start Complete Docker Environment</h3>
 
-                    <pre class="p-2.5 rounded bg-slate-950 border border-slate-800 font-mono text-[11px] text-indigo-300 mt-1">cp .env.example .env
+                    <pre class="p-2.5 rounded bg-zinc-950 border border-white/[0.08] font-mono text-[11px] text-zinc-200 mt-1">cp .env.example .env
 
 docker compose up --build -d
 
@@ -7442,9 +7395,9 @@ pytest backend/tests -v</pre>
 
                   <div>
 
-                    <h3 class="font-bold text-white">4. Environment Variables (<code class="font-mono text-indigo-300">.env.example</code>)</h3>
+                    <h3 class="font-bold text-white">4. Environment Variables (<code class="font-mono text-zinc-200">.env.example</code>)</h3>
 
-                    <pre class="p-2.5 rounded bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300 mt-1">APP_ENV=development
+                    <pre class="p-2.5 rounded bg-zinc-950 border border-white/[0.08] font-mono text-[11px] text-zinc-300 mt-1">APP_ENV=development
 
 DATABASE_URL=postgresql+psycopg://autopatch:autopatch_dev@postgres:5432/autopatch
 
@@ -7478,13 +7431,13 @@ SECRET_ENCRYPTION_KEY=replace_with_32_byte_fernet_key_in_prod</pre>
 
                     <h3 class="font-bold text-white">5. Exact Steps to Demonstrate AutoPatch to a Reviewer</h3>
 
-                    <ol class="list-decimal list-inside text-slate-400 space-y-0.5 mt-1">
+                    <ol class="list-decimal list-inside text-zinc-400 space-y-0.5 mt-1">
 
                       <li>Click <strong class="text-rose-300">Simulate API Drift</strong> in the top bar (changes <code class="font-mono">customer_id</code> to <code class="font-mono">customerId</code>).</li>
 
                       <li>Open <strong class="text-white">Incident Explorer</strong> to inspect the sanitized payload and structural contract diff.</li>
 
-                      <li>Click <strong class="text-indigo-300">Investigate & Repair in Workbench</strong> to run LangGraph Nodes 1–8 and inspect Qdrant citations + 4/4 sandbox test results.</li>
+                      <li>Click <strong class="text-zinc-200">Investigate & Repair in Workbench</strong> to run LangGraph Nodes 1–8 and inspect Qdrant citations + 4/4 sandbox test results.</li>
 
                       <li>Switch Role to <strong class="text-amber-300">Viewer</strong> and try clicking <em>Approve Repair</em> in <strong class="text-white">Code Review</strong> to verify 403 RBAC rejection.</li>
 
@@ -7504,11 +7457,11 @@ SECRET_ENCRYPTION_KEY=replace_with_32_byte_fernet_key_in_prod</pre>
 
             <!-- Reference Backend Implementation Modules (FastAPI + LangGraph + Docker Sandbox) -->
 
-            <div class="p-6 rounded-xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <div class="p-6 rounded-xl stitch-card border border-white/[0.08] space-y-4">
 
-              <h2 class="text-sm font-bold text-white">Reference Backend Architecture (<code class="font-mono text-indigo-300">backend/app/sandbox/runner.py</code> & <code class="font-mono text-indigo-300">docker-compose.yml</code>)</h2>
+              <h2 class="text-sm font-bold text-white">Reference Backend Architecture (<code class="font-mono text-zinc-200">backend/app/sandbox/runner.py</code> & <code class="font-mono text-zinc-200">docker-compose.yml</code>)</h2>
 
-              <pre class="p-4 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300 overflow-x-auto leading-relaxed"># backend/app/sandbox/runner.py — Isolated Ephemeral Docker Sandbox Runner
+              <pre class="p-4 rounded-lg bg-zinc-950 border border-white/[0.08] font-mono text-[11px] text-zinc-300 overflow-x-auto leading-relaxed"># backend/app/sandbox/runner.py — Isolated Ephemeral Docker Sandbox Runner
 
 import docker
 
