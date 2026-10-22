@@ -141,12 +141,36 @@
 
     }
 
+    /* High-Precision Dark Canvas Grid (Stitch / Linear Aesthetic) */
+    .bg-grid-mesh {
+      background-size: 44px 44px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse 75% 65% at 50% 18%, black 30%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 18%, black 30%, transparent 85%);
+    }
+
+    /* Multi-layered Atmospheric Lighting */
     .stitch-glow {
+      background: 
+        radial-gradient(circle at 50% -8%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 75%),
+        radial-gradient(circle at 18% 12%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 82% 15%, rgba(16, 185, 129, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
+    }
 
-      background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 40%, transparent 80%),
-
-                  radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.025), transparent 50%);
-
+    .hero-glow-orb {
+      position: absolute;
+      width: 700px;
+      height: 420px;
+      left: 50%;
+      top: -120px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 45%, transparent 75%);
+      filter: blur(50px);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .stitch-card {
@@ -264,137 +288,68 @@
 
 
   <!-- TOP GLOBAL NAVIGATION NAVBAR (STITCH STYLE) -->
-
   <header class="sticky top-0 z-40 h-16 bg-[#050507]/90 backdrop-blur-xl border-b border-white/[0.08] px-4 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 select-none">
-
     <!-- Brand Logo -->
-
     <div class="flex items-center gap-3 cursor-pointer group" onclick="window.AutoPatchApp.navigate('home')">
-
       <div class="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-bold shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:scale-105 group-hover:shadow-[0_0_22px_rgba(255,255,255,0.4)] transition-all duration-200">
-
         <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
-
       </div>
-
       <div>
-
         <div class="flex items-center gap-2">
-
           <span class="font-bold tracking-tight text-white text-base">Sarthi</span>
-
           <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/15 font-medium">v1.4.0</span>
-
         </div>
-
         <p class="text-[10px] text-zinc-400 hidden sm:block tracking-tight">AI Self-Healing API Middleware</p>
-
       </div>
-
     </div>
-
-
 
     <!-- Center Website Navigation Links (Clean & Aesthetic) -->
-
-    <nav class="hidden md:flex items-center gap-1 text-xs font-medium">
-
+    <nav class="hidden md:flex items-center gap-1.5 text-xs font-medium">
       <button onclick="window.AutoPatchApp.navigate('home')" id="nav-link-home" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Product</button>
-
-      <button onclick="window.AutoPatchApp.scrollToSection('how-it-works')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">What It Does</button>
-
-      <button onclick="window.AutoPatchApp.scrollToSection('who-uses-it')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Who It's For</button>
-
+      <button onclick="window.AutoPatchApp.scrollToSection('how-it-works')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Architecture</button>
       <button onclick="window.AutoPatchApp.scrollToSection('live-showcase')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Interactive Demo</button>
-
-      <button onclick="window.AutoPatchApp.scrollToSection('button-guide')" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200">Button Guide</button>
-
       <button onclick="window.AutoPatchApp.navigate('dashboard')" id="nav-link-console" class="px-3 py-1.5 rounded-lg text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-all duration-200 flex items-center gap-1.5">
-
         <span>Console</span>
-
         <span id="nav-console-badge" class="hidden text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">!</span>
-
       </button>
-
     </nav>
 
-
-
-    <!-- Right Actions: Drift Toggle, Status Indicator, LLM Mode Badge, Role Switcher, and Main CTA -->
-
+    <!-- Right Actions: Unified, Clean & Balanced -->
     <div class="flex items-center gap-2 sm:gap-2.5">
+      <!-- Live Upstream Status Indicator -->
+      <div id="header-drift-status" class="hidden sm:flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] px-2.5 py-1 rounded-full text-xs font-mono">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="text-zinc-300 text-[11px]">v2.1 Baseline</span>
+      </div>
 
       <!-- Quick Header Drift Toggle Button -->
-
-      <button id="btn-simulate-drift" onclick="window.AutoPatchApp.toggleApiDrift()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 hover:border-rose-500/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5">
-
-        <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
-
-        <span id="btn-simulate-drift-label" class="hidden sm:inline">Simulate API Drift</span>
-
+      <button id="btn-simulate-drift" onclick="window.AutoPatchApp.toggleApiDrift()" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-white/[0.05] hover:bg-white/[0.1] text-zinc-300 hover:text-white border border-white/10 hover:border-white/20 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5">
+        <i data-lucide="zap" class="w-3.5 h-3.5 text-zinc-400"></i>
+        <span id="btn-simulate-drift-label" class="hidden lg:inline">Simulate Drift</span>
       </button>
-
-
-
-      <!-- Live Upstream Status Indicator -->
-
-      <div id="header-drift-status" class="hidden xl:flex items-center gap-2 bg-black/60 border border-white/[0.08] px-3 py-1.5 rounded-full text-xs font-mono">
-
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-
-        <span class="text-zinc-300 text-[11px]">API: Baseline v2.1</span>
-
-      </div>
-
-
 
       <!-- Live LLM / Demo Mode Badge -->
-
-      <div id="header-mode-badge" class="hidden 2xl:flex text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 items-center gap-1">
-
-        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> DEMO MODE (LOCAL DETERMINISTIC)
-
+      <div id="header-mode-badge" class="hidden xl:flex text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-white/[0.04] text-zinc-400 border border-white/10 items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span> Demo Mode
       </div>
-
-
 
       <!-- RBAC Role Dropdown -->
-
-      <div class="flex items-center gap-1.5 bg-black/60 border border-white/[0.08] rounded-lg px-2.5 py-1 text-xs">
-
-        <i data-lucide="user-check" class="w-3.5 h-3.5 text-zinc-400"></i>
-
-        <span class="text-zinc-400 text-[11px] hidden lg:inline">Role:</span>
-
-        <select id="rbac-role-select" onchange="window.AutoPatchApp.switchRole(this.value)" class="bg-transparent text-xs font-mono font-semibold text-zinc-200 focus:outline-none cursor-pointer">
-
-          <option value="Admin" class="bg-zinc-900 text-zinc-200">Admin (Full Access)</option>
-
-          <option value="Reviewer" class="bg-zinc-900 text-zinc-200">Reviewer (Approve/PR)</option>
-
-          <option value="Operator" class="bg-zinc-900 text-zinc-200">Operator (Repair)</option>
-
-          <option value="Viewer" class="bg-zinc-900 text-zinc-200">Viewer (Read-Only)</option>
-
+      <div class="flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-1 text-xs">
+        <i data-lucide="shield" class="w-3.5 h-3.5 text-zinc-400"></i>
+        <select id="rbac-role-select" onchange="window.AutoPatchApp.switchRole(this.value)" class="bg-transparent text-xs font-mono font-medium text-zinc-200 focus:outline-none cursor-pointer">
+          <option value="Admin" class="bg-zinc-900 text-zinc-200">Admin</option>
+          <option value="Reviewer" class="bg-zinc-900 text-zinc-200">Reviewer</option>
+          <option value="Operator" class="bg-zinc-900 text-zinc-200">Operator</option>
+          <option value="Viewer" class="bg-zinc-900 text-zinc-200">Viewer</option>
         </select>
-
       </div>
 
-
-
       <!-- Header Main CTA Button -->
-
       <button id="header-cta-btn" onclick="window.AutoPatchApp.handleHeaderCta()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-[0_0_18px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5">
-
         <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-
         <span id="header-cta-label">Open Console</span>
-
       </button>
-
     </div>
-
   </header>
 
 
@@ -2088,42 +2043,23 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
         // Live Header Drift Status Badge
-
         if (headerDriftStatus) {
-
           if (this.db.workspace.drift_active) {
-
-            headerDriftStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span><span class="text-rose-300 font-medium text-[11px]">API: v2.2 DRIFT ACTIVE</span>`;
-
+            headerDriftStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span><span class="text-rose-300 font-medium text-[11px]">v2.2 Drift Active</span>`;
           } else {
-
-            headerDriftStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-emerald-300 font-medium text-[11px]">API: Baseline v2.1</span>`;
-
+            headerDriftStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-zinc-300 font-medium text-[11px]">v2.1 Baseline</span>`;
           }
-
         }
-
-
 
         if (driftBtn && driftLabel) {
-
           if (this.db.workspace.drift_active) {
-
-            driftBtn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5';
-
-            driftLabel.textContent = 'Disable API Drift (Restore v2.1)';
-
+            driftBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 hover:border-rose-500/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5';
+            driftLabel.textContent = 'Reset Baseline';
           } else {
-
-            driftBtn.className = 'px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 hover:border-rose-500/50 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5';
-
-            driftLabel.textContent = 'Simulate API Drift';
-
+            driftBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/[0.05] hover:bg-white/[0.1] text-zinc-300 hover:text-white border border-white/10 hover:border-white/20 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5';
+            driftLabel.textContent = 'Simulate Drift';
           }
-
         }
-
-
 
         if (upstreamInd) {
 
@@ -4286,372 +4222,252 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
       // PAGE 0: MODERN STITCH WEBSITE (FRONT PAGE)
 
       renderHomePage() {
-
         const driftActive = this.db.workspace.drift_active;
-
         const inc = this.db.incidents[0] || null;
-
         const rep = this.db.repairs[0] || null;
-
         const isAwaitingApproval = rep && rep.workflow_state === 'AWAITING_APPROVAL';
-
         const isDeployed = rep && rep.workflow_state === 'DEPLOYED';
 
-
-
         return `
-
-          <div class="stitch-glow min-h-screen text-zinc-100 pb-20 animate-fade-in">
+          <div class="stitch-glow relative min-h-screen text-zinc-100 pb-24 animate-fade-in overflow-hidden select-text">
+            <!-- Atmospheric Dark Canvas Grid & Ambient Orb Mesh -->
+            <div class="absolute inset-0 bg-grid-mesh pointer-events-none"></div>
+            <div class="hero-glow-orb"></div>
 
             <!-- HERO SECTION -->
-
-            <section class="pt-16 sm:pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
-
-              <!-- Pill Badge -->
-
-              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 text-zinc-300 text-xs font-medium mb-6 shadow-sm backdrop-blur-md">
-
-                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-
-                <span>Autonomous Middleware for Third-Party APIs</span>
-
+            <section class="relative z-10 pt-16 sm:pt-24 pb-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
+              <!-- Top Announcement Pill -->
+              <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/15 text-zinc-200 text-xs font-medium mb-6 shadow-xl shadow-black/60 backdrop-blur-xl">
+                <span class="w-2 h-2 rounded-full ${driftActive ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
+                <span class="text-white font-semibold">Autonomous API Middleware</span>
+                <span class="text-zinc-500">•</span>
+                <span class="text-zinc-400">Zero-Downtime Contract Self-Healing</span>
               </div>
-
-
 
               <!-- Main Hero Headline -->
-
-              <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.12]">
-
-                When external APIs break, <br class="hidden sm:inline" />
-
-                <span class="bg-gradient-to-b from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-
+              <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.08]">
+                When external APIs break,
+                <span class="block bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent mt-1">
                   Sarthi heals your code in seconds.
-
                 </span>
-
               </h1>
 
-
-
               <!-- Subtitle -->
-
-              <p class="mt-5 text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed font-normal">
-
-                Never get paged for an unexpected API schema change again. <strong class="text-white">Sarthi</strong> (सारथी — powered by the AutoPatch engine) sits transparently between your microservices and external vendors to detect contract drift in &lt;180ms, synthesize backward-compatible adapter patches from official docs, run isolated non-root sandbox regression tests, and deliver verified Pull Requests ready to merge.
-
+              <p class="mt-6 text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed font-normal">
+                Never get paged for surprise third-party API breaking changes. <strong class="text-white">Sarthi</strong> (सारथी — powered by AutoPatch) sits transparently between your microservices and external vendors to detect schema drift in &lt;180ms, synthesize backward-compatible adapter patches from official docs, run isolated non-root sandbox regression tests, and deliver verified Pull Requests ready to merge.
               </p>
 
-
-
-              <!-- HERO ACTION BUTTONS (Only 2 Clean Buttons) -->
-
+              <!-- HERO ACTION BUTTONS -->
               <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-
-                <button onclick="window.AutoPatchApp.toggleApiDrift()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold text-xs sm:text-sm ${driftActive ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 shadow-lg shadow-amber-900/20' : 'bg-white hover:bg-zinc-200 text-black shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4)]'} transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-2">
-
-                  <i data-lucide="zap" class="w-4 h-4 ${driftActive ? 'text-amber-300' : 'text-black'}"></i>
-
-                  <span>${driftActive ? 'Disable API Drift (Restore Baseline)' : 'Simulate API Drift (Test Healing)'}</span>
-
+                <button onclick="window.AutoPatchApp.toggleApiDrift()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold text-xs sm:text-sm ${driftActive ? 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 shadow-lg shadow-rose-950/40' : 'bg-white hover:bg-zinc-200 text-black shadow-[0_0_28px_rgba(255,255,255,0.25)] hover:shadow-[0_0_38px_rgba(255,255,255,0.45)]'} transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-2">
+                  <i data-lucide="zap" class="w-4 h-4 ${driftActive ? 'text-rose-400' : 'text-black'}"></i>
+                  <span>${driftActive ? 'Reset Baseline (v2.1 Normal)' : 'Simulate API Drift (Test Healing)'}</span>
                 </button>
-
-
 
                 <button onclick="window.AutoPatchApp.navigate('dashboard')" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold text-xs sm:text-sm bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/12 hover:border-white/25 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-2 backdrop-blur-md">
-
                   <span>Open Developer Console</span>
-
-                  <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400 group-hover:translate-x-1 transition-transform"></i>
-
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
                 </button>
-
               </div>
-
-
 
               <!-- Micro Proof Badges -->
-
               <div class="mt-7 flex flex-wrap items-center justify-center gap-6 text-xs text-zinc-400 font-mono">
-
                 <span class="flex items-center gap-1.5"><i data-lucide="gauge" class="w-3.5 h-3.5 text-emerald-400"></i> 180ms Detection Latency</span>
-
                 <span class="text-zinc-600">•</span>
-
                 <span class="flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-zinc-300"></i> Non-Root Docker Sandbox</span>
-
                 <span class="text-zinc-600">•</span>
-
                 <span class="flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5 text-zinc-300"></i> 100% Human Governed</span>
-
               </div>
 
+              <!-- HERO TOPOLOGY VISUAL (Transforms empty void into rich interactive engineering preview) -->
+              <div class="mt-12 max-w-4xl mx-auto rounded-2xl bg-zinc-950/80 border border-white/10 p-5 backdrop-blur-xl shadow-2xl relative text-left">
+                <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="flex gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+                      <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+                      <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+                    </div>
+                    <span class="font-mono text-zinc-400 text-[11px] ml-2">sarthi-middleware-topology.live</span>
+                  </div>
+                  <div class="flex items-center gap-2 font-mono text-[11px]">
+                    <span class="w-2 h-2 rounded-full ${driftActive ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
+                    <span class="${driftActive ? 'text-rose-300' : 'text-emerald-300'} font-medium">
+                      ${driftActive ? 'DRIFT INTERCEPTED: customer_id ➔ customerId' : 'GATEWAY STATUS: HEALTHY PASS-THROUGH'}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                  <!-- Node 1: Client Application -->
+                  <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center shrink-0">
+                      <i data-lucide="terminal-square" class="w-5 h-5 text-zinc-300"></i>
+                    </div>
+                    <div>
+                      <div class="text-[10px] font-mono text-zinc-500 uppercase">Consumer App</div>
+                      <div class="text-xs font-semibold text-white">Client Microservice</div>
+                      <div class="text-[10px] font-mono text-zinc-400">Expects: snake_case</div>
+                    </div>
+                  </div>
+
+                  <!-- Connector & Middle Node: Sarthi Self-Healing Gateway -->
+                  <div class="p-3.5 rounded-xl bg-zinc-900/90 border ${driftActive ? 'border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)]' : 'border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.06)]'} flex items-center gap-3 relative">
+                    <div class="w-10 h-10 rounded-lg ${driftActive ? 'bg-rose-500/20 text-rose-300' : 'bg-white text-black'} flex items-center justify-center shrink-0 font-bold transition-colors">
+                      <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                      <div class="text-[10px] font-mono ${driftActive ? 'text-rose-400' : 'text-zinc-400'} uppercase">Active Middleware</div>
+                      <div class="text-xs font-semibold text-white">Sarthi Proxy Gateway</div>
+                      <div class="text-[10px] font-mono text-zinc-400">&lt;180ms OpenAPI 3.1 Check</div>
+                    </div>
+                  </div>
+
+                  <!-- Node 3: Third Party Upstream -->
+                  <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center shrink-0">
+                      <i data-lucide="cloud" class="w-5 h-5 text-zinc-300"></i>
+                    </div>
+                    <div>
+                      <div class="text-[10px] font-mono text-zinc-500 uppercase">Upstream API</div>
+                      <div class="text-xs font-semibold text-white">CommerceCore API</div>
+                      <div class="text-[10px] font-mono ${driftActive ? 'text-rose-300' : 'text-emerald-300'}">${driftActive ? 'v2.2 camelCase Drift' : 'v2.1 Baseline Active'}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </section>
-
-
 
             <!-- LIVE INTERACTIVE SHOWCASE COMPONENT -->
-
-            <section id="live-showcase" class="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto scroll-mt-20">
-
+            <section id="live-showcase" class="relative z-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto scroll-mt-20">
               <div class="rounded-2xl stitch-card p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-
                 <!-- Glowing corner accent -->
-
                 <div class="absolute -top-12 -right-12 w-48 h-48 bg-white/[0.03] rounded-full blur-3xl pointer-events-none"></div>
 
-
-
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-5">
-
                   <div>
-
                     <div class="flex items-center gap-2">
-
                       <span class="w-2.5 h-2.5 rounded-full ${driftActive ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
-
                       <h2 class="text-base font-bold text-white tracking-tight">Interactive Self-Healing Demo</h2>
-
                       <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.05] border border-white/10 text-zinc-300">Target: CommerceCore Customer API</span>
-
                     </div>
-
                     <p class="text-xs text-zinc-400 mt-0.5">Click through the live lifecycle below to observe how AutoPatch intercepts drift, executes LangGraph repair, and gates deployment.</p>
-
                   </div>
-
                   <div class="flex items-center gap-2">
-
                     <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-1.5">
-
                       <i data-lucide="sparkles" class="w-3.5 h-3.5 text-zinc-300"></i>
-
                       <span>Run 1-Click E2E Demo</span>
-
                     </button>
-
                   </div>
-
                 </div>
-
-
 
                 <!-- 3 Interactive Lifecycle Stages -->
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
-
                   <!-- Stage 1: Gateway & Drift Detection -->
-
                   <div class="p-4 rounded-xl bg-black/60 border ${driftActive ? 'border-rose-500/50 bg-rose-950/10' : 'border-white/[0.08]'} flex flex-col justify-between space-y-3 transition-all duration-200 hover:-translate-y-0.5">
-
                     <div class="space-y-2">
-
                       <div class="flex items-center justify-between">
-
                         <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Step 1 • Proxy Gateway</span>
-
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded ${driftActive ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-emerald-500/15 text-emerald-300'}">
-
                           ${driftActive ? 'DRIFT DETECTED' : 'HEALTHY'}
-
                         </span>
-
                       </div>
-
                       <div class="text-sm font-semibold text-white">Contract Validation</div>
-
                       <p class="text-xs text-zinc-400 leading-relaxed">
-
                         ${driftActive 
-
                           ? 'Upstream returned <code class="text-rose-300 font-mono">customerId</code> instead of baseline <code class="text-zinc-300 font-mono">customer_id</code>. Adapter raised KeyError.'
-
                           : 'Upstream returning baseline <code class="text-emerald-300 font-mono">customer_id</code>. Consumer adapter executes cleanly.'}
-
                       </p>
-
                     </div>
-
                     <button onclick="window.AutoPatchApp.sendProxyRequest()" class="w-full py-2 rounded-lg text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 transition-all duration-200 flex items-center justify-center gap-1.5 hover:-translate-y-0.5">
-
                       <i data-lucide="activity" class="w-3.5 h-3.5 text-zinc-300"></i>
-
                       <span>Send Proxy Request</span>
-
                     </button>
-
                   </div>
-
-
 
                   <!-- Stage 2: LangGraph Agent & Ephemeral Docker Sandbox -->
-
                   <div class="p-4 rounded-xl bg-black/60 border ${inc ? 'border-white/30 bg-white/[0.02]' : 'border-white/[0.08]'} flex flex-col justify-between space-y-3 transition-all duration-200 hover:-translate-y-0.5">
-
                     <div class="space-y-2">
-
                       <div class="flex items-center justify-between">
-
                         <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Step 2 • AI Repair</span>
-
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded ${rep ? 'bg-emerald-500/20 text-emerald-300' : inc ? 'bg-amber-500/20 text-amber-300' : 'bg-zinc-800 text-zinc-400'}">
-
                           ${rep ? 'TESTS 4/4 PASSED' : inc ? 'READY TO REPAIR' : 'IDLE'}
-
                         </span>
-
                       </div>
-
                       <div class="text-sm font-semibold text-white">LangGraph & Sandbox</div>
-
                       <p class="text-xs text-zinc-400 leading-relaxed">
-
                         ${rep 
-
                           ? 'Dual-compatible adapter generated. Ruff AST security check passed. 4/4 pytest regressions passed in Docker sandbox.'
-
                           : inc 
-
                             ? 'Incident recorded. Click below to retrieve Qdrant docs and run isolated sandbox tests.'
-
                             : 'Awaiting schema drift detection to trigger LangGraph orchestrator.'}
-
                       </p>
-
                     </div>
-
                     ${inc ? `
-
                       <button onclick="window.AutoPatchApp.startOrResumeRepair('${inc.id}')" class="w-full py-2 rounded-lg text-xs font-semibold bg-white text-black hover:bg-zinc-200 shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-200 flex items-center justify-center gap-1.5 hover:-translate-y-0.5">
-
                         <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-
                         <span>${rep ? 'Inspect AI Workbench' : 'Run AI Repair & Sandbox'}</span>
-
                       </button>
-
                     ` : `
-
                       <button onclick="window.AutoPatchApp.toggleApiDrift()" class="w-full py-2 rounded-lg text-xs font-medium bg-zinc-900 text-zinc-500 border border-white/10 cursor-pointer hover:text-zinc-300 transition-all duration-200 flex items-center justify-center gap-1.5">
-
                         <i data-lucide="play" class="w-3.5 h-3.5"></i>
-
                         <span>Trigger Drift First</span>
-
                       </button>
-
                     `}
-
                   </div>
-
-
 
                   <!-- Stage 3: Human Review & Safe Deployment Gate -->
-
                   <div class="p-4 rounded-xl bg-black/60 border ${isDeployed ? 'border-emerald-500/50 bg-emerald-950/10' : isAwaitingApproval ? 'border-amber-500/50 bg-amber-950/10' : 'border-white/[0.08]'} flex flex-col justify-between space-y-3 transition-all duration-200 hover:-translate-y-0.5">
-
                     <div class="space-y-2">
-
                       <div class="flex items-center justify-between">
-
                         <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Step 3 • Human Gate</span>
-
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded ${isDeployed ? 'bg-emerald-500/20 text-emerald-300' : isAwaitingApproval ? 'bg-amber-500/20 text-amber-300' : 'bg-zinc-800 text-zinc-400'}">
-
                           ${isDeployed ? 'DEPLOYED & RECOVERED' : isAwaitingApproval ? 'APPROVAL REQUIRED' : 'LOCKED'}
-
                         </span>
-
                       </div>
-
                       <div class="text-sm font-semibold text-white">Review & Deploy</div>
-
                       <p class="text-xs text-zinc-400 leading-relaxed">
-
                         ${isDeployed 
-
                           ? 'Deployed to production. The adapter now supports both legacy v2.1 and drifted v2.2 payloads seamlessly.'
-
                           : isAwaitingApproval 
-
                             ? 'Patch awaiting Admin/Reviewer sign-off. Click below to authorize production deployment with zero downtime.'
-
                             : 'Deployment gate remains locked until human review and isolated sandbox verification.'}
-
                       </p>
-
                     </div>
-
                     ${isAwaitingApproval ? `
-
                       <button onclick="window.AutoPatchApp.quickOneClickApproveAndDeploy('${rep.id}')" class="w-full py-2 rounded-lg text-xs font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 transition-all duration-200 flex items-center justify-center gap-1.5 shadow hover:-translate-y-0.5">
-
                         <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-
                         <span>1-Click Approve & Deploy</span>
-
                       </button>
-
                     ` : isDeployed ? `
-
                       <button onclick="window.AutoPatchApp.navigate('review')" class="w-full py-2 rounded-lg text-xs font-semibold bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-300 border border-emerald-500/30 transition-all duration-200 flex items-center justify-center gap-1.5 hover:-translate-y-0.5">
-
                         <i data-lucide="check" class="w-3.5 h-3.5"></i>
-
                         <span>View Verified Patch Diff</span>
-
                       </button>
-
                     ` : `
-
                       <button disabled class="w-full py-2 rounded-lg text-xs font-medium bg-zinc-900 text-zinc-600 border border-white/5 cursor-not-allowed flex items-center justify-center gap-1.5">
-
                         <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-
                         <span>Awaiting AI Repair</span>
-
                       </button>
-
                     `}
-
                   </div>
-
                 </div>
-
-
 
                 <!-- Footer Summary Bar inside Showcase -->
-
                 <div class="mt-6 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-zinc-400">
-
                   <div class="flex items-center gap-2">
-
                     <span class="text-zinc-300 font-medium">Adapter Target:</span>
-
                     <code class="font-mono text-zinc-300 bg-zinc-950 px-2 py-0.5 rounded border border-white/10">src/adapters/commerce_customer_adapter.py</code>
-
                   </div>
-
                   <div class="flex items-center gap-3">
-
                     <button onclick="window.AutoPatchApp.navigate('review')" class="text-zinc-300 hover:text-white font-medium flex items-center gap-1 transition-colors duration-200">
-
                       <span>Inspect Side-by-Side Diff</span>
-
                       <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-
                     </button>
-
                   </div>
-
                 </div>
-
               </div>
-
             </section>
-
-
 
             <!-- SECTION: WHAT AUTOPATCH DOES (3 CORE PILLARS) -->
 
