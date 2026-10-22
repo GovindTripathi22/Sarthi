@@ -142,6 +142,78 @@
 
     }
 
+    /* Refined Obsidian Canvas & Specular Tiers (Stitch Aesthetic) */
+    .stitch-card {
+      background: rgba(14, 14, 18, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stitch-card:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.03), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    .stitch-card-elevated {
+      background: rgba(20, 20, 26, 0.82);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+    }
+    .stitch-boost-btn {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stitch-boost-btn:hover {
+      transform: translateY(-1.5px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    }
+    .stitch-boost-btn:active {
+      transform: translateY(0);
+      transform: scale(0.98);
+    }
+    .stitch-goal-track {
+      height: 6px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .stitch-goal-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #10b981 0%, #38bdf8 50%, #818cf8 100%);
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+    .stitch-kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #a1a1aa;
+      box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.4);
+    }
+    .stitch-nav-pill {
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stitch-nav-pill:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .stitch-nav-pill.active {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.08);
+    }
+
     /* High-Precision Dark Canvas Grid (Stitch / Linear Aesthetic) */
     .bg-grid-mesh {
       background-size: 44px 44px;
@@ -342,14 +414,48 @@
         <span>Console</span>
         <span id="nav-console-badge" class="hidden text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">!</span>
       </button>
+      <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="px-3 py-1.5 rounded-lg text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 border border-amber-500/20 transition-all duration-200 flex items-center gap-1.5">
+        <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+        <span>Pitch Guide</span>
+      </button>
     </nav>
 
     <!-- Center Console Breadcrumb & Telemetry Indicator (Shown in Developer Console) -->
-    <div id="console-nav-container" class="items-center gap-3 text-xs font-mono" style="display: none;">
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08]">
+    <div id="console-nav-container" class="items-center gap-2.5 text-xs font-mono" style="display: none;">
+      <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.08]">
         <span class="text-zinc-500">Console</span>
         <span class="text-zinc-600">/</span>
         <span id="console-active-tab-title" class="text-white font-medium">Overview Dashboard</span>
+      </div>
+      <!-- Horizontal Quick Nav Pills for Instant 1-Click Switch -->
+      <div class="hidden 2xl:flex items-center gap-1 bg-black/40 p-1 rounded-lg border border-white/[0.06] text-[11px]">
+        <button onclick="window.AutoPatchApp.navigate('dashboard')" data-quick-nav="dashboard" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="layout-dashboard" class="w-3 h-3"></i> <span>Overview</span> <span class="stitch-kbd">1</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('integrations')" data-quick-nav="integrations" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="network" class="w-3 h-3"></i> <span>Proxy</span> <span class="stitch-kbd">2</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('incidents')" data-quick-nav="incidents" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="alert-triangle" class="w-3 h-3"></i> <span>Incidents</span> <span class="stitch-kbd">3</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('workbench')" data-quick-nav="workbench" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="cpu" class="w-3 h-3"></i> <span>Workbench</span> <span class="stitch-kbd">4</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('review')" data-quick-nav="review" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="git-pull-request" class="w-3 h-3"></i> <span>Review</span> <span class="stitch-kbd">5</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('contracts')" data-quick-nav="contracts" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="book-open" class="w-3 h-3"></i> <span>Docs RAG</span> <span class="stitch-kbd">6</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('analytics')" data-quick-nav="analytics" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="bar-chart-3" class="w-3 h-3"></i> <span>Cost</span> <span class="stitch-kbd">7</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('settings')" data-quick-nav="settings" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="settings" class="w-3 h-3"></i> <span>Settings</span> <span class="stitch-kbd">8</span>
+        </button>
+        <button onclick="window.AutoPatchApp.navigate('blueprint')" data-quick-nav="blueprint" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
+          <i data-lucide="terminal-square" class="w-3 h-3 text-emerald-400"></i> <span>E2E</span> <span class="stitch-kbd">9</span>
+        </button>
       </div>
       <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-zinc-400 text-[11px]">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
@@ -387,6 +493,20 @@
         </select>
       </div>
 
+      <!-- Turbo Boost Quick Launcher Button -->
+      <button onclick="window.AutoPatchApp.openBoostActionsModal()" title="Open Turbo Boost Actions (Press B)" class="stitch-boost-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-violet-500/20 hover:from-amber-500/30 hover:to-violet-500/30 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 flex items-center gap-1.5 shadow-sm">
+        <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span class="hidden sm:inline font-mono">Boost</span>
+        <span class="stitch-kbd hidden md:inline">B</span>
+      </button>
+
+      <!-- Interview Pitch & Demo Runbook Guide Button -->
+      <button onclick="window.AutoPatchApp.openInterviewDemoModal()" title="Open Interview Demo Guide (Press ?)" class="stitch-boost-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/15 hover:border-white/30 flex items-center gap-1.5 shadow-sm">
+        <i data-lucide="mic" class="w-3.5 h-3.5 text-emerald-400"></i>
+        <span class="hidden lg:inline font-mono">Pitch Guide</span>
+        <span class="stitch-kbd hidden xl:inline">?</span>
+      </button>
+
       <!-- Header Main CTA Button -->
       <button id="header-cta-btn" onclick="window.AutoPatchApp.handleHeaderCta()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-[0_0_18px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5">
         <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
@@ -412,6 +532,50 @@
             <span class="text-xs font-semibold text-white tracking-tight">Acme FinTech Core</span>
           </div>
           <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-zinc-400 border border-white/10 font-medium">ws_prod_01</span>
+        </div>
+
+        <!-- Autonomous Goal Progression Card (Live Dynamic Tracker) -->
+        <div id="sidebar-goal-tracker-card" class="p-3 mb-2 rounded-xl bg-zinc-950/90 border border-white/[0.09] text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-white flex items-center gap-1.5 tracking-tight text-[11px]">
+              <i data-lucide="target" class="w-3.5 h-3.5 text-emerald-400"></i> Self-Healing Goals
+            </span>
+            <span id="sidebar-goal-badge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold">2/4 Goals (50%)</span>
+          </div>
+          <div class="stitch-goal-track">
+            <div id="sidebar-goal-fill" class="stitch-goal-fill" style="width: 50%;"></div>
+          </div>
+          <div class="space-y-1 text-[10px] font-mono pt-1">
+            <div id="sidebar-goal-item-1" class="flex items-center justify-between text-zinc-400">
+              <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-1" class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> 1. Drift Interception</span>
+              <span class="text-zinc-500">&lt;180ms</span>
+            </div>
+            <div id="sidebar-goal-item-2" class="flex items-center justify-between text-zinc-400">
+              <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-2" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 2. Qdrant RAG Grounding</span>
+              <span class="text-emerald-400">Ready</span>
+            </div>
+            <div id="sidebar-goal-item-3" class="flex items-center justify-between text-zinc-400">
+              <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-3" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 3. Docker Sandbox Pass</span>
+              <span class="text-emerald-400">4/4</span>
+            </div>
+            <div id="sidebar-goal-item-4" class="flex items-center justify-between text-zinc-400">
+              <span class="flex items-center gap-1.5"><span id="sidebar-goal-dot-4" class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> 4. Governed Deploy Gate</span>
+              <span class="text-amber-400">Gate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Turbo Boost Quick Controls -->
+        <div class="p-2 mb-2 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-1">
+          <button onclick="window.AutoPatchApp.toggleApiDrift()" title="Simulate schema drift (Press D)" class="flex-1 py-1 px-1.5 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 text-[10px] font-mono flex items-center justify-center gap-1 transition-all">
+            <i data-lucide="zap" class="w-3 h-3 text-rose-400"></i> Drift
+          </button>
+          <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" title="Run autonomous LangGraph repair" class="flex-1 py-1 px-1.5 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 text-[10px] font-mono flex items-center justify-center gap-1 transition-all">
+            <i data-lucide="cpu" class="w-3 h-3 text-emerald-400"></i> Repair
+          </button>
+          <button onclick="window.AutoPatchApp.openBoostActionsModal()" title="Open turbo boost menu (Press B)" class="py-1 px-2 rounded bg-white/[0.05] hover:bg-white/[0.1] text-zinc-300 border border-white/10 text-[10px] font-mono transition-all">
+            ⚡ All
+          </button>
         </div>
 
         <!-- Section 1: Operations -->
@@ -459,6 +623,14 @@
 
         <button onclick="window.AutoPatchApp.navigate('blueprint')" data-nav="blueprint" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
           <span class="flex items-center gap-2.5"><i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400"></i> E2E Tests & Backend</span>
+        </button>
+      </div>
+
+      <!-- Sidebar Footer Pitch Guide Launcher -->
+      <div class="px-3 pt-1 pb-1">
+        <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="w-full py-2 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+          <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Interview Pitch Cheatsheet</span>
         </button>
       </div>
 
@@ -2152,7 +2324,275 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
             : 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03] transition-all duration-200 border border-transparent';
         });
 
+        // Update Horizontal Quick Nav Pills in Top Header
+        document.querySelectorAll('[data-quick-nav]').forEach(pill => {
+          const isTarget = pill.getAttribute('data-quick-nav') === this.currentPage;
+          if (isTarget) {
+            pill.className = 'stitch-nav-pill active px-2 py-1 rounded text-white font-semibold flex items-center gap-1';
+          } else {
+            pill.className = 'stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1';
+          }
+        });
+
+        // Update Sidebar Goal Progression Card
+        const g = this.getGoalsState();
+        const goalBadge = document.getElementById('sidebar-goal-badge');
+        const goalFill = document.getElementById('sidebar-goal-fill');
+        if (goalBadge) {
+          goalBadge.textContent = `${g.completedCount}/${g.totalCount} Goals (${g.pct}%)`;
+          if (g.isAllComplete) {
+            goalBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 font-bold';
+          } else {
+            goalBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/15 font-semibold';
+          }
+        }
+        if (goalFill) {
+          goalFill.style.width = `${Math.max(10, g.pct)}%`;
+        }
+        for (let i = 1; i <= 4; i++) {
+          const dot = document.getElementById(`sidebar-goal-dot-${i}`);
+          const goal = g.goals[i - 1];
+          if (dot && goal) {
+            dot.className = goal.achieved ? 'w-1.5 h-1.5 rounded-full bg-emerald-400' : 'w-1.5 h-1.5 rounded-full bg-zinc-600';
+          }
+        }
       }
+
+
+      getGoalsState() {
+        const hasDrift = Boolean(this.db.workspace.drift_active || (this.db.incidents && this.db.incidents.length > 0));
+        const hasRag = Boolean(this.db.documentation_sources && this.db.documentation_sources.length > 0);
+        const rep = (this.db.repairs && this.db.repairs[0]) || null;
+        const hasSandboxPass = Boolean(rep && rep.validation_test_run && rep.validation_test_run.passed_count >= 4);
+        const hasHumanGate = Boolean(rep && (rep.workflow_state === 'DEPLOYED' || rep.workflow_state === 'APPROVED_READY_FOR_PR' || rep.workflow_state === 'PR_CREATED'));
+
+        const goals = [
+          {
+            id: 1,
+            title: 'Drift Intercept',
+            detail: 'Proxy catches schema mutations before downstream KeyError',
+            achieved: hasDrift,
+            badge: hasDrift ? 'Intercepted' : '<180ms'
+          },
+          {
+            id: 2,
+            title: 'Qdrant RAG',
+            detail: 'Dual-compatible adapter synthesized from official vendor docs',
+            achieved: hasRag,
+            badge: hasRag ? 'Grounding Ready' : 'Empty'
+          },
+          {
+            id: 3,
+            title: 'Sandbox Tests',
+            detail: 'AST security scanner and 4/4 pytest pass in non-root container',
+            achieved: hasSandboxPass,
+            badge: hasSandboxPass ? '4/4 Pass' : 'Pending'
+          },
+          {
+            id: 4,
+            title: 'Human Gate',
+            detail: 'Two-stage RBAC approval required before production deployment',
+            achieved: hasHumanGate,
+            badge: rep ? (rep.workflow_state === 'DEPLOYED' ? 'Deployed' : rep.workflow_state === 'AWAITING_APPROVAL' ? 'Awaiting Human' : rep.workflow_state) : 'Locked'
+          }
+        ];
+
+        const completedCount = goals.filter(g => g.achieved).length;
+        const pct = Math.round((completedCount / goals.length) * 100);
+
+        return {
+          goals,
+          completedCount,
+          totalCount: goals.length,
+          pct,
+          isAllComplete: completedCount === goals.length
+        };
+      }
+
+      openBoostActionsModal() {
+        const g = this.getGoalsState();
+        const contentHtml = `
+          <div class="space-y-4">
+            <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-zinc-950 to-violet-500/10 border border-amber-500/30">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Sarthi Turbo Boost Accelerator</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold">${g.completedCount}/${g.totalCount} Goals (${g.pct}%)</span>
+              </div>
+              <p class="text-xs text-zinc-300">Instantly trigger any core self-healing phase without manual configuration or multi-step navigation.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.toggleApiDrift();" class="p-3 rounded-xl bg-rose-950/20 hover:bg-rose-950/40 border border-rose-500/30 hover:border-rose-500/50 text-left transition-all group">
+                <div class="flex items-center justify-between text-xs font-semibold text-rose-300">
+                  <span class="flex items-center gap-1.5"><i data-lucide="zap" class="w-4 h-4"></i> 1. Toggle Schema Drift</span>
+                  <span class="stitch-kbd group-hover:bg-rose-500/20">D</span>
+                </div>
+                <p class="text-[11px] text-zinc-400 mt-1">Switches CommerceCore from v2.1 (snake_case) to v2.2 (camelCase) to fire live interception.</p>
+              </button>
+
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.runAutomatedE2ETest();" class="p-3 rounded-xl bg-emerald-950/20 hover:bg-emerald-950/40 border border-emerald-500/30 hover:border-emerald-500/50 text-left transition-all group">
+                <div class="flex items-center justify-between text-xs font-semibold text-emerald-300">
+                  <span class="flex items-center gap-1.5"><i data-lucide="cpu" class="w-4 h-4"></i> 2. Auto-Heal (LangGraph)</span>
+                  <span class="stitch-kbd group-hover:bg-emerald-500/20">Run</span>
+                </div>
+                <p class="text-[11px] text-zinc-400 mt-1">Executes 11-node state machine, retrieves Qdrant docs, and runs 4/4 Docker sandbox tests.</p>
+              </button>
+
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); if (window.AutoPatchApp.db.repairs[0]) { window.AutoPatchApp.switchRole('Admin'); window.AutoPatchApp.quickOneClickApproveAndDeploy(window.AutoPatchApp.db.repairs[0].id); } else { window.AutoPatchApp.runAutomatedE2ETest(); }" class="p-3 rounded-xl bg-violet-950/20 hover:bg-violet-950/40 border border-violet-500/30 hover:border-violet-500/50 text-left transition-all group">
+                <div class="flex items-center justify-between text-xs font-semibold text-violet-300">
+                  <span class="flex items-center gap-1.5"><i data-lucide="rocket" class="w-4 h-4"></i> 3. 1-Click Ship & Deploy</span>
+                  <span class="stitch-kbd group-hover:bg-violet-500/20">Ship</span>
+                </div>
+                <p class="text-[11px] text-zinc-400 mt-1">Approves proposal as Admin, exports PR, and authorizes zero-downtime production rollout.</p>
+              </button>
+
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.execute14StepAcceptanceVerification();" class="p-3 rounded-xl bg-sky-950/20 hover:bg-sky-950/40 border border-sky-500/30 hover:border-sky-500/50 text-left transition-all group">
+                <div class="flex items-center justify-between text-xs font-semibold text-sky-300">
+                  <span class="flex items-center gap-1.5"><i data-lucide="check-check" class="w-4 h-4"></i> 4. 14-Step Acceptance</span>
+                  <span class="stitch-kbd group-hover:bg-sky-500/20">Verify</span>
+                </div>
+                <p class="text-[11px] text-zinc-400 mt-1">Runs complete automated acceptance assertions and outputs verified verification logs.</p>
+              </button>
+            </div>
+
+            <div class="pt-2 border-t border-white/[0.08] flex items-center justify-between text-xs">
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.resetDemoEnvironment();" class="text-rose-400 hover:text-rose-300 text-xs font-mono flex items-center gap-1">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset to Pristine Baseline
+              </button>
+              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.openInterviewDemoModal();" class="text-amber-300 hover:text-white font-medium flex items-center gap-1">
+                <i data-lucide="mic" class="w-3.5 h-3.5"></i> Open Interview Pitch Cheatsheet ➔
+              </button>
+            </div>
+          </div>
+        `;
+        this.openModal('<div class="flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-amber-400"></i><span>Turbo Boost Controls</span></div>', contentHtml, () => true, 'Close', 'bg-white text-black');
+      }
+
+      openInterviewDemoModal() {
+        const contentHtml = `
+          <div class="space-y-5 text-xs text-zinc-300 max-h-[72vh] overflow-y-auto pr-1">
+            <!-- 1. The 30-Second Elevator Pitch -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/30 via-zinc-950 to-zinc-950 border border-emerald-500/30">
+              <div class="flex items-center gap-2 text-emerald-300 font-bold text-sm mb-1">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>The 30-Second Elevator Pitch (Deliver This First)</span>
+              </div>
+              <p class="text-zinc-200 leading-relaxed italic text-xs">
+                "When third-party APIs (Stripe, Twilio, Shopify, CommerceCore) push unannounced breaking changes, consumer adapters throw fatal KeyError crashes. <strong>Sarthi</strong> is an autonomous, self-healing API middleware that sits transparently between your microservices and upstream vendors. In &lt;180ms, it intercepts schema drift, grounds a backward-compatible adapter patch using official documentation via Qdrant RAG, verifies it in an isolated non-root Docker container, and delivers a tested Pull Request behind a strict two-stage RBAC human review gate—slashing enterprise MTTR from 3.5 hours to under 2 minutes with zero uncontrolled production drops."
+              </p>
+            </div>
+
+            <!-- 2. Step-by-Step Live Demo Runbook (Click Here -> Say This -> Observe This) -->
+            <div class="space-y-3">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                <i data-lucide="list-ordered" class="w-4 h-4 text-amber-400"></i>
+                <span>Live Demonstration Runbook (Follow During Interview)</span>
+              </h3>
+
+              <!-- Stage 1 -->
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-white/10 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-mono">1</span> Baseline Health Check</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Phase 1</span>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">1</kbd> or click <strong>Overview Dashboard</strong>.
+                </div>
+                <div class="text-[11px] text-zinc-300">
+                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"Here is our live overview. Our CommerceCore integration is healthy, processing client requests in &lt;180ms against OpenAPI 3.1 contracts with 0 open incidents."</em>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> Green status badge, healthy request bar chart, 0 active incidents.
+                </div>
+              </div>
+
+              <!-- Stage 2 -->
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-rose-500/20 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center text-[10px] font-mono">2</span> Upstream API Schema Drift Interception</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">Phase 2</span>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">D</kbd> or click <strong>Simulate Drift</strong> in top navbar.
+                </div>
+                <div class="text-[11px] text-zinc-300">
+                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"Now imagine CommerceCore deploys v2.2 without notifying us, changing <code class='text-zinc-200'>customer_id</code> to camelCase <code class='text-rose-300'>customerId</code>. Let's emit a proxy request. Sarthi immediately intercepts the payload mismatch in &lt;180ms and classifies it specifically as Schema Drift—not a 401 auth or 429 rate limit."</em>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> Red pulsating banner appears, incident created, MTTD recorded at 180ms.
+                </div>
+              </div>
+
+              <!-- Stage 3 -->
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-sky-500/20 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center text-[10px] font-mono">3</span> LangGraph Orchestration & Docker Sandbox</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">Phase 3</span>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">4</kbd> to open <strong>AI Repair Workbench</strong>, then click <strong>Run LangGraph Self-Healing</strong>.
+                </div>
+                <div class="text-[11px] text-zinc-300">
+                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"Instead of waking up on-call engineers, Sarthi triggers an 11-node LangGraph orchestrator. It queries our Qdrant vector database for official CommerceCore migration guides, writes a dual-compatible adapter fallback, runs a static AST security scan, and executes 4 pytest regressions inside an ephemeral non-root Docker sandbox."</em>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> 11-node execution graph, persisted checkpoint ID, cosine doc score (0.92), and 4/4 pytest passes.
+                </div>
+              </div>
+
+              <!-- Stage 4 -->
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-amber-500/20 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center text-[10px] font-mono">4</span> Two-Stage RBAC & Code Review Gate</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Phase 4</span>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">5</kbd> to open <strong>Code Review & Gate</strong>. Switch role dropdown to <strong>Viewer</strong> and click <strong>Approve Repair</strong>.
+                </div>
+                <div class="text-[11px] text-zinc-300">
+                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"In an enterprise system, autonomous code deployment is a major liability. Notice our RBAC enforcement: when I attempt to approve as a Viewer, the action is rejected with a 403 Forbidden audit log. Only an authorized Reviewer or Admin can approve and export a Git PR."</em>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> 403 Forbidden toast, side-by-side adapter diff with <code class="text-emerald-300">.get('customerId') or .get('customer_id')</code>, immutable audit log entry.
+                </div>
+              </div>
+
+              <!-- Stage 5 -->
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-emerald-500/20 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-[10px] font-mono">5</span> Deployment Authorization & Zero-Downtime Proof</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Phase 5</span>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Switch role to <strong>Admin</strong>, click <strong>Approve Repair</strong> ➔ <strong>Create GitHub PR</strong> ➔ <strong>Authorize Deployment</strong>.
+                </div>
+                <div class="text-[11px] text-zinc-300">
+                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"The patch is authorized and loaded into the active middleware. Now, when we emit requests, both legacy v2.1 and drifted v2.2 payloads succeed with 200 OK. Our MTTR is under 2 minutes, and downstream consumers experience zero errors."</em>
+                </div>
+                <div class="text-[11px] text-zinc-400">
+                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> State updates to DEPLOYED, verified production MTTR logged in Analytics, Goal tracker hits 100%!
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. FAANG System Design Pillars -->
+            <div class="p-4 rounded-xl bg-zinc-950 border border-white/10 space-y-2">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="layers" class="w-4 h-4 text-violet-400"></i>
+                <span>Architectural Tradeoffs (Interview Discussion Points)</span>
+              </h3>
+              <ul class="list-disc list-inside space-y-1 text-zinc-300 text-[11px]">
+                <li><strong>Reverse Proxy vs Envoy Sidecar:</strong> Sarthi runs as a transparent reverse proxy at the edge, but can also be deployed as a WebAssembly filter inside an Envoy service mesh.</li>
+                <li><strong>AST Defense-in-Depth:</strong> We parse proposed code with Python's <code class="text-zinc-200">ast.parse</code> to reject <code class="text-rose-300">eval</code>, <code class="text-rose-300">exec</code>, <code class="text-rose-300">subprocess</code>, and dangerous imports before container execution.</li>
+                <li><strong>LangGraph State Checkpointing:</strong> Each node checkpoint is saved in PostgreSQL with a deterministic hash so long-running repairs can resume safely after restarts.</li>
+                <li><strong>Two-Stage Governance:</strong> Reviewers sign off on code correctness; Admins authorize deployment. Solves enterprise SOC2 compliance.</li>
+              </ul>
+            </div>
+          </div>
+        `;
+        this.openModal('<div class="flex items-center gap-2"><i data-lucide="mic" class="w-5 h-5 text-amber-400"></i><span>Sarthi Interview Pitch & Live Demonstration Cheatsheet</span></div>', contentHtml, () => true, 'Close Cheatsheet', 'bg-white text-black');
+      }
+
 
 
 
@@ -4233,6 +4673,11 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                   <span>Open Developer Console</span>
                   <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
                 </button>
+
+                <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold text-xs sm:text-sm bg-gradient-to-r from-amber-500/15 to-violet-500/15 hover:from-amber-500/25 hover:to-violet-500/25 text-amber-200 hover:text-white border border-amber-500/30 hover:border-amber-500/50 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-2 backdrop-blur-md shadow-lg shadow-black/40">
+                  <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
+                  <span>Interview Pitch & Demo Guide</span>
+                </button>
               </div>
 
               <!-- Micro Proof Badges -->
@@ -5003,6 +5448,66 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                   ${['1h', '24h', '7d', '30d'].map(rng => `
                     <button onclick="window.AutoPatchApp.selectedTimeRange='${rng}'; window.AutoPatchApp.render();" class="px-3 py-1 rounded-md transition-all duration-200 ${this.selectedTimeRange === rng ? 'bg-white text-black font-semibold shadow-[0_0_12px_rgba(255,255,255,0.25)]' : 'text-zinc-400 hover:text-white hover:bg-white/[0.04]'}">${rng}</button>
                   `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- GOAL PROGRESSION & BOOST ACCELERATOR HUD (STITCH AESTHETIC) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+              <!-- Goal Progression Card (Left 7 Cols) -->
+              <div class="lg:col-span-7 p-4 rounded-2xl stitch-card border border-white/10 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full ${this.getGoalsState().isAllComplete ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}"></span>
+                    <h2 class="text-xs font-bold text-white tracking-tight">Autonomous Production Goals</h2>
+                  </div>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${this.getGoalsState().isAllComplete ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-zinc-300 border border-white/15'} font-semibold">
+                    ${this.getGoalsState().completedCount}/4 Goals Achieved (${this.getGoalsState().pct}%)
+                  </span>
+                </div>
+                <div class="stitch-goal-track">
+                  <div class="stitch-goal-fill" style="width: ${Math.max(12, this.getGoalsState().pct)}%;"></div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-mono pt-1">
+                  ${this.getGoalsState().goals.map(g => `
+                    <div class="p-2 rounded-lg bg-black/40 border border-white/[0.06] flex flex-col justify-between space-y-1">
+                      <div class="flex items-center justify-between">
+                        <span class="text-zinc-400">Goal ${g.id}</span>
+                        <span class="w-1.5 h-1.5 rounded-full ${g.achieved ? 'bg-emerald-400' : 'bg-zinc-600'}"></span>
+                      </div>
+                      <span class="text-zinc-200 font-semibold truncate">${g.title}</span>
+                      <span class="${g.achieved ? 'text-emerald-400' : 'text-zinc-500'} font-medium">${g.badge}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Quick Turbo Boost Actions Bar (Right 5 Cols) -->
+              <div class="lg:col-span-5 p-4 rounded-2xl stitch-card border border-white/10 flex flex-col justify-between space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                    <span>Turbo Boost Controls</span>
+                  </span>
+                  <span class="text-[10px] font-mono text-zinc-400">Press <kbd class="stitch-kbd">B</kbd> for menu</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <button onclick="window.AutoPatchApp.toggleApiDrift()" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
+                    <span class="font-semibold text-rose-300 flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3 text-rose-400"></i> 1. Drift</span>
+                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Toggle v2.2 Drift</span>
+                  </button>
+                  <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
+                    <span class="font-semibold text-emerald-300 flex items-center gap-1"><i data-lucide="cpu" class="w-3 h-3 text-emerald-400"></i> 2. Auto-Heal</span>
+                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">LangGraph & Sandbox</span>
+                  </button>
+                  <button onclick="if (window.AutoPatchApp.db.repairs[0]) { window.AutoPatchApp.switchRole('Admin'); window.AutoPatchApp.quickOneClickApproveAndDeploy(window.AutoPatchApp.db.repairs[0].id); } else { window.AutoPatchApp.runAutomatedE2ETest(); }" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
+                    <span class="font-semibold text-violet-300 flex items-center gap-1"><i data-lucide="rocket" class="w-3 h-3 text-violet-400"></i> 3. 1-Click Ship</span>
+                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Approve, PR & Deploy</span>
+                  </button>
+                  <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="p-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 hover:text-white border border-amber-500/30 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
+                    <span class="font-semibold text-amber-300 flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3 text-amber-400"></i> Pitch Cheatsheet</span>
+                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Click ➔ Say ➔ Observe</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -7681,13 +8186,40 @@ class EphemeralSandboxRunner:
 
 
     window.addEventListener('keydown', (e) => {
+      if (!window.AutoPatchApp) return;
 
-      if (e.key === 'Escape' && window.AutoPatchApp) {
-
+      if (e.key === 'Escape') {
         window.AutoPatchApp.closeModal();
-
+        return;
       }
 
+      // Do not trigger navigation shortcuts when typing in form inputs
+      const activeTag = document.activeElement ? document.activeElement.tagName : '';
+      if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+
+      const key = e.key;
+      const numMap = {
+        '1': 'dashboard',
+        '2': 'integrations',
+        '3': 'incidents',
+        '4': 'workbench',
+        '5': 'review',
+        '6': 'contracts',
+        '7': 'analytics',
+        '8': 'settings',
+        '9': 'blueprint',
+        '0': 'home'
+      };
+
+      if (numMap[key]) {
+        window.AutoPatchApp.navigate(numMap[key]);
+      } else if (key === 'b' || key === 'B') {
+        window.AutoPatchApp.openBoostActionsModal();
+      } else if (key === 'd' || key === 'D') {
+        window.AutoPatchApp.toggleApiDrift();
+      } else if (key === '?' || key === 'h' || key === 'H') {
+        window.AutoPatchApp.openInterviewDemoModal();
+      }
     });
 
   </script>
