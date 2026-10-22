@@ -140,6 +140,25 @@ async def get_health(db: Session = Depends(get_db)):
     }
 
 
+@app.get("/api/v1/system/gemini-status")
+async def get_gemini_status():
+    """System health check for Google Gemini API integration."""
+    has_key = bool(settings.gemini_api_key)
+    return {
+        "provider": "google-gemini" if has_key else "deterministic_local",
+        "model": settings.llm_model,
+        "api_key_configured": has_key,
+        "status": "ACTIVE" if has_key else "STANDALONE_FALLBACK_READY",
+        "engine": "Gemini 2.5 Flash API" if has_key else "Sarthi Deterministic Synthesis Engine",
+        "capabilities": [
+            "autonomous_patch_synthesis",
+            "root_cause_analysis",
+            "recursive_schema_drift_triage",
+            "isolated_sandbox_test_generation",
+        ],
+    }
+
+
 # Synchronized Full State Endpoint
 @app.get("/api/v1/state")
 async def get_full_workspace_state(db: Session = Depends(get_db)) -> Dict[str, Any]:
