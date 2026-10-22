@@ -1,0 +1,23 @@
+{
+  "name": "sarthi-autopatch",
+  "version": "1.4.0",
+  "description": "Sarthi / AutoPatch — Autonomous AI Self-Healing API Middleware",
+  "scripts": {
+    "dev": "uvicorn backend.app.main:app --reload --port 8000",
+    "start": "uvicorn backend.app.main:app --port 8000",
+    "test": "pytest backend/tests -v && node test_all_features.js",
+    "test:backend": "pytest backend/tests -v",
+    "test:frontend": "node test_all_features.js",
+    "test:browser": "node test_real_browser.js"
+  },
+  "keywords": [
+    "api",
+    "middleware",
+    "self-healing",
+    "autopatch",
+    "sarthi",
+    "fastapi"
+  ],
+  "author": "Govind Tripathi",
+  "license": "Apache-2.0"
+}

@@ -2,41 +2,77 @@ from __future__ import annotations
 
 import re
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-try:
-    from backend.app.adapters.commerce_customer_adapter import parse_commerce_customer
-    from backend.app.agents.workflow import (
-        BASELINE_ADAPTER_CODE,
-        PATCHED_ADAPTER_CODE,
-        compute_sha256_digest,
-        execute_langgraph_repair_workflow,
-        validate_payload_against_contract,
-    )
-    from backend.app.github.client import GitHubIntegrationClient, generate_unified_patch
-    from backend.app.models import init_db
-    from backend.app.sandbox.runner import EphemeralSandboxRunner
-except ImportError:
-    from app.adapters.commerce_customer_adapter import parse_commerce_customer  # type: ignore
-    from app.agents.workflow import (  # type: ignore
-        BASELINE_ADAPTER_CODE,
-        PATCHED_ADAPTER_CODE,
-        compute_sha256_digest,
-        execute_langgraph_repair_workflow,
-        validate_payload_against_contract,
-    )
-    from app.github.client import GitHubIntegrationClient, generate_unified_patch  # type: ignore
-    from app.models import init_db  # type: ignore
-    from app.sandbox.runner import EphemeralSandboxRunner  # type: ignore
+from backend.app.adapters.commerce_customer_adapter import parse_commerce_customer
+from backend.app.config import settings
+from backend.app.database import SessionLocal, get_db
+from backend.app.db_seed import seed_database_if_empty
+from backend.app.mock_upstream.server import mock_upstream_router
+from backend.app.models import (
+    AgentRun,
+    ApiContractVersion,
+    AuditLog,
+    DocumentationSource,
+    Incident,
+    Integration,
+    PatchArtifact,
+    RequestEvent,
+    TestRun,
+    User,
+    Workspace,
+    init_db,
+    utcnow,
+)
+from backend.app.schemas import (
+    ContractImportRequest,
+    DeploymentAuthorizeRequest,
+    DocumentIngestRequest,
+    IntegrationCreate,
+    IntegrationUpdate,
+    RejectRequest,
+    RevisionRequest,
+)
+from backend.app.security.auth import get_current_user, require_roles
+from backend.app.services.analytics_service import AnalyticsService
+from backend.app.services.audit_service import record_audit
+from backend.app.services.contract_service import ContractValidationService
+from backend.app.services.deployment_service import DeploymentService
+from backend.app.services.github_service import GitHubIntegrationClient, generate_unified_patch
+from backend.app.services.incident_service import IncidentService
+from backend.app.services.integration_service import IntegrationService
+from backend.app.services.knowledge_service import KnowledgeService
+from backend.app.services.proxy_service import ProxyGatewayService
+from backend.app.services.repair_service import RepairWorkflowService
+from backend.app.services.review_service import ReviewService
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize all 21 tables and seed with enterprise baseline if empty
+    init_db()
+    with SessionLocal() as db:
+        seed_database_if_empty(db)
+    yield
+
+# Also seed synchronously on module load for test clients
+init_db()
+with SessionLocal() as _db_init:
+    seed_database_if_empty(_db_init)
+
 
 app = FastAPI(
     title="Sarthi / AutoPatch — Self-Healing API & Integration Middleware",
     version="1.4.0",
-    description="API Gateway, Contract Drift Detector, Qdrant RAG, 11-Node LangGraph & Docker Sandbox",
+    description="API Gateway, Contract Drift Detector, Qdrant RAG, 12-Stage Repair Engine & Docker Sandbox",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -47,268 +83,213 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-SENSITIVE_HEADER_RE = re.compile(
-    r"authorization|api[-_]?key|secret|password|token|cookie|session|private_key",
-    re.IGNORECASE,
-)
+# Mount local mock upstream provider for local dev and live testing
+app.include_router(mock_upstream_router)
 
 
-def redact_sensitive(obj: Any) -> Any:
-    """Recursively redact sensitive keys from headers and payloads before persistence."""
-    if isinstance(obj, dict):
-        return {
-            k: ("[REDACTED_BY_GATEWAY_POLICY]" if SENSITIVE_HEADER_RE.search(str(k)) else redact_sensitive(v))
-            for k, v in obj.items()
-        }
-    if isinstance(obj, list):
-        return [redact_sensitive(item) for item in obj]
-    return obj
-
-
-def build_initial_state() -> Dict[str, Any]:
-    now_iso = datetime.now(timezone.utc).isoformat()
-    return {
-        "workspace": {
-            "id": "ws_prod_01",
-            "name": "Acme FinTech Core Production",
-            "approval_policy": "STRICT_TWO_STAGE",
-            "demo_mode": True,
-            "drift_active": False,
-            "upstream_failure_mode": "NONE",
-            "llm_config": {
-                "provider": "deterministic_demo",
-                "model": "gpt-4o-mini",
-                "api_key_masked": "",
-                "input_cost_per_1k": 0.00015,
-                "output_cost_per_1k": 0.00060,
-            },
-            "github_config": {
-                "configured": False,
-                "owner": "acme-corp",
-                "repo": "commerce-integrations-service",
-                "base_branch": "main",
-                "token_masked": "",
-            },
-            "business_assumptions": {
-                "hourly_downtime_cost_usd": 4200,
-                "engineer_hourly_rate_usd": 145,
-                "avg_manual_fix_hours": 3.5,
-            },
-        },
-        "integrations": [
-            {
-                "id": "int_commerce_01",
-                "workspace_id": "ws_prod_01",
-                "name": "CommerceCore Customer API",
-                "provider": "CommerceCore",
-                "base_url": "https://api.commercecore.internal",
-                "proxy_route": "/proxy/int_commerce_01/v2/customers/{id}",
-                "health_route": "/v2/health",
-                "auth_method": "Bearer Token (Vault Ref: sec_cc_991)",
-                "repository": "acme-corp/commerce-integrations-service",
-                "target_adapter_file": "src/adapters/commerce_customer_adapter.py",
-                "status": "HEALTHY",
-                "monitoring_paused": False,
-                "latency_threshold_ms": 450,
-                "error_rate_threshold_pct": 5.0,
-                "active_contract_version": "v2.1.0",
-                "doc_ingestion_status": "INDEXED",
-                "last_success_at": now_iso,
-                "last_incident_at": None,
-            },
-            {
-                "id": "int_stripe_02",
-                "workspace_id": "ws_prod_01",
-                "name": "PayStream Settlement Webhook",
-                "provider": "PayStream",
-                "base_url": "https://api.paystream.io",
-                "proxy_route": "/proxy/int_stripe_02/v1/payouts",
-                "health_route": "/v1/health",
-                "auth_method": "Webhook Secret",
-                "repository": "acme-corp/commerce-integrations-service",
-                "target_adapter_file": "src/adapters/paystream_adapter.py",
-                "status": "HEALTHY",
-                "monitoring_paused": False,
-                "latency_threshold_ms": 300,
-                "error_rate_threshold_pct": 2.0,
-                "active_contract_version": "v1.8.4",
-                "doc_ingestion_status": "INDEXED",
-                "last_success_at": now_iso,
-                "last_incident_at": None,
-            },
-            {
-                "id": "int_ship_03",
-                "workspace_id": "ws_prod_01",
-                "name": "GlobalFreight Logistics Rates",
-                "provider": "GlobalFreight",
-                "base_url": "https://api.globalfreight.com",
-                "proxy_route": "/proxy/int_ship_03/v3/rates",
-                "health_route": "/v3/ping",
-                "auth_method": "API Key",
-                "repository": "acme-corp/commerce-integrations-service",
-                "target_adapter_file": "src/adapters/freight_adapter.py",
-                "status": "HEALTHY",
-                "monitoring_paused": False,
-                "latency_threshold_ms": 600,
-                "error_rate_threshold_pct": 5.0,
-                "active_contract_version": "v3.0.1",
-                "doc_ingestion_status": "INDEXED",
-                "last_success_at": now_iso,
-                "last_incident_at": None,
-            },
-        ],
-        "contract_versions": [
-            {
-                "id": "cv_cc_210",
-                "integration_id": "int_commerce_01",
-                "version": "v2.1.0",
-                "created_at": now_iso,
-                "is_baseline": True,
-                "schema": {
-                    "type": "object",
-                    "required": ["customer_id", "email", "status"],
-                    "properties": {
-                        "customer_id": {"type": "string"},
-                        "email": {"type": "string"},
-                        "status": {"type": "string"},
-                    },
-                },
-            },
-            {
-                "id": "cv_cc_220_observed",
-                "integration_id": "int_commerce_01",
-                "version": "v2.2.0-observed",
-                "created_at": now_iso,
-                "is_baseline": False,
-                "schema": {
-                    "type": "object",
-                    "required": ["customerId", "email", "status"],
-                    "properties": {
-                        "customerId": {"type": "string"},
-                        "email": {"type": "string"},
-                        "status": {"type": "string"},
-                        "schemaVersion": {"type": "string"},
-                    },
-                },
-            },
-        ],
-        "documentation_sources": [
-            {
-                "id": "doc_cc_mig_22",
-                "integration_id": "int_commerce_01",
-                "provider": "CommerceCore",
-                "title": "CommerceCore API v2.2 Migration Guide & Breaking Changes",
-                "source_url": "https://docs.commercecore.internal/migrations/v2.1-to-v2.2",
-                "doc_type": "MIGRATION_GUIDE",
-                "version": "v2.2",
-                "ingested_at": now_iso,
-                "content": "Effective in API revision 2026-10, GET /v2/customers/{id} renames `customer_id` to `customerId`.",
-                "content_hash": compute_sha256_digest(
-                    "CommerceCore REST API v2.2 Breaking Change Notice customer_id renamed to customerId"
-                ),
-                "chunks": [
-                    {
-                        "chunk_id": "chk_01",
-                        "text": "Effective in API revision 2026-10, the GET /v2/customers/{id} endpoint standardizes JSON keys to lowerCamelCase. BREAKING: The primary key field `customer_id` (string) has been renamed to `customerId` (string).",
-                        "keywords": ["customer_id", "customerid", "/v2/customers", "rename", "camelcase"],
-                    }
-                ],
-            }
-        ],
-        "request_events": [],
-        "incidents": [],
-        "repairs": [],
-        "audit_logs": [],
-    }
-
-
-STATE: Dict[str, Any] = build_initial_state()
-init_db()
-
-
-def record_audit(role: str, action: str, target: str, outcome: str, details: str) -> None:
-    STATE["audit_logs"].insert(
-        0,
-        {
-            "id": f"aud_{uuid.uuid4().hex[:8]}",
-            "workspace_id": STATE["workspace"]["id"],
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "actor": f"Elena Rostova ({role})",
-            "role": role,
-            "action": action,
-            "target": target,
-            "outcome": outcome,
-            "details": details,
-        },
-    )
-
-
-def require_roles(allowed: List[str], action_label: str):
-    def _dep(x_autopatch_role: str = Header(default="Admin")) -> str:
-        if x_autopatch_role not in allowed:
-            record_audit(
-                x_autopatch_role,
-                "UNAUTHORIZED_ACTION_BLOCKED",
-                action_label,
-                "DENIED_403",
-                f"Role '{x_autopatch_role}' attempted '{action_label}'. Allowed: {allowed}",
-            )
-            raise HTTPException(
-                status_code=403,
-                detail=f"RBAC Policy Enforcement: Role '{x_autopatch_role}' cannot perform '{action_label}'. Required: {allowed}",
-            )
-        return x_autopatch_role
-
-    return _dep
+from fastapi.responses import FileResponse
+from pathlib import Path
 
 
 # Root & Compatibility Health Endpoints
 @app.get("/")
-async def root():
+async def root(request: Request):
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept and "application/json" not in accept:
+        index_path = Path(__file__).resolve().parent.parent.parent / "index.html"
+        if not index_path.exists():
+            index_path = Path("index.html").resolve()
+        return FileResponse(index_path)
     return {
         "status": "OPERATIONAL",
         "system": "Sarthi / AutoPatch AI Self-Healing API Middleware Gateway",
         "version": "1.4.0",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": utcnow().isoformat(),
     }
 
 
+@app.get("/app", include_in_schema=False)
+@app.get("/ui", include_in_schema=False)
+@app.get("/index.html", include_in_schema=False)
+async def serve_index():
+    index_path = Path(__file__).resolve().parent.parent.parent / "index.html"
+    if not index_path.exists():
+        index_path = Path("index.html").resolve()
+    return FileResponse(index_path)
+
+
 @app.get("/health")
-async def health():
+async def health(db: Session = Depends(get_db)):
+    int_count = len(db.scalars(select(Integration)).all())
     return {
         "status": "HEALTHY",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "active_integrations": len(STATE["integrations"]),
+        "timestamp": utcnow().isoformat(),
+        "active_integrations": int_count,
         "gateway_mode": "ACTIVE",
     }
 
 
-@app.get("/integrations")
-async def get_integrations_compat():
-    return {"integrations": STATE["integrations"], "total": len(STATE["integrations"])}
-
-
-@app.get("/contracts/{integration_id}")
-async def get_contract_compat(integration_id: str):
-    integration = next((i for i in STATE["integrations"] if i["id"] == integration_id), None)
-    if not integration:
-        raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
-    contract = next((c for c in STATE["contract_versions"] if c["integration_id"] == integration_id and c["is_baseline"]), None)
-    if not contract:
-        contract = STATE["contract_versions"][0]
+@app.get("/api/v1/health")
+async def get_health(db: Session = Depends(get_db)):
+    ws = db.scalar(select(Workspace).where(Workspace.id == "ws_prod_01"))
     return {
-        "integration_id": integration_id,
-        "provider": integration["provider"],
-        "version": contract["version"],
-        "schema": contract["schema"],
+        "status": "healthy",
+        "version": "1.4.0",
+        "workspace_id": ws.id if ws else "ws_prod_01",
+        "drift_active": ws.drift_active if ws else False,
     }
 
 
+# Synchronized Full State Endpoint
+@app.get("/api/v1/state")
+async def get_full_workspace_state(db: Session = Depends(get_db)) -> Dict[str, Any]:
+    """Return database-persisted synchronized state for the frontend dashboard."""
+    ws = db.scalar(select(Workspace).where(Workspace.id == "ws_prod_01"))
+    integrations = list(db.scalars(select(Integration)).all())
+    contracts = list(db.scalars(select(ApiContractVersion)).all())
+    docs = list(db.scalars(select(DocumentationSource)).all())
+    req_events = list(db.scalars(select(RequestEvent).order_by(RequestEvent.timestamp.desc()).limit(50)).all())
+    incidents = list(db.scalars(select(Incident).order_by(Incident.last_occurrence.desc())).all())
+    repairs = list(db.scalars(select(AgentRun).order_by(AgentRun.created_at.desc())).all())
+    audit_logs = list(db.scalars(select(AuditLog).order_by(AuditLog.timestamp.desc()).limit(50)).all())
+
+    return {
+        "workspace": {
+            "id": ws.id if ws else "ws_prod_01",
+            "name": ws.name if ws else "Acme FinTech Core Production",
+            "approval_policy": ws.approval_policy if ws else "STRICT_TWO_STAGE",
+            "demo_mode": ws.demo_mode if ws else True,
+            "drift_active": ws.drift_active if ws else False,
+            "upstream_failure_mode": ws.upstream_failure_mode if ws else "NONE",
+            "llm_config": ws.llm_config if ws else {},
+            "github_config": ws.github_config if ws else {},
+            "business_assumptions": ws.business_assumptions if ws else {},
+        },
+        "integrations": [
+            {
+                "id": i.id,
+                "workspace_id": i.workspace_id,
+                "name": i.name,
+                "provider": i.provider,
+                "base_url": i.base_url,
+                "proxy_route": i.proxy_route,
+                "health_route": i.health_route,
+                "auth_method": i.auth_method,
+                "repository": i.repository,
+                "target_adapter_file": i.target_adapter_file,
+                "status": i.status,
+                "monitoring_paused": i.monitoring_paused,
+                "latency_threshold_ms": i.latency_threshold_ms,
+                "error_rate_threshold_pct": i.error_rate_threshold_pct,
+                "active_contract_version": i.active_contract_version,
+                "doc_ingestion_status": i.doc_ingestion_status,
+                "last_success_at": i.last_success_at.isoformat() if i.last_success_at else None,
+                "last_incident_at": i.last_incident_at.isoformat() if i.last_incident_at else None,
+                "is_simulation_mode": i.is_simulation_mode,
+            }
+            for i in integrations
+        ],
+        "contract_versions": [
+            {
+                "id": c.id,
+                "integration_id": c.integration_id,
+                "version": c.version,
+                "is_baseline": c.is_baseline,
+                "schema": c.schema_json,
+                "created_at": c.created_at.isoformat(),
+            }
+            for c in contracts
+        ],
+        "documentation_sources": [
+            {
+                "id": d.id,
+                "integration_id": d.integration_id,
+                "provider": d.provider,
+                "title": d.title,
+                "source_url": d.source_url,
+                "doc_type": d.doc_type,
+                "version": d.version,
+                "content": d.content,
+                "content_hash": d.content_hash,
+                "ingested_at": d.ingested_at.isoformat(),
+                "chunks": [{"chunk_id": "chk_01", "text": d.content}],
+            }
+            for d in docs
+        ],
+        "request_events": [
+            {
+                "id": r.id,
+                "integration_id": r.integration_id,
+                "method": r.method,
+                "normalized_route": r.normalized_route,
+                "status_code": r.status_code,
+                "duration_ms": r.duration_ms,
+                "error_classification": r.error_classification,
+                "schema_validation_result": r.schema_validation_result,
+                "correlation_id": r.correlation_id,
+                "incident_id": r.incident_id,
+                "timestamp": r.timestamp.isoformat(),
+            }
+            for r in req_events
+        ],
+        "incidents": [
+            {
+                "id": inc.id,
+                "integration_id": inc.integration_id,
+                "integration_name": inc.integration_name,
+                "provider": inc.provider,
+                "severity": inc.severity,
+                "status": inc.status,
+                "failure_type": inc.failure_type,
+                "endpoint": inc.endpoint,
+                "failure_count": inc.failure_count,
+                "first_occurrence": inc.first_occurrence.isoformat(),
+                "last_occurrence": inc.last_occurrence.isoformat(),
+                "error_trace": inc.error_trace,
+                "sanitized_payload": inc.sanitized_payload,
+                "contract_diff": inc.contract_diff,
+            }
+            for inc in incidents
+        ],
+        "repairs": [
+            {
+                "id": rep.id,
+                "incident_id": rep.incident_id,
+                "workflow_state": rep.workflow_state,
+                "current_node_index": rep.current_node_index,
+                "target_file": rep.target_file,
+                "confidence_score": rep.confidence_score,
+                "iteration_count": rep.iteration_count,
+                "proposed_code": rep.proposed_code,
+                "root_cause_hypothesis": rep.root_cause_hypothesis,
+                "nodes": rep.nodes_state,
+            }
+            for rep in repairs
+        ],
+        "audit_logs": [
+            {
+                "id": a.id,
+                "timestamp": a.timestamp.isoformat(),
+                "actor": a.actor,
+                "role": a.role,
+                "action": a.action,
+                "target": a.target,
+                "outcome": a.outcome,
+                "details": a.details,
+            }
+            for a in audit_logs
+        ],
+    }
+
+
+# Payload Validation Endpoint (Must be defined BEFORE the catch-all proxy route)
 @app.post("/proxy/{integration_id}/validate")
-async def validate_integration_payload(integration_id: str, request: Request):
-    integration = next((i for i in STATE["integrations"] if i["id"] == integration_id), None)
-    if not integration:
-        raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
+async def validate_integration_payload(
+    integration_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    IntegrationService.get_integration(db, integration_id)
     payload = await request.json()
     try:
         norm = parse_commerce_customer(payload)
@@ -321,6 +302,7 @@ async def validate_integration_payload(integration_id: str, request: Request):
         return {"valid": False, "error": str(exc), "schema_check": "FAIL"}
 
 
+# Live Proxy Gateway Route (Catch-all for subpaths)
 @app.api_route("/proxy/{integration_id}/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
 async def proxy_gateway(
     integration_id: str,
@@ -328,611 +310,542 @@ async def proxy_gateway(
     request: Request,
     failure_mode: Optional[str] = Query(default=None),
     simulate_drift: Optional[bool] = Query(default=False),
+    db: Session = Depends(get_db),
 ) -> Dict[str, Any]:
-    """
-    Explicitly configured API Gateway route that observes traffic, redacts sensitive headers,
-    validates response schemas against baseline contracts, and creates incidents on drift.
-    """
-    integration = next(
-        (i for i in STATE["integrations"] if i["id"] == integration_id),
-        None,
-    )
-    if not integration:
-        raise HTTPException(status_code=404, detail=f"Integration '{integration_id}' not found")
-
-    if integration.get("monitoring_paused"):
-        raise HTTPException(status_code=503, detail="Integration monitoring is paused.")
-
-    now_iso = datetime.now(timezone.utc).isoformat()
-    corr_id = f"corr_{uuid.uuid4().hex[:8]}"
-    mode = failure_mode or (
-        "SCHEMA_DRIFT"
-        if (simulate_drift or STATE["workspace"]["drift_active"])
-        else STATE["workspace"]["upstream_failure_mode"]
+    integration = IntegrationService.get_integration(db, integration_id)
+    return await ProxyGatewayService.dispatch_request(
+        db=db,
+        integration=integration,
+        subpath=path,
+        request=request,
+        failure_mode=failure_mode,
+        simulate_drift=simulate_drift,
     )
 
-    deployed_repair = next(
-        (
-            r
-            for r in STATE["repairs"]
-            if r["integration_id"] == integration["id"] and r["workflow_state"] == "DEPLOYED"
-        ),
-        None,
-    )
 
-    status_code = 200
-    duration_ms = 122
-    error_classification = "NONE"
-    schema_validation_result = "PASS"
-    adapter_exception = None
-
-    customer_match = re.match(r"^v2/customers/([^/?]+)", path)
-    if customer_match:
-        cust_id = customer_match.group(1)
-        if mode == "AUTH_401":
-            status_code = 401
-            upstream_payload = {"error": "invalid_token", "error_description": "Token expired or revoked."}
-            error_classification = "AUTH_FAILURE"
-            schema_validation_result = "SKIPPED_HTTP_ERROR"
-        elif mode == "RATE_LIMIT_429":
-            status_code = 429
-            upstream_payload = {"error": "rate_limit_exceeded", "retry_after_seconds": 30}
-            error_classification = "RATE_LIMIT"
-            schema_validation_result = "SKIPPED_HTTP_ERROR"
-        elif mode == "SCHEMA_DRIFT" or cust_id == "cust_9041" or simulate_drift:
-            upstream_payload = {
-                "customerId": cust_id,
-                "email": "buyer@enterprise.io" if cust_id != "cust_9099" else "hold@enterprise.io",
-                "status": "SUSPENDED" if cust_id == "cust_9099" else "ACTIVE",
-                "schemaVersion": "2.2",
-            }
-        else:
-            upstream_payload = {
-                "customer_id": cust_id,
-                "email": "legacy@enterprise.io" if cust_id == "cust_8810" else ("hold@enterprise.io" if cust_id == "cust_9099" else "buyer@enterprise.io"),
-                "status": "SUSPENDED" if cust_id == "cust_9099" else "ACTIVE",
-            }
-    else:
-        if mode == "AUTH_401":
-            status_code = 401
-            upstream_payload = {"error": "invalid_token", "error_description": "Token expired or revoked."}
-            error_classification = "AUTH_FAILURE"
-            schema_validation_result = "SKIPPED_HTTP_ERROR"
-        elif mode == "RATE_LIMIT_429":
-            status_code = 429
-            upstream_payload = {"error": "rate_limit_exceeded", "retry_after_seconds": 30}
-            error_classification = "RATE_LIMIT"
-            schema_validation_result = "SKIPPED_HTTP_ERROR"
-        elif mode == "SCHEMA_DRIFT":
-            upstream_payload = {
-                "customerId": "cust_9041",
-                "email": "buyer@enterprise.io",
-                "status": "ACTIVE",
-                "schemaVersion": "2.2",
-            }
-        else:
-            upstream_payload = {
-                "customer_id": "cust_9041",
-                "email": "buyer@enterprise.io",
-                "status": "ACTIVE",
-            }
-
-    baseline_contract = next(
-        (
-            c
-            for c in STATE["contract_versions"]
-            if c["integration_id"] == integration["id"] and c["is_baseline"]
-        ),
-        None,
-    )
-
-    validation_report = None
-    if status_code == 200 and baseline_contract:
-        validation_report = validate_payload_against_contract(
-            upstream_payload, baseline_contract["schema"]
-        )
-        if not validation_report["valid"] and not deployed_repair:
-            schema_validation_result = "FAIL_DRIFT"
-            error_classification = "SCHEMA_DRIFT"
-            adapter_exception = "KeyError: Missing required contract field: 'customer_id' in src/adapters/commerce_customer_adapter.py:14"
-        elif not validation_report["valid"] and deployed_repair:
-            schema_validation_result = "PASS_COMPAT_PATCHED"
-            error_classification = "NONE"
-
-    linked_incident_id = None
-    if error_classification != "NONE":
-        integration["status"] = "DEGRADED"
-        integration["last_incident_at"] = now_iso
-        existing = next(
-            (
-                inc
-                for inc in STATE["incidents"]
-                if inc["integration_id"] == integration["id"]
-                and inc["failure_type"] == error_classification
-                and inc["status"] not in ("DEPLOYED", "RESOLVED")
-            ),
-            None,
-        )
-        if existing:
-            existing["failure_count"] += 1
-            existing["last_occurrence"] = now_iso
-            linked_incident_id = existing["id"]
-        else:
-            new_id = f"inc_{1041 + len(STATE['incidents'])}"
-            new_inc = {
-                "id": new_id,
-                "workspace_id": STATE["workspace"]["id"],
-                "integration_id": integration["id"],
-                "integration_name": integration["name"],
-                "provider": integration["provider"],
-                "severity": "CRITICAL" if error_classification == "SCHEMA_DRIFT" else "HIGH",
-                "status": "DETECTED",
-                "failure_type": error_classification,
-                "endpoint": f"GET /{path}",
-                "first_occurrence": now_iso,
-                "detected_at": now_iso,
-                "diagnosed_at": None,
-                "proposed_at": None,
-                "recovered_at": None,
-                "last_occurrence": now_iso,
-                "failure_count": 1,
-                "assigned_reviewer": "Elena Rostova (Admin)",
-                "workflow_state": "DETECTED",
-                "error_trace": adapter_exception or str(upstream_payload),
-                "sanitized_payload": redact_sensitive(upstream_payload),
-                "contract_diff": validation_report or {"valid": False},
-                "timeline": [
-                    {
-                        "timestamp": now_iso,
-                        "event": f"AutoPatch Gateway detected {error_classification} on /proxy/{integration_id}/{path} ({corr_id})",
-                    }
-                ],
-            }
-            STATE["incidents"].insert(0, new_inc)
-            linked_incident_id = new_id
-
-    raw_headers = dict(request.headers)
-    raw_headers.setdefault("Authorization", "Bearer sk_live_redacted_sample")
-
-    req_event = {
-        "id": f"req_{9906 + len(STATE['request_events'])}",
-        "workspace_id": STATE["workspace"]["id"],
-        "integration_id": integration["id"],
-        "method": request.method,
-        "normalized_route": f"/{path}",
-        "upstream_host": "api.commercecore.internal",
-        "timestamp": now_iso,
-        "duration_ms": duration_ms,
-        "status_code": status_code,
-        "response_size_bytes": len(str(upstream_payload)),
-        "error_classification": error_classification,
-        "schema_validation_result": schema_validation_result,
-        "correlation_id": corr_id,
-        "incident_id": linked_incident_id,
-        "sanitized_headers": redact_sensitive(raw_headers),
-        "sanitized_payload": redact_sensitive(upstream_payload),
-    }
-    STATE["request_events"].insert(0, req_event)
-
-    response_data: Dict[str, Any] = {
-        "event": req_event,
-        "incident_id": linked_incident_id,
-        "upstream_payload": upstream_payload,
-    }
-
-    # If customer adapter can parse, provide normalized customer object for compatibility
-    if status_code == 200:
-        try:
-            norm_cust = parse_commerce_customer(upstream_payload)
-            response_data["customer"] = {
-                "id": norm_cust.id,
-                "email": norm_cust.email,
-                "is_active": norm_cust.is_active,
-            }
-            response_data["contract_validation"] = "PASS_DUAL_COMPAT"
-            if simulate_drift:
-                response_data["simulated_drift"] = True
-        except Exception:
-            pass
-
-    return response_data
-
-
-@app.get("/api/v1/health")
-async def get_health() -> Dict[str, Any]:
-    return {
-        "status": "healthy",
-        "version": "1.4.0",
-        "workspace_id": STATE["workspace"]["id"],
-        "drift_active": STATE["workspace"]["drift_active"],
-    }
-
-
-@app.get("/api/v1/state")
-async def get_full_workspace_state() -> Dict[str, Any]:
-    """Return full synchronized state for the frontend dashboard."""
-    return STATE
-
-
-@app.post("/api/v1/demo/toggle-drift")
-async def toggle_demo_drift() -> Dict[str, Any]:
-    STATE["workspace"]["drift_active"] = not STATE["workspace"]["drift_active"]
-    STATE["workspace"]["upstream_failure_mode"] = (
-        "SCHEMA_DRIFT" if STATE["workspace"]["drift_active"] else "NONE"
-    )
-    record_audit(
-        "Admin",
-        "DEMO_API_DRIFT_TOGGLED",
-        "int_commerce_01",
-        "SUCCESS",
-        f"drift_active={STATE['workspace']['drift_active']}",
-    )
-    return {"drift_active": STATE["workspace"]["drift_active"]}
-
-
-@app.get("/api/v1/dashboard/summary")
-async def get_dashboard_summary() -> Dict[str, Any]:
-    events = STATE["request_events"]
-    total = len(events)
-    failed = sum(1 for e in events if e["error_classification"] != "NONE" or e["status_code"] >= 400)
-    drift_events = sum(1 for e in events if e["error_classification"] == "SCHEMA_DRIFT")
-    return {
-        "monitored_integrations": len(STATE["integrations"]),
-        "total_requests": total,
-        "failed_requests": failed,
-        "schema_drift_events": drift_events,
-        "open_incidents": sum(1 for i in STATE["incidents"] if i["status"] != "DEPLOYED"),
-        "awaiting_approval": sum(1 for r in STATE["repairs"] if r["workflow_state"] == "AWAITING_APPROVAL"),
-    }
-
-
-@app.get("/api/v1/dashboard/timeseries")
-async def get_dashboard_timeseries() -> Dict[str, Any]:
-    return {"series": STATE["request_events"][:25]}
-
-
+# Integrations API
+@app.get("/integrations")
 @app.get("/api/v1/integrations")
-async def list_integrations() -> List[Dict[str, Any]]:
-    return STATE["integrations"]
+async def list_integrations(db: Session = Depends(get_db)):
+    integrations = IntegrationService.list_integrations(db)
+    return {"integrations": integrations, "total": len(integrations)}
 
 
 @app.post("/api/v1/integrations")
 async def create_integration(
-    payload: Dict[str, Any],
-    role: str = Depends(require_roles(["Admin"], "Register Integration")),
-) -> Dict[str, Any]:
-    new_id = f"int_custom_{len(STATE['integrations']) + 1}"
-    item = {
-        "id": new_id,
-        "workspace_id": STATE["workspace"]["id"],
-        "name": payload.get("name", "Custom API Integration"),
-        "provider": payload.get("provider", "CustomProvider"),
-        "base_url": payload.get("base_url", "https://api.example.com"),
-        "proxy_route": f"/proxy/{new_id}/v1/resource",
-        "health_route": "/v1/health",
-        "auth_method": "Bearer Token",
-        "repository": payload.get("repository", "acme-corp/custom-service"),
-        "target_adapter_file": "src/adapters/custom_adapter.py",
-        "status": "HEALTHY",
-        "monitoring_paused": False,
-        "latency_threshold_ms": 500,
-        "error_rate_threshold_pct": 5.0,
-        "active_contract_version": "v1.0.0",
-        "doc_ingestion_status": "INDEXED",
-        "last_success_at": datetime.now(timezone.utc).isoformat(),
-        "last_incident_at": None,
+    payload: IntegrationCreate,
+    current_user: User = Depends(require_roles(["Admin"], "Register Integration")),
+    db: Session = Depends(get_db),
+):
+    integration = IntegrationService.create_integration(db, payload)
+    record_audit(
+        db,
+        actor=f"{current_user.name} ({current_user.role})",
+        role=current_user.role,
+        action="INTEGRATION_REGISTERED",
+        target=integration.id,
+        outcome="SUCCESS",
+        details=f"Registered connector '{integration.name}' ({integration.provider})",
+    )
+    return {
+        "id": integration.id,
+        "workspace_id": integration.workspace_id,
+        "name": integration.name,
+        "provider": integration.provider,
+        "base_url": integration.base_url,
+        "proxy_route": integration.proxy_route,
+        "health_route": integration.health_route,
+        "auth_method": integration.auth_method,
+        "repository": integration.repository,
+        "target_adapter_file": integration.target_adapter_file,
+        "status": integration.status,
+        "monitoring_paused": integration.monitoring_paused,
+        "latency_threshold_ms": integration.latency_threshold_ms,
+        "error_rate_threshold_pct": integration.error_rate_threshold_pct,
+        "active_contract_version": integration.active_contract_version,
+        "doc_ingestion_status": integration.doc_ingestion_status,
+        "is_simulation_mode": integration.is_simulation_mode,
+        "created_at": integration.created_at.isoformat(),
     }
-    STATE["integrations"].append(item)
-    record_audit(role, "INTEGRATION_REGISTERED", new_id, "SUCCESS", item["name"])
-    return item
+
+
+@app.get("/api/v1/integrations/{integration_id}")
+async def get_integration(integration_id: str, db: Session = Depends(get_db)):
+    i = IntegrationService.get_integration(db, integration_id)
+    return {
+        "id": i.id,
+        "workspace_id": i.workspace_id,
+        "name": i.name,
+        "provider": i.provider,
+        "base_url": i.base_url,
+        "proxy_route": i.proxy_route,
+        "health_route": i.health_route,
+        "auth_method": i.auth_method,
+        "repository": i.repository,
+        "target_adapter_file": i.target_adapter_file,
+        "status": i.status,
+        "monitoring_paused": i.monitoring_paused,
+        "latency_threshold_ms": i.latency_threshold_ms,
+        "error_rate_threshold_pct": i.error_rate_threshold_pct,
+        "active_contract_version": i.active_contract_version,
+        "doc_ingestion_status": i.doc_ingestion_status,
+        "is_simulation_mode": i.is_simulation_mode,
+        "created_at": i.created_at.isoformat(),
+    }
+
+
+@app.put("/api/v1/integrations/{integration_id}")
+async def update_integration(
+    integration_id: str,
+    payload: IntegrationUpdate,
+    current_user: User = Depends(require_roles(["Admin", "Engineer"], "Update Integration")),
+    db: Session = Depends(get_db),
+):
+    i = IntegrationService.update_integration(db, integration_id, payload)
+    record_audit(
+        db,
+        actor=f"{current_user.name} ({current_user.role})",
+        role=current_user.role,
+        action="INTEGRATION_UPDATED",
+        target=i.id,
+        outcome="SUCCESS",
+        details=f"Updated settings for {i.name}",
+    )
+    return {
+        "id": i.id,
+        "workspace_id": i.workspace_id,
+        "name": i.name,
+        "provider": i.provider,
+        "base_url": i.base_url,
+        "proxy_route": i.proxy_route,
+        "health_route": i.health_route,
+        "auth_method": i.auth_method,
+        "repository": i.repository,
+        "target_adapter_file": i.target_adapter_file,
+        "status": i.status,
+        "monitoring_paused": i.monitoring_paused,
+        "latency_threshold_ms": i.latency_threshold_ms,
+        "error_rate_threshold_pct": i.error_rate_threshold_pct,
+        "active_contract_version": i.active_contract_version,
+        "doc_ingestion_status": i.doc_ingestion_status,
+        "is_simulation_mode": i.is_simulation_mode,
+        "created_at": i.created_at.isoformat(),
+    }
 
 
 @app.post("/api/v1/integrations/{integration_id}/test")
-async def test_integration_connectivity(integration_id: str, request: Request) -> Dict[str, Any]:
-    return await proxy_gateway(integration_id, "v2/customers/cust_9041", request)
+async def test_integration_connectivity(
+    integration_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    integration = IntegrationService.get_integration(db, integration_id)
+    return await ProxyGatewayService.dispatch_request(
+        db=db,
+        integration=integration,
+        subpath="v2/customers/cust_9041",
+        request=request,
+    )
+
+
+# Contracts API
+@app.get("/contracts/{integration_id}")
+@app.get("/api/v1/integrations/{integration_id}/contracts")
+async def get_contracts(integration_id: str, db: Session = Depends(get_db)):
+    integration = IntegrationService.get_integration(db, integration_id)
+    contract = db.scalar(
+        select(ApiContractVersion).where(
+            ApiContractVersion.integration_id == integration.id,
+            ApiContractVersion.is_baseline == True,
+        )
+    )
+    if not contract:
+        contract = db.scalar(select(ApiContractVersion).where(ApiContractVersion.integration_id == integration.id))
+    if not contract:
+        raise HTTPException(status_code=404, detail=f"No contract schema registered for '{integration_id}'")
+
+    return {
+        "integration_id": integration_id,
+        "provider": integration.provider,
+        "version": contract.version,
+        "schema": contract.schema_json,
+    }
 
 
 @app.post("/api/v1/integrations/{integration_id}/contracts/import")
-async def import_contract(integration_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-    new_cv = {
-        "id": f"cv_{uuid.uuid4().hex[:6]}",
-        "integration_id": integration_id,
-        "version": payload.get("version", "v2.2.0"),
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "is_baseline": payload.get("is_baseline", False),
-        "schema": payload.get("schema", {}),
-    }
-    STATE["contract_versions"].append(new_cv)
-    return new_cv
+async def import_contract(
+    integration_id: str,
+    payload: ContractImportRequest,
+    current_user: User = Depends(require_roles(["Admin", "Engineer"], "Import Contract Schema")),
+    db: Session = Depends(get_db),
+):
+    IntegrationService.get_integration(db, integration_id)
+    cv = ApiContractVersion(
+        id=f"cv_{uuid.uuid4().hex[:6]}",
+        workspace_id="ws_prod_01",
+        integration_id=integration_id,
+        version=payload.version,
+        is_baseline=payload.is_baseline,
+        schema_json=payload.schema_json,
+        created_at=utcnow(),
+    )
+    db.add(cv)
+    db.commit()
+    db.refresh(cv)
+    return cv
 
 
 @app.get("/api/v1/integrations/{integration_id}/contracts/diff")
-async def diff_contracts(integration_id: str) -> Dict[str, Any]:
-    baseline = STATE["contract_versions"][0]["schema"]
-    observed_sample = {"customerId": "cust_9041", "email": "buyer@enterprise.io", "status": "ACTIVE"}
-    return validate_payload_against_contract(observed_sample, baseline)
+async def diff_contracts(integration_id: str, db: Session = Depends(get_db)):
+    contract = db.scalar(
+        select(ApiContractVersion).where(
+            ApiContractVersion.integration_id == integration_id,
+            ApiContractVersion.is_baseline == True,
+        )
+    )
+    baseline_schema = contract.schema_json if contract else {}
+    sample = {"customerId": "cust_9041", "email": "buyer@enterprise.io", "status": "ACTIVE"}
+    report = ContractValidationService.validate_payload(sample, baseline_schema)
+    return report.model_dump()
 
 
+# Documents & RAG API
 @app.post("/api/v1/integrations/{integration_id}/documents")
 async def ingest_document(
     integration_id: str,
-    payload: Dict[str, Any],
-    role: str = Depends(require_roles(["Admin", "Operator"], "Ingest Documentation")),
-) -> Dict[str, Any]:
-    content = payload.get("content", "")
-    digest = compute_sha256_digest(content)
-    existing = next((d for d in STATE["documentation_sources"] if d["content_hash"] == digest), None)
-    if existing:
-        return {"status": "DEDUPLICATED_SKIPPED", "document": existing}
-
-    doc = {
-        "id": f"doc_{uuid.uuid4().hex[:6]}",
-        "integration_id": integration_id,
-        "provider": payload.get("provider", "CommerceCore"),
-        "title": payload.get("title", "Uploaded Migration Guide"),
-        "source_url": payload.get("source_url", "https://docs.commercecore.internal/upload"),
-        "doc_type": "MIGRATION_GUIDE",
-        "version": payload.get("version", "v2.3"),
-        "ingested_at": datetime.now(timezone.utc).isoformat(),
-        "content": content,
-        "content_hash": digest,
-        "chunks": [{"chunk_id": f"chk_{uuid.uuid4().hex[:6]}", "text": content, "keywords": content.lower().split()}],
+    payload: DocumentIngestRequest,
+    current_user: User = Depends(require_roles(["Admin", "Operator", "Engineer"], "Ingest Documentation")),
+    db: Session = Depends(get_db),
+):
+    doc, is_new = KnowledgeService.ingest_document(db, integration_id, payload)
+    record_audit(
+        db,
+        actor=f"{current_user.name} ({current_user.role})",
+        role=current_user.role,
+        action="DOCUMENT_INGESTED",
+        target=doc.id,
+        outcome="SUCCESS" if is_new else "DEDUPLICATED_SKIPPED",
+        details=f"Document '{doc.title}' (Hash: {doc.content_hash})",
+    )
+    return {
+        "status": "INDEXED" if is_new else "DEDUPLICATED_SKIPPED",
+        "document": {
+            "id": doc.id,
+            "title": doc.title,
+            "content_hash": doc.content_hash,
+            "version": doc.version,
+        },
     }
-    STATE["documentation_sources"].insert(0, doc)
-    record_audit(role, "DOCUMENT_INGESTED", doc["id"], "SUCCESS", f"Hash: {digest}")
-    return {"status": "INDEXED", "document": doc}
 
 
-@app.post("/api/v1/integrations/{integration_id}/documents/reindex")
-async def reindex_documents(integration_id: str) -> Dict[str, Any]:
-    docs = [d for d in STATE["documentation_sources"] if d["integration_id"] == integration_id]
-    return {"reindexed_count": len(docs), "status": "INDEXED"}
-
-
+# Incidents API
 @app.get("/api/v1/incidents")
-async def list_incidents() -> List[Dict[str, Any]]:
-    return STATE["incidents"]
+async def list_incidents(
+    status: Optional[str] = None,
+    failure_type: Optional[str] = None,
+    integration_id: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+    return IncidentService.list_incidents(db, status=status, failure_type=failure_type, integration_id=integration_id)
 
 
 @app.get("/api/v1/incidents/{incident_id}")
-async def get_incident(incident_id: str) -> Dict[str, Any]:
-    inc = next((i for i in STATE["incidents"] if i["id"] == incident_id), None)
+async def get_incident(incident_id: str, db: Session = Depends(get_db)):
+    inc = IncidentService.get_incident(db, incident_id)
     if not inc:
-        raise HTTPException(status_code=404, detail="Incident not found")
+        raise HTTPException(status_code=404, detail="Incident not found.")
     return inc
 
 
+# Repair State Machine API
 @app.post("/api/v1/incidents/{incident_id}/investigate")
 @app.post("/api/v1/incidents/{incident_id}/repair")
 async def run_incident_repair(
     incident_id: str,
-    role: str = Depends(require_roles(["Admin", "Operator", "Reviewer"], "Execute LangGraph Repair")),
-) -> Dict[str, Any]:
-    inc = next((i for i in STATE["incidents"] if i["id"] == incident_id), None)
+    current_user: User = Depends(require_roles(["Admin", "Reviewer", "Engineer", "Operator"], "Execute Repair Workflow")),
+    db: Session = Depends(get_db),
+):
+    inc = IncidentService.get_incident(db, incident_id)
     if not inc:
-        raise HTTPException(status_code=404, detail="Incident not found")
+        raise HTTPException(status_code=404, detail="Incident not found.")
 
-    existing = next((r for r in STATE["repairs"] if r["incident_id"] == incident_id), None)
-    if existing:
-        return existing
-
-    rag_results = {
-        "duration_ms": 16,
-        "results": [
-            {
-                "chunk_id": "chk_01",
-                "doc_id": "doc_cc_mig_22",
-                "title": "CommerceCore API v2.2 Migration Guide & Breaking Changes",
-                "source_url": "https://docs.commercecore.internal/migrations/v2.1-to-v2.2",
-                "version": "v2.2",
-                "doc_type": "MIGRATION_GUIDE",
-                "excerpt": STATE["documentation_sources"][0]["chunks"][0]["text"],
-                "score": 0.97,
-                "content_hash": STATE["documentation_sources"][0]["content_hash"],
-            }
-        ],
+    repair = await RepairWorkflowService.execute_repair(db=db, incident=inc)
+    record_audit(
+        db,
+        actor=f"{current_user.name} ({current_user.role})",
+        role=current_user.role,
+        action="AGENT_REPAIR_WORKFLOW_EXECUTED",
+        target=repair.id,
+        outcome="CHECKPOINT_PAUSED",
+        details=f"Incident {incident_id} repair executed (Node 9 paused)",
+    )
+    return {
+        "id": repair.id,
+        "incident_id": repair.incident_id,
+        "workflow_state": repair.workflow_state,
+        "confidence_score": repair.confidence_score,
+        "current_node_index": repair.current_node_index,
+        "target_file": repair.target_file,
+        "proposed_code": repair.proposed_code,
+        "root_cause_hypothesis": repair.root_cause_hypothesis,
+        "repair_plan": repair.repair_plan,
+        "nodes": repair.nodes_state,
+        "iteration_count": repair.iteration_count,
+        "max_iterations": repair.max_iterations,
     }
-
-    wf_out = execute_langgraph_repair_workflow(inc, rag_results)
-    now_iso = datetime.now(timezone.utc).isoformat()
-    repair_id = f"rep_{501 + len(STATE['repairs'])}"
-
-    repair = {
-        "id": repair_id,
-        "incident_id": inc["id"],
-        "workspace_id": STATE["workspace"]["id"],
-        "integration_id": inc["integration_id"],
-        "repository": "acme-corp/commerce-integrations-service",
-        "base_branch": "main",
-        "target_file": "src/adapters/commerce_customer_adapter.py",
-        "created_at": now_iso,
-        "updated_at": now_iso,
-        "iteration_count": 1,
-        "max_iterations": 3,
-        "estimated_cost_usd": 0.0,
-        "input_tokens": 0,
-        "output_tokens": 0,
-        "rag_retrieval": rag_results,
-        "approval_record": None,
-        "rejection_record": None,
-        "revision_notes": [],
-        "pull_request": None,
-        "deployment_record": None,
-        **wf_out,
-    }
-    inc["status"] = repair["workflow_state"]
-    inc["workflow_state"] = repair["workflow_state"]
-    inc["diagnosed_at"] = now_iso
-    inc["proposed_at"] = now_iso
-    STATE["repairs"].insert(0, repair)
-    record_audit(role, "AGENT_REPAIR_WORKFLOW_EXECUTED", repair_id, "CHECKPOINT_PAUSED", f"Incident {incident_id}")
-    return repair
 
 
 @app.get("/api/v1/repairs/{repair_id}")
-async def get_repair(repair_id: str) -> Dict[str, Any]:
-    rep = next((r for r in STATE["repairs"] if r["id"] == repair_id), None)
-    if not rep:
-        raise HTTPException(status_code=404, detail="Repair not found")
-    return rep
+async def get_repair(repair_id: str, db: Session = Depends(get_db)):
+    repair = RepairWorkflowService.get_repair(db, repair_id)
+    if not repair:
+        raise HTTPException(status_code=404, detail="Repair not found.")
+    return repair
 
 
 @app.get("/api/v1/repairs/{repair_id}/diff")
-async def get_repair_diff(repair_id: str) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
+async def get_repair_diff(repair_id: str, db: Session = Depends(get_db)):
+    repair = RepairWorkflowService.get_repair(db, repair_id)
+    if not repair:
+        raise HTTPException(status_code=404, detail="Repair not found.")
+    unified_patch = generate_unified_patch(repair.incident_id, repair.proposed_code)
     return {
-        "repair_id": repair_id,
-        "target_file": rep["target_file"],
-        "baseline_code": rep["baseline_code"],
-        "proposed_code": rep["proposed_code"],
-        "unified_patch": generate_unified_patch(rep["incident_id"], rep["proposed_code"]),
+        "repair_id": repair.id,
+        "target_file": repair.target_file,
+        "baseline_code": repair.baseline_code,
+        "proposed_code": repair.proposed_code,
+        "unified_patch": unified_patch,
     }
 
 
 @app.get("/api/v1/repairs/{repair_id}/tests")
-async def get_repair_tests(repair_id: str) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
-    return rep.get("validation_test_run") or {}
+async def get_repair_tests(repair_id: str, db: Session = Depends(get_db)):
+    repair = RepairWorkflowService.get_repair(db, repair_id)
+    if not repair:
+        raise HTTPException(status_code=404, detail="Repair not found.")
+    test_run = db.scalar(select(TestRun).where(TestRun.agent_run_id == repair.id).order_by(TestRun.created_at.desc()))
+    if not test_run:
+        return {"status": "NO_TEST_RUNS"}
+    return {
+        "sandbox_id": test_run.sandbox_id,
+        "passed_count": test_run.passed_count,
+        "failed_count": test_run.failed_count,
+        "total_count": test_run.total_count,
+        "runtime_ms": test_run.runtime_ms,
+        "results": test_run.results_json,
+        "raw_log": test_run.raw_log,
+    }
 
 
+# Human Review Gate
 @app.post("/api/v1/repairs/{repair_id}/approve")
 async def approve_repair(
     repair_id: str,
-    role: str = Depends(require_roles(["Admin", "Reviewer"], "Approve Repair Proposal")),
-) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
-    now_iso = datetime.now(timezone.utc).isoformat()
-    rep["workflow_state"] = "APPROVED_READY_FOR_PR"
-    rep["current_node_index"] = 10
-    rep["approval_record"] = {
-        "approved_by": f"Elena Rostova ({role})",
-        "timestamp": now_iso,
-        "comment": "Verified dual-compatibility fallback and 4/4 isolated pytest results.",
-    }
-    rep["nodes"][8]["status"] = "COMPLETED"
-    rep["nodes"][9]["status"] = "AWAITING_ACTION"
-    record_audit(role, "REPAIR_APPROVED", repair_id, "SUCCESS", f"Approved by {role}")
-    return rep
+    current_user: User = Depends(require_roles(["Admin", "Reviewer"], "Approve Repair Proposal")),
+    db: Session = Depends(get_db),
+):
+    return ReviewService.approve_repair(db, repair_id, current_user)
 
 
 @app.post("/api/v1/repairs/{repair_id}/reject")
 async def reject_repair(
     repair_id: str,
-    payload: Dict[str, Any],
-    role: str = Depends(require_roles(["Admin", "Reviewer"], "Reject Repair Proposal")),
-) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
-    reason = (payload or {}).get("reason", "").strip()
-    if not reason:
-        raise HTTPException(status_code=400, detail="Rejection reason is mandatory.")
-    now_iso = datetime.now(timezone.utc).isoformat()
-    rep["workflow_state"] = "REJECTED"
-    rep["rejection_record"] = {
-        "rejected_by": f"Elena Rostova ({role})",
-        "timestamp": now_iso,
-        "reason": reason,
-    }
-    rep["nodes"][8]["status"] = "FAILED"
-    record_audit(role, "REPAIR_REJECTED", repair_id, "SUCCESS", f"Reason: {reason}")
-    return rep
+    payload: RejectRequest,
+    current_user: User = Depends(require_roles(["Admin", "Reviewer"], "Reject Repair Proposal")),
+    db: Session = Depends(get_db),
+):
+    return ReviewService.reject_repair(db, repair_id, current_user, payload.reason)
 
 
 @app.post("/api/v1/repairs/{repair_id}/request-revision")
 async def request_repair_revision(
     repair_id: str,
-    payload: Dict[str, Any],
-    role: str = Depends(require_roles(["Admin", "Reviewer", "Operator"], "Request Patch Revision")),
-) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
-    if rep["iteration_count"] >= rep["max_iterations"]:
-        raise HTTPException(status_code=400, detail="Bounded iteration limit (3) reached.")
-    note = (payload or {}).get("note", "Add explicit string stripping on customerId.")
-    rep["iteration_count"] += 1
-    rep["revision_notes"].append(
-        {"iteration": rep["iteration_count"], "requested_by": role, "note": note}
+    payload: RevisionRequest,
+    current_user: User = Depends(require_roles(["Admin", "Reviewer", "Engineer", "Operator"], "Request Patch Revision")),
+    db: Session = Depends(get_db),
+):
+    repair = RepairWorkflowService.get_repair(db, repair_id)
+    if not repair:
+        raise HTTPException(status_code=404, detail="Repair not found.")
+    incident = IncidentService.get_incident(db, repair.incident_id)
+    if not incident:
+        raise HTTPException(status_code=404, detail="Incident not found.")
+
+    updated_repair = await RepairWorkflowService.execute_repair(
+        db=db, incident=incident, revision_feedback=payload.note
     )
-    runner = EphemeralSandboxRunner()
-    rep["validation_test_run"] = runner.run_validation(rep["proposed_code"])
-    rep["workflow_state"] = "AWAITING_APPROVAL"
-    record_audit(role, "REPAIR_REVISION_ITERATION", repair_id, "SUCCESS", f"Iteration {rep['iteration_count']}: {note}")
-    return rep
+    record_audit(
+        db,
+        actor=f"{current_user.name} ({current_user.role})",
+        role=current_user.role,
+        action="REPAIR_REVISION_ITERATION",
+        target=repair_id,
+        outcome="SUCCESS",
+        details=f"Revision #{updated_repair.iteration_count}: {payload.note}",
+    )
+    return updated_repair
 
 
 @app.post("/api/v1/repairs/{repair_id}/create-pr")
 async def create_pull_request(
     repair_id: str,
-    role: str = Depends(require_roles(["Admin", "Reviewer", "Operator"], "Create Pull Request")),
-) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
-    if rep["workflow_state"] not in ("APPROVED_READY_FOR_PR", "PR_CREATED", "DEPLOYED"):
-        raise HTTPException(status_code=400, detail="Node 9 Human Approval is required before PR creation.")
-    if rep.get("pull_request"):
-        return rep
+    current_user: User = Depends(require_roles(["Admin", "Reviewer", "Engineer", "Operator"], "Create Pull Request")),
+    db: Session = Depends(get_db),
+):
+    repair = RepairWorkflowService.get_repair(db, repair_id)
+    if not repair:
+        raise HTTPException(status_code=404, detail="Repair not found.")
 
-    gh_cfg = STATE["workspace"]["github_config"]
+    if repair.workflow_state not in ("APPROVED_READY_FOR_PR", "PR_CREATED", "DEPLOYED"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Node 9 Human Approval is required before PR creation (Current: {repair.workflow_state}).",
+        )
+
     gh_client = GitHubIntegrationClient(
-        owner=gh_cfg["owner"],
-        repo=gh_cfg["repo"],
-        base_branch=gh_cfg["base_branch"],
-        token=None,
+        owner=settings.github_owner,
+        repo=settings.github_repo,
+        base_branch=settings.github_base_branch,
+        token=settings.github_token,
     )
     pr_record = await gh_client.create_pull_request_or_export(
-        incident_id=rep["incident_id"],
-        repair_id=rep["id"],
-        target_file=rep["target_file"],
-        proposed_code=rep["proposed_code"],
+        incident_id=repair.incident_id,
+        repair_id=repair.id,
+        target_file=repair.target_file,
+        proposed_code=repair.proposed_code,
         pr_body="AutoPatch automated dual-compatibility fix.",
     )
-    rep["pull_request"] = pr_record
-    rep["workflow_state"] = "PR_CREATED"
-    rep["current_node_index"] = 11
-    rep["nodes"][9]["status"] = "COMPLETED"
-    rep["nodes"][10]["status"] = "AWAITING_ACTION"
-    record_audit(role, "PATCH_ARTIFACT_FINALIZED", repair_id, "SUCCESS", f"Branch: {pr_record['branch']}")
-    return rep
+
+    repair.workflow_state = "PR_CREATED"
+    repair.current_node_index = 11
+    nodes = list(repair.nodes_state or [])
+    if len(nodes) > 9:
+        nodes[9]["status"] = "COMPLETED"
+    if len(nodes) > 10:
+        nodes[10]["status"] = "AWAITING_ACTION"
+    repair.nodes_state = nodes
+
+    record_audit(
+        db,
+        actor=f"{current_user.name} ({current_user.role})",
+        role=current_user.role,
+        action="PATCH_ARTIFACT_FINALIZED",
+        target=repair.id,
+        outcome="SUCCESS",
+        details=f"Status: {pr_record['status']} (Branch: {pr_record['branch']})",
+    )
+    db.commit()
+    db.refresh(repair)
+    return repair
 
 
 @app.post("/api/v1/repairs/{repair_id}/authorize-deployment")
 async def authorize_deployment(
     repair_id: str,
-    role: str = Depends(require_roles(["Admin"], "Authorize Production Deployment")),
-) -> Dict[str, Any]:
-    rep = await get_repair(repair_id)
-    if rep["workflow_state"] != "PR_CREATED":
-        raise HTTPException(status_code=400, detail="PR creation must complete before deployment authorization.")
-    now_iso = datetime.now(timezone.utc).isoformat()
-    rep["workflow_state"] = "DEPLOYED"
-    rep["deployment_record"] = {
-        "authorized_by": f"Elena Rostova ({role})",
-        "environment": "production-us-east-1",
-        "timestamp": now_iso,
-        "verification_status": "VERIFIED_RECOVERY",
-    }
-    rep["nodes"][10]["status"] = "COMPLETED"
-    inc = next((i for i in STATE["incidents"] if i["id"] == rep["incident_id"]), None)
-    if inc:
-        inc["status"] = "DEPLOYED"
-        inc["workflow_state"] = "DEPLOYED"
-        inc["recovered_at"] = now_iso
-    record_audit(role, "PRODUCTION_DEPLOYMENT_AUTHORIZED", repair_id, "SUCCESS", "Verified recovery")
-    return rep
+    payload: Optional[DeploymentAuthorizeRequest] = None,
+    current_user: User = Depends(require_roles(["Admin"], "Authorize Production Deployment")),
+    db: Session = Depends(get_db),
+):
+    env = payload.environment if payload else "staging"
+    return await DeploymentService.authorize_and_verify_deployment(
+        db=db, repair_id=repair_id, user=current_user, environment=env
+    )
 
 
+# Demo Drift Toggle
+@app.post("/api/v1/demo/toggle-drift")
+async def toggle_demo_drift(db: Session = Depends(get_db)):
+    ws = db.scalar(select(Workspace).where(Workspace.id == "ws_prod_01"))
+    if ws:
+        ws.drift_active = not ws.drift_active
+        ws.upstream_failure_mode = "SCHEMA_DRIFT" if ws.drift_active else "NONE"
+        db.commit()
+        drift_active = ws.drift_active
+    else:
+        drift_active = False
+
+    record_audit(
+        db,
+        actor="Elena Rostova (Admin)",
+        role="Admin",
+        action="DEMO_API_DRIFT_TOGGLED",
+        target="ws_prod_01",
+        outcome="SUCCESS",
+        details=f"drift_active={drift_active}",
+    )
+    return {"drift_active": drift_active}
+
+
+# Analytics & Dashboard
 @app.get("/api/v1/analytics/summary")
-async def get_analytics_summary() -> Dict[str, Any]:
-    return await get_dashboard_summary()
+@app.get("/api/v1/dashboard/summary")
+async def get_dashboard_summary(db: Session = Depends(get_db)):
+    return AnalyticsService.get_dashboard_summary(db)
 
 
 @app.get("/api/v1/analytics/costs")
-async def get_analytics_costs() -> Dict[str, Any]:
-    total_spend = sum(r.get("estimated_cost_usd", 0.0) for r in STATE["repairs"])
+async def get_analytics_costs(db: Session = Depends(get_db)):
+    repairs_count = len(db.scalars(select(AgentRun.id)).all())
     return {
-        "provider": STATE["workspace"]["llm_config"]["provider"],
-        "total_spend_usd": total_spend,
-        "repairs_count": len(STATE["repairs"]),
+        "provider": settings.llm_provider,
+        "total_spend_usd": 0.0,
+        "repairs_count": repairs_count,
     }
 
 
+@app.get("/api/v1/dashboard/timeseries")
+async def get_dashboard_timeseries(db: Session = Depends(get_db)):
+    events = list(db.scalars(select(RequestEvent).order_by(RequestEvent.timestamp.desc()).limit(25)).all())
+    return {
+        "series": [
+            {
+                "id": e.id,
+                "timestamp": e.timestamp.isoformat(),
+                "duration_ms": e.duration_ms,
+                "status_code": e.status_code,
+                "error_classification": e.error_classification,
+            }
+            for e in events
+        ]
+    }
+
+
+# Audit Logs
 @app.get("/api/v1/audit-logs")
-async def get_audit_logs() -> List[Dict[str, Any]]:
-    return STATE["audit_logs"]
+async def get_audit_logs(db: Session = Depends(get_db)):
+    logs = list(db.scalars(select(AuditLog).order_by(AuditLog.timestamp.desc()).limit(100)).all())
+    return logs
+
+
+# Compatibility helper dictionary to allow backwards-compatible test imports
+class LiveStateProxy(dict):
+    """Backwards-compatible dict interface that proxies workspace state."""
+    @property
+    def workspace(self):
+        with SessionLocal() as db:
+            ws = db.scalar(select(Workspace).where(Workspace.id == "ws_prod_01"))
+            return {"id": ws.id, "drift_active": ws.drift_active} if ws else {"drift_active": False}
+
+    def __getitem__(self, item):
+        with SessionLocal() as db:
+            if item == "workspace":
+                ws = db.scalar(select(Workspace).where(Workspace.id == "ws_prod_01"))
+                return {"id": ws.id, "drift_active": ws.drift_active} if ws else {"drift_active": False}
+            if item == "integrations":
+                return list(db.scalars(select(Integration)).all())
+            if item == "incidents":
+                return list(db.scalars(select(Incident)).all())
+            if item == "repairs":
+                return list(db.scalars(select(AgentRun)).all())
+            if item == "audit_logs":
+                return list(db.scalars(select(AuditLog)).all())
+            if item == "contract_versions":
+                return list(db.scalars(select(ApiContractVersion)).all())
+            if item == "documentation_sources":
+                return list(db.scalars(select(DocumentationSource)).all())
+            if item == "request_events":
+                return list(db.scalars(select(RequestEvent)).all())
+        return super().__getitem__(item)
+
+
+STATE = LiveStateProxy()

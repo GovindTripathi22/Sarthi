@@ -227,6 +227,8 @@ class EphemeralSandboxRunner:
 
             clean_env = {
                 "PATH": os.environ.get("PATH", ""),
+                "SYSTEMROOT": os.environ.get("SYSTEMROOT", "C:\\Windows"),
+                "WINDIR": os.environ.get("WINDIR", "C:\\Windows"),
                 "PYTHONPATH": str(work_dir),
                 "PYTHONDONTWRITEBYTECODE": "1",
             }
