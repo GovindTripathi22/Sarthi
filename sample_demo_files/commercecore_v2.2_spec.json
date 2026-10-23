@@ -1,0 +1,99 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CommerceCore Customer API (Upstream Vendor)",
+    "version": "2.2.0",
+    "description": "Enterprise customer management API with breaking schema modifications introduced in v2.2."
+  },
+  "servers": [
+    {
+      "url": "https://api.commercecore.internal/v2",
+      "description": "Production Vendor Cluster"
+    }
+  ],
+  "paths": {
+    "/customers/{id}": {
+      "get": {
+        "summary": "Retrieve Customer by Identifier",
+        "description": "Returns customer account details. BREAKING CHANGE in v2.2: 'customer_id' renamed to 'customerId'.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "cust_101"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Customer Record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerV2_2"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failure (Token expired or invalid API key)"
+          },
+          "429": {
+            "description": "Rate limit exceeded (Too many requests)"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustomerV2_2": {
+        "type": "object",
+        "required": [
+          "customerId",
+          "email",
+          "status"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "description": "Unique alphanumeric customer identifier (renamed from customer_id)",
+            "example": "cust_101"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "alex.chen@fintechcorp.internal"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "SUSPENDED", "PENDING_VERIFICATION"],
+            "example": "ACTIVE"
+          },
+          "tier": {
+            "type": "string",
+            "enum": ["STANDARD", "PREMIUM", "ENTERPRISE"],
+            "example": "ENTERPRISE"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "account_created": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-01-15T08:30:00Z"
+              },
+              "region": {
+                "type": "string",
+                "example": "us-east-1"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

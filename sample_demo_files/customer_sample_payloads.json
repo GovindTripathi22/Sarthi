@@ -1,0 +1,27 @@
+{
+  "baseline_v2_1_payload": {
+    "customer_id": "cust_101",
+    "email": "alex.chen@fintechcorp.internal",
+    "status": "ACTIVE",
+    "tier": "ENTERPRISE",
+    "metadata": {
+      "account_created": "2026-01-15T08:30:00Z",
+      "region": "us-east-1"
+    }
+  },
+  "drifted_v2_2_payload": {
+    "customerId": "cust_101",
+    "email": "alex.chen@fintechcorp.internal",
+    "status": "ACTIVE",
+    "tier": "ENTERPRISE",
+    "metadata": {
+      "account_created": "2026-01-15T08:30:00Z",
+      "region": "us-east-1"
+    }
+  },
+  "normalized_internal_output": {
+    "id": "cust_101",
+    "email": "alex.chen@fintechcorp.internal",
+    "is_active": true
+  }
+}
