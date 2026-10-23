@@ -8288,11 +8288,30 @@ class EphemeralSandboxRunner:
     // Boot Application
 
     window.addEventListener('DOMContentLoaded', () => {
-
       window.AutoPatchApp = new AutoPatchController();
-
+      if (typeof window !== 'undefined' && window.location) {
+        const path = (window.location.pathname || '').replace(/^\/+/, '').toLowerCase();
+        const hash = (window.location.hash || '').replace(/^#\/?/, '').toLowerCase();
+        const target = hash || path;
+        const validPages = ['home', 'dashboard', 'integrations', 'incidents', 'workbench', 'review', 'contracts', 'analytics', 'settings', 'blueprint'];
+        const pageAliases = {
+          'guide': 'home',
+          'check': 'dashboard',
+          'approvals': 'review',
+          'ledger': 'settings',
+          'tests': 'blueprint',
+          'brain': 'workbench',
+          'rag': 'contracts',
+          'proxy': 'integrations',
+          'goals': 'dashboard'
+        };
+        if (validPages.includes(target)) {
+          window.AutoPatchApp.currentPage = target;
+        } else if (pageAliases[target]) {
+          window.AutoPatchApp.currentPage = pageAliases[target];
+        }
+      }
       window.AutoPatchApp.render();
-
     });
 
 

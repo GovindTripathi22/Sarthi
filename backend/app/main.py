@@ -927,3 +927,20 @@ class LiveStateProxy(dict):
 
 
 STATE = LiveStateProxy()
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def spa_catch_all(request: Request, full_path: str):
+    """Serve index.html for all client-side navigation routes and subpaths."""
+    if full_path.startswith("api/") or full_path.startswith("proxy/"):
+        raise HTTPException(status_code=404, detail=f"Endpoint /{full_path} not found")
+    static_file = static_dir / full_path
+    if static_file.is_file():
+        return FileResponse(static_file)
+    index_path = Path(__file__).resolve().parent.parent.parent / "index.html"
+    if not index_path.exists():
+        index_path = Path("index.html").resolve()
+    response = FileResponse(index_path)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
+
