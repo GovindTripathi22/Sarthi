@@ -890,9 +890,22 @@ async def get_dashboard_timeseries(db: Session = Depends(get_db)):
 
 # Audit Logs
 @app.get("/api/v1/audit-logs")
+@app.get("/api/v1/ledger")
 async def get_audit_logs(db: Session = Depends(get_db)):
     logs = list(db.scalars(select(AuditLog).order_by(AuditLog.timestamp.desc()).limit(100)).all())
     return logs
+
+
+@app.get("/api/v1/approvals")
+async def get_approvals_alias(db: Session = Depends(get_db)):
+    repairs = list(db.scalars(select(AgentRun).where(AgentRun.workflow_state == "AWAITING_APPROVAL")).all())
+    return repairs
+
+
+@app.get("/api/v1/docs")
+async def get_docs_alias(db: Session = Depends(get_db)):
+    docs = list(db.scalars(select(DocumentationSource)).all())
+    return docs
 
 
 # Compatibility helper dictionary to allow backwards-compatible test imports
