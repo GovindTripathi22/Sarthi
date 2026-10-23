@@ -2058,17 +2058,38 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         } else if (step === 2) {
           if (!this.db.workspace.drift_active) {
             this.toggleApiDrift();
+          }
+          if (this.db.incidents.length === 0) {
             this.sendProxyRequest('int_commerce_01', 'SCHEMA_DRIFT');
           }
           this.navigate('dashboard');
           this.toast('Step 2: Breakdown Simulated', 'CommerceCore renamed customer_id -> customerId. Sarthi intercepted the breakdown!', 'warning');
         } else if (step === 3) {
-          if (this.db.incidents.length > 0 && this.db.repairs.length === 0) {
-            this.startOrResumeRepair(this.db.incidents[0].id);
+          if (this.db.repairs.length === 0) {
+            if (this.db.incidents.length === 0) {
+              if (!this.db.workspace.drift_active) {
+                this.toggleApiDrift();
+              }
+              this.sendProxyRequest('int_commerce_01', 'SCHEMA_DRIFT');
+            }
+            if (this.db.incidents.length > 0) {
+              this.startOrResumeRepair(this.db.incidents[0].id);
+            }
           }
           this.navigate('workbench');
           this.toast('Step 3: AI Self-Healing', 'Inspecting the 11-step LangGraph repair factory and isolated test chamber.', 'info');
         } else if (step === 4) {
+          if (this.db.repairs.length === 0) {
+            if (this.db.incidents.length === 0) {
+              if (!this.db.workspace.drift_active) {
+                this.toggleApiDrift();
+              }
+              this.sendProxyRequest('int_commerce_01', 'SCHEMA_DRIFT');
+            }
+            if (this.db.incidents.length > 0) {
+              this.startOrResumeRepair(this.db.incidents[0].id);
+            }
+          }
           this.navigate('review');
           this.toast('Step 4: Review & Deploy', 'Reviewing the backward-compatible patch and approving deployment.', 'info');
         }
@@ -2085,7 +2106,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
         const step1Label = !isDriftActive ? 'Healthy' : 'Baseline';
 
         const step2Badge = isDriftActive ? 'bg-rose-500/15 text-rose-300 border-rose-500/30' : 'bg-white/[0.04] text-zinc-400 border-white/10';
-        const step2Dot = isDriftActive ? 'bg-rose-500 animate-ping' : 'bg-zinc-600';
+        const step2Dot = isDriftActive ? 'bg-rose-500 animate-pulse' : 'bg-zinc-600';
         const step2Label = isDriftActive ? 'Broken!' : 'Ready to Break';
 
         const step3Badge = isDeployed ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' : isRepaired ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' : isDriftActive ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-white/[0.04] text-zinc-400 border-white/10';
@@ -6904,10 +6925,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <!-- Top Checkpoint Metadata Bar -->
               <div class="p-4 rounded-xl stitch-card border border-white/[0.08] flex flex-wrap items-center justify-between gap-4 text-xs">
                 <div class="flex flex-wrap items-center gap-4 font-mono">
-                  <span>Run ID: <strong class="text-zinc-200">${repair.id}</strong> <span class="text-zinc-400 font-sans text-[11px]">(Work Order #${repair.id.replace('rep_', '')})</span></span>
+                  <span>Run ID: <strong class="text-zinc-200">${repair.id}</strong>${this.explanationMode === 'simple' ? ` <span class="text-zinc-400 font-sans text-[11px]">(Work Order #${repair.id.replace('rep_', '')})</span>` : ''}</span>
                   <span>Incident: <strong class="text-rose-300">${repair.incident_id}</strong></span>
-                  <span>Checkpoint: <strong class="text-emerald-300">${repair.checkpoint_id}</strong> <span class="text-emerald-400 font-sans text-[11px]">(Safe Save-Game File)</span></span>
-                  <span>Iteration: <strong class="text-white">${repair.iteration_count}/${repair.max_iterations}</strong> <span class="text-zinc-400 font-sans text-[11px]">(Attempt ${repair.iteration_count} of ${repair.max_iterations} allowed)</span></span>
+                  <span>Checkpoint: <strong class="text-emerald-300">${repair.checkpoint_id}</strong>${this.explanationMode === 'simple' ? ` <span class="text-emerald-400 font-sans text-[11px]">(Safe Save-Game File)</span>` : ''}</span>
+                  <span>Iteration: <strong class="text-white">${repair.iteration_count}/${repair.max_iterations}</strong>${this.explanationMode === 'simple' ? ` <span class="text-zinc-400 font-sans text-[11px]">(Attempt ${repair.iteration_count} of ${repair.max_iterations} allowed)</span>` : ''}</span>
                   <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">${repair.execution_mode}</span>
                 </div>
                 <div class="flex items-center gap-2">
@@ -6935,14 +6956,14 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                       1: 'Log 911 Alarm Ticket',
                       2: 'Checking our Rulebook',
                       3: 'AI Detective Investigation',
-                      4: 'Formulate Repair Plan',
-                      5: 'Read Vendor Manual',
+                      4: 'Read Vendor Manual',
+                      5: 'Formulate Repair Plan',
                       6: 'Write Dual-Language Code',
-                      7: 'Security X-Ray',
-                      8: 'Safe Test Chamber',
-                      9: 'Run 4 Crash Tests',
-                      10: 'Generate Release Notes',
-                      11: 'Human Boss Approval'
+                      7: 'Safe Test Chamber & Security X-Ray (Run 4 Crash Tests)',
+                      8: 'AI Safety & Quality Inspection',
+                      9: 'Human Boss Approval',
+                      10: 'Generate Release Notes & GitHub PR',
+                      11: 'Authorize Live Deployment'
                     };
                     const assemblyTitle = friendlyTitles[n.id] || n.name;
                     const nodeHeading = (this.explanationMode === 'simple') ? assemblyTitle : n.name;
@@ -7309,8 +7330,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                       <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400 shrink-0"></i>
                       <span>
                         <strong>Visual Code Diff Guide:</strong>
-                        <span class="text-rose-400 font-semibold">Red lines</span> show old code removed;
-                        <span class="text-emerald-400 font-semibold">Green lines</span> show new code added.
+                        <span class="text-rose-400 font-semibold">Red lines = Old code removed;</span>
+                        <span class="text-emerald-400 font-semibold">Green lines = New code added</span>
+                        (accepts both words so nothing crashes).
                         The new adapter accepts <strong class="text-white">BOTH</strong> words (<code>customerId</code> and <code>customer_id</code>), preventing customer crashes.
                       </span>
                     </div>

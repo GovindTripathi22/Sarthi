@@ -249,6 +249,35 @@ const newTests = [
       if (!htmlContent.includes('What Sarthi Does')) throw new Error('Missing What Sarthi Does');
       if (!htmlContent.includes('$126,000')) throw new Error('Missing $126,000 saved savings metric');
     }
+  },
+  {
+    name: 'Technical Mode Collapses Badges in Workbench',
+    fn: () => {
+      app.setExplanationMode('technical');
+      app.navigate('workbench');
+      const htmlContent = elementsById['main-viewport'].innerHTML;
+      if (htmlContent.includes('Safe Save-Game File')) {
+        throw new Error('Safe Save-Game File should be collapsed in technical mode');
+      }
+      if (htmlContent.includes('Work Order #')) {
+        throw new Error('Work Order # should be collapsed in technical mode');
+      }
+      app.setExplanationMode('simple');
+    }
+  },
+  {
+    name: 'Code Review Visual Diff Guide Exact Phrasing',
+    fn: () => {
+      app.setExplanationMode('simple');
+      app.navigate('review');
+      const htmlContent = elementsById['main-viewport'].innerHTML;
+      if (!htmlContent.includes('Red lines = Old code removed;')) {
+        throw new Error('Missing exact phrasing for Red lines');
+      }
+      if (!htmlContent.includes('Green lines = New code added')) {
+        throw new Error('Missing exact phrasing for Green lines');
+      }
+    }
   }
 ];
 
