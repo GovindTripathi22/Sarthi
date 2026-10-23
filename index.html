@@ -459,6 +459,16 @@
         <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span> Demo Mode
       </div>
 
+      <!-- Global Explanations Mode Toggle (Simple for Non-Technical / Technical for Engineers) -->
+      <div id="header-explanations-toggle" class="flex items-center bg-white/[0.04] border border-white/[0.08] rounded-lg p-0.5 text-xs">
+        <span class="text-amber-400 pl-2 pr-1 text-[11px] flex items-center gap-1 font-semibold">
+          <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span class="hidden md:inline font-sans text-zinc-300">Explanations:</span>
+        </span>
+        <button id="btn-explanation-simple" onclick="window.AutoPatchApp.setExplanationMode('simple')" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm transition-all">Simple</button>
+        <button id="btn-explanation-technical" onclick="window.AutoPatchApp.setExplanationMode('technical')" class="px-2 py-0.5 rounded text-[10px] font-medium text-zinc-400 hover:text-white border border-transparent transition-all">Technical</button>
+      </div>
+
       <!-- RBAC Role Dropdown -->
       <div class="flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-1 text-xs">
         <i data-lucide="shield" class="w-3.5 h-3.5 text-zinc-400"></i>
@@ -561,48 +571,102 @@
         <!-- Section 1: Operations -->
         <div class="px-2.5 pt-2 pb-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">Operations</div>
         <button onclick="window.AutoPatchApp.navigate('dashboard')" data-nav="dashboard" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Overview Dashboard</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Overview Dashboard</div>
+              <div class="text-[10px] text-zinc-500 font-normal">System Health Monitor</div>
+            </div>
+          </div>
         </button>
 
         <button onclick="window.AutoPatchApp.navigate('integrations')" data-nav="integrations" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="network" class="w-4 h-4"></i> Integrations & Proxy</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="network" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Integrations & Proxy</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Connected Partners (Stripe, Shopify)</div>
+            </div>
+          </div>
           <span id="nav-badge-integrations" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-300 border border-white/10">3</span>
         </button>
 
         <button onclick="window.AutoPatchApp.navigate('incidents')" data-nav="incidents" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Incident Explorer</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Incident Explorer</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Error Tickets</div>
+            </div>
+          </div>
           <span id="nav-badge-incidents" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 hidden">0</span>
         </button>
 
         <!-- Section 2: Autonomous Engine -->
         <div class="px-2.5 pt-3 pb-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">Autonomous Engine</div>
         <button onclick="window.AutoPatchApp.navigate('workbench')" data-nav="workbench" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="cpu" class="w-4 h-4"></i> AI Repair Workbench</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="cpu" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">AI Repair Workbench</div>
+              <div class="text-[10px] text-zinc-500 font-normal">AI Repair Factory (11 Steps)</div>
+            </div>
+          </div>
           <span id="nav-badge-workbench" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/15">LangGraph</span>
         </button>
 
         <button onclick="window.AutoPatchApp.navigate('review')" data-nav="review" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="git-pull-request" class="w-4 h-4"></i> Code Review & Gate</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="git-pull-request" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Code Review & Gate</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Review & Approve Fix</div>
+            </div>
+          </div>
           <span id="nav-badge-review" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 hidden">Pending</span>
         </button>
 
         <button onclick="window.AutoPatchApp.navigate('contracts')" data-nav="contracts" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="book-open" class="w-4 h-4"></i> Docs & Contracts</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="book-open" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Docs & Contracts</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Partner Manuals & Guides</div>
+            </div>
+          </div>
           <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-400 border border-white/10">RAG</span>
         </button>
 
         <!-- Section 3: Governance & Verification -->
         <div class="px-2.5 pt-3 pb-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-semibold">Governance & Quality</div>
         <button onclick="window.AutoPatchApp.navigate('analytics')" data-nav="analytics" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Analytics & Cost</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="bar-chart-3" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Analytics & Cost</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Money & Time Saved</div>
+            </div>
+          </div>
         </button>
 
         <button onclick="window.AutoPatchApp.navigate('settings')" data-nav="settings" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="settings" class="w-4 h-4"></i> Settings & Audit Log</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="settings" class="w-4 h-4 shrink-0"></i>
+            <div>
+              <div class="leading-tight">Settings & Audit Log</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Security & History</div>
+            </div>
+          </div>
         </button>
 
         <button onclick="window.AutoPatchApp.navigate('blueprint')" data-nav="blueprint" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200">
-          <span class="flex items-center gap-2.5"><i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400"></i> E2E Tests & Backend</span>
+          <div class="flex items-center gap-2.5 text-left">
+            <i data-lucide="terminal-square" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+            <div>
+              <div class="leading-tight">E2E Tests & Backend</div>
+              <div class="text-[10px] text-zinc-500 font-normal">Verify Everything Works</div>
+            </div>
+          </div>
         </button>
       </div>
 
@@ -1903,6 +1967,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
         this.ragSearchQuery = 'customer_id customerId /v2/customers KeyError migration';
 
+        this.explanationMode = 'simple';
+
         this.loadState();
 
       }
@@ -1931,6 +1997,13 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           this.db = getInitialDatabase();
 
+        }
+
+        try {
+          const savedMode = localStorage.getItem('autopatch_explanation_mode');
+          this.explanationMode = (savedMode === 'technical') ? 'technical' : 'simple';
+        } catch (_) {
+          this.explanationMode = 'simple';
         }
 
         if (this.db.incidents.length > 0 && !this.selectedIncidentId) {
@@ -1966,6 +2039,224 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
       }
 
 
+
+      setExplanationMode(mode) {
+        this.explanationMode = (mode === 'technical') ? 'technical' : 'simple';
+        try { localStorage.setItem('autopatch_explanation_mode', this.explanationMode); } catch (_) {}
+        this.updateGlobalHeaderAndBadges();
+        this.render();
+      }
+
+      toggleExplanationMode() {
+        this.setExplanationMode(this.explanationMode === 'simple' ? 'technical' : 'simple');
+      }
+
+      goToStoryStep(step) {
+        if (step === 1) {
+          this.navigate('dashboard');
+          this.toast('Step 1: System Health', 'Viewing baseline system health and connected partner APIs.', 'info');
+        } else if (step === 2) {
+          if (!this.db.workspace.drift_active) {
+            this.toggleApiDrift();
+            this.sendProxyRequest('int_commerce_01', 'SCHEMA_DRIFT');
+          }
+          this.navigate('dashboard');
+          this.toast('Step 2: Breakdown Simulated', 'CommerceCore renamed customer_id -> customerId. Sarthi intercepted the breakdown!', 'warning');
+        } else if (step === 3) {
+          if (this.db.incidents.length > 0 && this.db.repairs.length === 0) {
+            this.startOrResumeRepair(this.db.incidents[0].id);
+          }
+          this.navigate('workbench');
+          this.toast('Step 3: AI Self-Healing', 'Inspecting the 11-step LangGraph repair factory and isolated test chamber.', 'info');
+        } else if (step === 4) {
+          this.navigate('review');
+          this.toast('Step 4: Review & Deploy', 'Reviewing the backward-compatible patch and approving deployment.', 'info');
+        }
+      }
+
+      renderStoryStepper() {
+        const isDriftActive = Boolean(this.db.workspace.drift_active);
+        const rep = (this.db.repairs && this.db.repairs[0]) || null;
+        const isRepaired = Boolean(rep && (rep.workflow_state === 'AWAITING_APPROVAL' || rep.workflow_state === 'APPROVED_READY_FOR_PR' || rep.workflow_state === 'PR_CREATED' || rep.workflow_state === 'DEPLOYED'));
+        const isDeployed = Boolean(rep && rep.workflow_state === 'DEPLOYED');
+
+        const step1Badge = !isDriftActive ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' : 'bg-white/[0.04] text-zinc-400 border-white/10';
+        const step1Dot = !isDriftActive ? 'bg-emerald-400' : 'bg-zinc-500';
+        const step1Label = !isDriftActive ? 'Healthy' : 'Baseline';
+
+        const step2Badge = isDriftActive ? 'bg-rose-500/15 text-rose-300 border-rose-500/30' : 'bg-white/[0.04] text-zinc-400 border-white/10';
+        const step2Dot = isDriftActive ? 'bg-rose-500 animate-ping' : 'bg-zinc-600';
+        const step2Label = isDriftActive ? 'Broken!' : 'Ready to Break';
+
+        const step3Badge = isDeployed ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' : isRepaired ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' : isDriftActive ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-white/[0.04] text-zinc-400 border-white/10';
+        const step3Dot = isDeployed ? 'bg-emerald-400' : isRepaired ? 'bg-emerald-400' : isDriftActive ? 'bg-amber-400 animate-pulse' : 'bg-zinc-600';
+        const step3Label = isDeployed ? 'Repaired' : isRepaired ? 'Repaired (4/4 Pass)' : isDriftActive ? 'Repairing' : 'Idle';
+
+        const step4Badge = isDeployed ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' : rep && rep.workflow_state === 'AWAITING_APPROVAL' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : rep && rep.workflow_state === 'PR_CREATED' ? 'bg-violet-500/15 text-violet-300 border-violet-500/30' : 'bg-white/[0.04] text-zinc-400 border-white/10';
+        const step4Dot = isDeployed ? 'bg-emerald-400' : rep && rep.workflow_state === 'AWAITING_APPROVAL' ? 'bg-amber-400 animate-pulse' : rep && rep.workflow_state === 'PR_CREATED' ? 'bg-violet-400' : 'bg-zinc-600';
+        const step4Label = isDeployed ? 'Live' : rep && rep.workflow_state === 'AWAITING_APPROVAL' ? 'Review Gate' : rep && rep.workflow_state === 'PR_CREATED' ? 'PR Ready' : 'Locked';
+
+        return `
+          <div id="story-stepper-container" class="sticky top-0 z-20 bg-[#050507]/95 backdrop-blur-md border-b border-white/[0.08] px-4 sm:px-6 py-2.5">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-zinc-400 flex items-center gap-1.5">
+                  <i data-lucide="compass" class="w-3.5 h-3.5 text-zinc-400"></i>
+                  <span class="hidden sm:inline">Self-Healing</span> Story:
+                </span>
+              </div>
+              <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-2">
+                <button onclick="window.AutoPatchApp.goToStoryStep(1)" class="p-2 rounded-xl text-left transition-all ${this.currentPage === 'dashboard' ? 'bg-white/[0.08] border border-white/20 shadow-sm' : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06]'} flex items-center justify-between gap-1.5 group">
+                  <div class="min-w-0">
+                    <div class="text-[10px] font-mono text-zinc-400 font-semibold group-hover:text-white transition-colors">Step 1</div>
+                    <div class="text-xs font-bold text-white truncate">System Health</div>
+                  </div>
+                  <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border flex items-center gap-1 shrink-0 ${step1Badge}">
+                    <span class="w-1.5 h-1.5 rounded-full ${step1Dot}"></span>
+                    <span class="hidden xl:inline">${step1Label}</span>
+                  </span>
+                </button>
+
+                <button onclick="window.AutoPatchApp.goToStoryStep(2)" class="p-2 rounded-xl text-left transition-all ${isDriftActive ? 'bg-rose-500/10 border border-rose-500/30 shadow-sm' : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06]'} flex items-center justify-between gap-1.5 group">
+                  <div class="min-w-0">
+                    <div class="text-[10px] font-mono text-zinc-400 font-semibold group-hover:text-white transition-colors">Step 2</div>
+                    <div class="text-xs font-bold ${isDriftActive ? 'text-rose-300' : 'text-white'} truncate">Simulate Breakdown</div>
+                  </div>
+                  <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border flex items-center gap-1 shrink-0 ${step2Badge}">
+                    <span class="w-1.5 h-1.5 rounded-full ${step2Dot}"></span>
+                    <span class="hidden xl:inline">${step2Label}</span>
+                  </span>
+                </button>
+
+                <button onclick="window.AutoPatchApp.goToStoryStep(3)" class="p-2 rounded-xl text-left transition-all ${this.currentPage === 'workbench' ? 'bg-white/[0.08] border border-white/20 shadow-sm' : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06]'} flex items-center justify-between gap-1.5 group">
+                  <div class="min-w-0">
+                    <div class="text-[10px] font-mono text-zinc-400 font-semibold group-hover:text-white transition-colors">Step 3</div>
+                    <div class="text-xs font-bold text-white truncate">AI Self-Healing</div>
+                  </div>
+                  <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border flex items-center gap-1 shrink-0 ${step3Badge}">
+                    <span class="w-1.5 h-1.5 rounded-full ${step3Dot}"></span>
+                    <span class="hidden xl:inline">${step3Label}</span>
+                  </span>
+                </button>
+
+                <button onclick="window.AutoPatchApp.goToStoryStep(4)" class="p-2 rounded-xl text-left transition-all ${this.currentPage === 'review' ? 'bg-white/[0.08] border border-white/20 shadow-sm' : 'bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06]'} flex items-center justify-between gap-1.5 group">
+                  <div class="min-w-0">
+                    <div class="text-[10px] font-mono text-zinc-400 font-semibold group-hover:text-white transition-colors">Step 4</div>
+                    <div class="text-xs font-bold text-white truncate">Review & Deploy</div>
+                  </div>
+                  <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border flex items-center gap-1 shrink-0 ${step4Badge}">
+                    <span class="w-1.5 h-1.5 rounded-full ${step4Dot}"></span>
+                    <span class="hidden xl:inline">${step4Label}</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      renderExplanationCallout(pageKey) {
+        if (this.explanationMode !== 'simple') return '';
+
+        const explanations = {
+          dashboard: {
+            tag: 'System Overview • Why this matters',
+            title: 'This is mission control for all your third-party software connections.',
+            why: 'When external companies like Stripe or Shopify silently change their software, your app could crash. Sarthi sits in between, catches the break before any customer notices, and fixes it automatically.',
+            what: this.db.workspace.drift_active 
+              ? '⚠️ <strong>What happened:</strong> CommerceCore sent a newly formatted customer record (renamed key). Sarthi prevented a crash and logged an incident.'
+              : '🟢 <strong>What is happening:</strong> All partner connections are healthy and operating normally with 0 errors.',
+            action: this.db.workspace.drift_active
+              ? '👉 <strong>What to click next:</strong> Click <strong>Step 3: AI Self-Healing</strong> in the top bar (or "Open AI Repair Workbench" below) to watch the AI write and test the fix.'
+              : '👉 <strong>What to click next:</strong> Click <strong>Step 2: Simulate Breakdown</strong> in the top bar to test how Sarthi protects your app when an API breaks.'
+          },
+          integrations: {
+            tag: 'Integrations & Proxy • Why this matters',
+            title: 'These are the external services your application talks to every day.',
+            why: 'Instead of connecting directly to third-party APIs, your servers talk through Sarthi. Sarthi acts like a diplomatic translator and bulletproof shield for your traffic.',
+            what: '🟢 <strong>What is happening:</strong> 3 partner connections are active (CommerceCore, Stripe, Shopify). Traffic is actively monitored in real time.',
+            action: '👉 <strong>What to click next:</strong> Click <strong>"Send 200 Baseline"</strong> to test normal traffic, or <strong>"Inject v2.2 Drift"</strong> to see how Sarthi detects subtle schema changes.'
+          },
+          incidents: {
+            tag: 'Incident Explorer • Why this matters',
+            title: 'When an external service misbehaves, Sarthi writes a detailed incident report.',
+            why: 'Normally, an engineer would be woken up at 3 AM to read server logs. Here, Sarthi captures the exact payload, redacts any passwords or sensitive tokens, and pinpoints what changed.',
+            what: this.db.incidents.length > 0
+              ? `⚠️ <strong>What happened:</strong> ${this.db.incidents.length} incident(s) detected. The primary failure is a schema drift where <code>customer_id</code> was renamed to <code>customerId</code>.`
+              : '🟢 <strong>What is happening:</strong> Zero active incidents. All API payloads match registered contracts.',
+            action: '👉 <strong>What to click next:</strong> Click on an incident in the list to inspect the timeline, or click <strong>"Execute LangGraph Repair"</strong> to heal it.'
+          },
+          workbench: {
+            tag: 'AI Repair Factory • Why this matters',
+            title: 'Watch the AI investigate, read documentation, and write new code in 11 safe steps.',
+            why: 'Instead of an unguided chatbot guessing code, Sarthi uses an 11-station assembly line (LangGraph). The AI must read official vendor documentation and pass strict security scans before code is ever shown to a human.',
+            what: this.db.repairs.length > 0
+              ? `⚡ <strong>What happened:</strong> LangGraph Work Order ${this.db.repairs[0].id} ran 11 automated stations. All 4 crash tests passed inside an isolated Docker sandbox.`
+              : 'ℹ️ <strong>What is happening:</strong> No active repair run. Trigger a breakdown to see the AI factory floor in action.',
+            action: '👉 <strong>What to click next:</strong> Click <strong>Step 4: Review & Deploy</strong> (or "Open Code Review & Approval Gate") to review the AI’s proposed code fix.'
+          },
+          review: {
+            tag: 'Human Review & Gate • Why this matters',
+            title: 'You are the boss — AI never deploys to production without human sign-off.',
+            why: 'This screen is the safety gate. You can inspect the exact lines of code the AI wants to change. Red lines show old code being removed; green lines show new code being added.',
+            what: this.db.repairs.length > 0
+              ? `📋 <strong>What happened:</strong> The AI wrote a dual-compatibility fix: it accepts BOTH the old word (<code>customer_id</code>) and the new word (<code>customerId</code>).`
+              : 'ℹ️ <strong>What is happening:</strong> No pending patches waiting for review.',
+            action: '👉 <strong>What to click next:</strong> Make sure your role is <strong>Admin</strong> (in the header), then click <strong>"Approve Repair"</strong> followed by <strong>"Authorize Deployment"</strong> to ship the fix live!'
+          },
+          contracts: {
+            tag: 'Docs & API Contracts • Why this matters',
+            title: 'This is the AI\'s library and rulebook.',
+            why: 'To prevent hallucinations, Sarthi stores official vendor migration guides and OpenAPI specifications in a vector database (Qdrant). The AI grounds every fix in real vendor manuals.',
+            what: '📚 <strong>What is happening:</strong> Official documentation for CommerceCore v2.2 and PayStream v1.8 is indexed and ready for semantic vector search.',
+            action: '👉 <strong>What to click next:</strong> Type a keyword like <code>customerId</code> into the search box above to test how quickly the AI retrieves relevant migration paragraphs.'
+          },
+          analytics: {
+            tag: 'Analytics & ROI • Why this matters',
+            title: 'See the real-world business value and financial savings delivered by Sarthi.',
+            why: 'Engineering downtime is expensive ($4,200/hr on average). Sarthi eliminates the 4 hours engineers usually spend diagnosing, writing, and testing emergency patches.',
+            what: '💰 <strong>What is happening:</strong> MTTR (Mean Time to Repair) dropped from 4 hours down to under 2 minutes, saving thousands in avoided outage costs.',
+            action: '👉 <strong>What to click next:</strong> Check the "Downtime Cost Saved" and "Engineer Hours Saved" cards below to see the accumulated return on investment.'
+          },
+          settings: {
+            tag: 'Settings & Security Audit • Why this matters',
+            title: 'Enterprise security controls, credentials, and tamper-evident audit trail.',
+            why: 'Enterprise compliance requires strict accountability. Every single action (who broke what, what code the AI generated, who approved the deploy) is recorded in an immutable audit ledger.',
+            what: '🔒 <strong>What is happening:</strong> API keys and GitHub tokens are masked. Role-based access control (RBAC) enforces that only authorized roles can deploy.',
+            action: '👉 <strong>What to click next:</strong> Scroll down to the Audit Log table to see the complete cryptographic trace of all actions taken in this session.'
+          },
+          blueprint: {
+            tag: 'Tests & Verification • Why this matters',
+            title: 'Proof that everything works — automated acceptance test suite.',
+            why: 'Don’t take our word for it: click one button to run 14 rigorous end-to-end automated tests verifying gateway routing, drift detection, AST security, and RBAC governance.',
+            what: '🧪 <strong>What is happening:</strong> 14 automated verification tests are ready to execute in real time.',
+            action: '👉 <strong>What to click next:</strong> Click <strong>"Run 14-Step Acceptance Test Suite"</strong> to watch all 14 tests execute and pass green in seconds.'
+          }
+        };
+
+        const exp = explanations[pageKey];
+        if (!exp) return '';
+
+        return `
+          <div class="mb-5 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-zinc-950 to-zinc-950 border border-amber-500/25 shadow-lg shadow-amber-950/20 text-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-amber-400 bg-amber-500/15 px-2.5 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1.5">
+                <i data-lucide="lightbulb" class="w-3 h-3 text-amber-400"></i>
+                <span>${exp.tag}</span>
+              </span>
+              <button onclick="window.AutoPatchApp.setExplanationMode('technical')" class="text-[10px] text-zinc-400 hover:text-zinc-200 font-mono underline decoration-zinc-600 hover:decoration-zinc-400 transition-colors">
+                Switch to Technical View ➔
+              </button>
+            </div>
+            <div class="text-sm font-semibold text-white">${exp.title}</div>
+            <p class="text-zinc-300 leading-relaxed">${exp.why}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 border-t border-white/[0.06] text-[11px]">
+              <div class="p-2 rounded-lg bg-black/40 border border-white/[0.04] text-zinc-300">${exp.what}</div>
+              <div class="p-2 rounded-lg bg-black/40 border border-white/[0.04] text-amber-200">${exp.action}</div>
+            </div>
+          </div>
+        `;
+      }
 
       resetDemoEnvironment() {
 
@@ -2103,6 +2394,18 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
           roleSelect.value = this.db.currentUser.role;
 
+        }
+
+        const btnSimple = document.getElementById('btn-explanation-simple');
+        const btnTech = document.getElementById('btn-explanation-technical');
+        if (btnSimple && btnTech) {
+          if (this.explanationMode === 'simple') {
+            btnSimple.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm transition-all';
+            btnTech.className = 'px-2 py-0.5 rounded text-[10px] font-medium text-zinc-400 hover:text-white border border-transparent transition-all';
+          } else {
+            btnSimple.className = 'px-2 py-0.5 rounded text-[10px] font-medium text-zinc-400 hover:text-white border border-transparent transition-all';
+            btnTech.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 shadow-sm transition-all';
+          }
         }
 
 
@@ -4629,71 +4932,77 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
 
 
-        switch (this.currentPage) {
+        if (this.currentPage === 'home') {
 
-          case 'home':
+          viewport.innerHTML = this.renderHomePage();
 
-            viewport.innerHTML = this.renderHomePage();
+        } else {
 
-            break;
+          let pageHtml = '';
 
-          case 'dashboard':
+          switch (this.currentPage) {
 
-            viewport.innerHTML = this.renderDashboardPage();
+            case 'dashboard':
 
-            break;
+              pageHtml = this.renderDashboardPage();
 
-          case 'integrations':
+              break;
 
-            viewport.innerHTML = this.renderIntegrationsPage();
+            case 'integrations':
 
-            break;
+              pageHtml = this.renderIntegrationsPage();
 
-          case 'incidents':
+              break;
 
-            viewport.innerHTML = this.renderIncidentsPage();
+            case 'incidents':
 
-            break;
+              pageHtml = this.renderIncidentsPage();
 
-          case 'workbench':
+              break;
 
-            viewport.innerHTML = this.renderWorkbenchPage();
+            case 'workbench':
 
-            break;
+              pageHtml = this.renderWorkbenchPage();
 
-          case 'review':
+              break;
 
-            viewport.innerHTML = this.renderCodeReviewPage();
+            case 'review':
 
-            break;
+              pageHtml = this.renderCodeReviewPage();
 
-          case 'contracts':
+              break;
 
-            viewport.innerHTML = this.renderContractsAndDocsPage();
+            case 'contracts':
 
-            break;
+              pageHtml = this.renderContractsAndDocsPage();
 
-          case 'analytics':
+              break;
 
-            viewport.innerHTML = this.renderAnalyticsPage();
+            case 'analytics':
 
-            break;
+              pageHtml = this.renderAnalyticsPage();
 
-          case 'settings':
+              break;
 
-            viewport.innerHTML = this.renderSettingsAndAuditPage();
+            case 'settings':
 
-            break;
+              pageHtml = this.renderSettingsAndAuditPage();
 
-          case 'blueprint':
+              break;
 
-            viewport.innerHTML = this.renderBlueprintAndReportPage();
+            case 'blueprint':
 
-            break;
+              pageHtml = this.renderBlueprintAndReportPage();
 
-          default:
+              break;
 
-            viewport.innerHTML = this.renderDashboardPage();
+            default:
+
+              pageHtml = this.renderDashboardPage();
+
+          }
+
+          viewport.innerHTML = this.renderStoryStepper() + pageHtml;
 
         }
 
@@ -5563,6 +5872,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               </div>
             </div>
 
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('dashboard')}
+
             <!-- GOAL PROGRESSION & BOOST ACCELERATOR HUD (STITCH AESTHETIC) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
               <!-- Goal Progression Card (Left 7 Cols) -->
@@ -5640,6 +5952,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                       ${this.db.incidents[0].integration_name} <span class="text-zinc-500">→</span> <code class="font-mono text-rose-300 text-xs px-1.5 py-0.5 rounded bg-zinc-900 border border-white/10">${this.db.incidents[0].endpoint}</code>
                     </div>
                     <p class="text-xs text-zinc-400 font-mono">${this.db.incidents[0].error_trace}</p>
+                    <div class="pt-1 text-xs text-rose-300 font-sans flex items-center gap-1.5">
+                      <i data-lucide="info" class="w-3.5 h-3.5 text-rose-400 shrink-0"></i>
+                      <span><strong>Alert:</strong> CommerceCore changed their data format! Sarthi stopped your app from crashing. Click "Open AI Repair Workbench" to watch the AI fix it.</span>
+                    </div>
                   </div>
                 </div>
                 <div class="flex items-center gap-2.5 shrink-0">
@@ -5658,6 +5974,10 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                   <div>
                     <div class="text-sm font-semibold text-white">All ${m.monitoredIntegrations} Registered API Integrations Operating Within Contract Thresholds</div>
                     <p class="text-xs text-zinc-400 mt-0.5">Proxy gateway actively validating responses against registered OpenAPI schemas in &lt;180ms.</p>
+                    <div class="pt-1 text-xs text-emerald-300 font-sans flex items-center gap-1.5">
+                      <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+                      <span><strong>Status:</strong> Everything is running smoothly. Your app is connected to 18 partner services, and zero errors are occurring.</span>
+                    </div>
                   </div>
                 </div>
                 <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 text-xs font-semibold shrink-0 flex items-center gap-2 transition-all duration-200 hover:-translate-y-0.5">
@@ -5666,6 +5986,46 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 </button>
               </div>
             `}
+
+            <!-- Visual "Before & After" Data Card (Demystifies the Technical Drift) -->
+            <div class="p-5 rounded-2xl stitch-card border border-white/10 space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                  <h3 class="text-xs font-bold uppercase tracking-wider text-white">Visual Translation: Why External API Changes Break Applications</h3>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-semibold">Non-Breaking Dual Adapter</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div class="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1.5">
+                  <div class="text-[10px] font-mono uppercase tracking-wider text-rose-400 font-semibold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> 🔴 What Partner Sent (New Word)
+                  </div>
+                  <div class="font-mono text-xs text-rose-200 bg-black/40 p-2 rounded border border-rose-500/20">
+                    {"<strong class="text-rose-400">customerId</strong>": "cust_9041"}
+                  </div>
+                  <p class="text-[11px] text-zinc-400 leading-relaxed">CommerceCore changed key to camelCase. Without Sarthi, your backend crashes with an unhandled KeyError.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-sky-950/20 border border-sky-500/30 space-y-1.5">
+                  <div class="text-[10px] font-mono uppercase tracking-wider text-sky-400 font-semibold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-sky-400"></span> 🟢 What Your App Expected (Old Word)
+                  </div>
+                  <div class="font-mono text-xs text-sky-200 bg-black/40 p-2 rounded border border-sky-500/20">
+                    payload["<strong class="text-sky-300">customer_id</strong>"]
+                  </div>
+                  <p class="text-[11px] text-zinc-400 leading-relaxed">Your existing codebase expects snake_case. Normally an engineer spends 4 hours diagnosing the breakdown.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-1.5">
+                  <div class="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ⚡ What Sarthi Does (Self-Healing)
+                  </div>
+                  <div class="font-mono text-xs text-emerald-200 bg-black/40 p-2 rounded border border-emerald-500/20">
+                    payload.get("<strong class="text-emerald-400">customerId</strong>") or payload.get("<strong class="text-emerald-400">customer_id</strong>")
+                  </div>
+                  <p class="text-[11px] text-zinc-300 leading-relaxed">Automatically translates between both words so customers never see an outage, saving $126,000 in downtime.</p>
+                </div>
+              </div>
+            </div>
 
             <!-- Primary KPI Grid (6 Cohesive Cards with Breathable Spacing) -->
             <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
@@ -5678,6 +6038,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 <div class="text-[11px] font-mono text-emerald-400 mt-1.5 flex items-center gap-1">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Active Routes
                 </div>
+                <div class="text-[10px] text-zinc-500 font-sans mt-1">3 Active Connections</div>
               </div>
 
               <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
@@ -5689,6 +6050,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 <div class="text-[11px] font-mono ${m.failedRequests > 0 ? 'text-rose-400' : 'text-zinc-400'} mt-1.5 flex items-center gap-1">
                   <span class="w-1.5 h-1.5 rounded-full ${m.failedRequests > 0 ? 'bg-rose-400' : 'bg-zinc-400'}"></span> ${m.failedRequests} drifted (${m.failureRatePct}%)
                 </div>
+                <div class="text-[10px] text-zinc-500 font-sans mt-1">Monitored API calls</div>
               </div>
 
               <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
@@ -5698,6 +6060,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 </div>
                 <div class="text-2xl font-bold font-mono ${m.schemaDriftEvents > 0 ? 'text-amber-400' : 'text-white'} mt-2">${m.schemaDriftEvents}</div>
                 <div class="text-[11px] font-mono text-zinc-400 mt-1.5">${m.openIncidents} Open Incident(s)</div>
+                <div class="text-[10px] text-zinc-500 font-sans mt-1">Caught before customer outage</div>
               </div>
 
               <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
@@ -5707,6 +6070,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 </div>
                 <div class="text-2xl font-bold font-mono ${m.awaitingApproval > 0 ? 'text-amber-300' : 'text-white'} mt-2">${m.awaitingApproval}</div>
                 <div class="text-[11px] font-mono text-zinc-400 mt-1.5">${m.deployedRepairs} Deployed • ${m.rejectedRepairs} Declined</div>
+                <div class="text-[10px] text-zinc-500 font-sans mt-1">Requires your approval</div>
               </div>
 
               <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
@@ -5716,6 +6080,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 </div>
                 <div class="text-2xl font-bold font-mono text-white mt-2">${m.p50}ms</div>
                 <div class="text-[11px] font-mono text-zinc-400 mt-1.5">p95: ${m.p95}ms • p99: ${m.p99}ms</div>
+                <div class="text-[10px] text-zinc-400 font-sans mt-1">⚡ 0.18s detection (blink of an eye)</div>
               </div>
 
               <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
@@ -5725,6 +6090,7 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                 </div>
                 <div class="text-2xl font-bold font-mono text-white mt-2">${m.mttdMs}ms</div>
                 <div class="text-[11px] font-mono text-emerald-400 mt-1.5">Diagnosis: ${m.mttDiagSec}s</div>
+                <div class="text-[10px] text-emerald-400/90 font-sans mt-1">⏱️ Fixes in 2 mins vs 4 hours</div>
               </div>
             </div>
 
@@ -5896,7 +6262,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('integrations')}
 
             <!-- Fault Injection / Classification Test Bar (Proves Node 2 Doesn't Assume Everything is Schema Drift) -->
 
@@ -6292,7 +6659,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('incidents')}
 
             ${filtered.length === 0 ? `
 
@@ -6507,143 +6875,96 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
-
               <div>
-
                 <h1 class="text-lg font-bold text-white tracking-tight">AI Self-Healing Workbench (11-Node LangGraph Orchestrator)</h1>
-
                 <p class="text-xs text-zinc-400">Inspect persistent LangGraph workflow checkpoints, retrieved Qdrant evidence, isolated Docker sandbox test logs, and human review gates.</p>
-
               </div>
-
               ${this.db.incidents.length > 0 && !repair ? `
-
                 <button onclick="window.AutoPatchApp.startOrResumeRepair('${this.db.incidents[0].id}')" class="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold">
-
                   Execute LangGraph Repair for ${this.db.incidents[0].id}
-
                 </button>
-
               ` : ''}
-
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('workbench')}
 
             ${!repair ? `
-
               <div class="p-12 rounded-xl bg-zinc-950/70 border border-white/[0.08] text-center space-y-3">
-
                 <div class="w-10 h-10 rounded-full bg-white/10 text-zinc-200 text-zinc-300 flex items-center justify-center mx-auto">
-
                   <i data-lucide="cpu" class="w-5 h-5"></i>
-
                 </div>
-
                 <div class="text-sm font-semibold text-white">No Active LangGraph Repair Run</div>
-
                 <p class="text-xs text-zinc-400 max-w-md mx-auto">Simulate an API drift incident first, then launch the 11-node repair orchestrator to inspect real persisted checkpoints.</p>
-
                 <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold">
-
                   Simulate Drift & Run LangGraph Now
-
                 </button>
-
               </div>
-
             ` : `
-
               <!-- Top Checkpoint Metadata Bar -->
-
               <div class="p-4 rounded-xl stitch-card border border-white/[0.08] flex flex-wrap items-center justify-between gap-4 text-xs">
-
                 <div class="flex flex-wrap items-center gap-4 font-mono">
-
-                  <span>Run ID: <strong class="text-zinc-200">${repair.id}</strong></span>
-
+                  <span>Run ID: <strong class="text-zinc-200">${repair.id}</strong> <span class="text-zinc-400 font-sans text-[11px]">(Work Order #${repair.id.replace('rep_', '')})</span></span>
                   <span>Incident: <strong class="text-rose-300">${repair.incident_id}</strong></span>
-
-                  <span>Checkpoint: <strong class="text-emerald-300">${repair.checkpoint_id}</strong></span>
-
-                  <span>Iteration: <strong class="text-white">${repair.iteration_count}/${repair.max_iterations}</strong></span>
-
+                  <span>Checkpoint: <strong class="text-emerald-300">${repair.checkpoint_id}</strong> <span class="text-emerald-400 font-sans text-[11px]">(Safe Save-Game File)</span></span>
+                  <span>Iteration: <strong class="text-white">${repair.iteration_count}/${repair.max_iterations}</strong> <span class="text-zinc-400 font-sans text-[11px]">(Attempt ${repair.iteration_count} of ${repair.max_iterations} allowed)</span></span>
                   <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">${repair.execution_mode}</span>
-
                 </div>
-
                 <div class="flex items-center gap-2">
-
                   <button onclick="window.AutoPatchApp.navigate('review')" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] font-semibold flex items-center gap-1.5">
-
                     <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> Open Code Review & Approval Gate
-
                   </button>
-
                 </div>
-
               </div>
-
-
 
               <!-- 11-Node Graph Sequence & Detailed Evidence Inspector -->
-
               <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
                 <!-- Left Column: 11 LangGraph Nodes -->
-
                 <div class="lg:col-span-5 space-y-2">
-
                   <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">LangGraph State Machine Nodes</div>
-
                   ${repair.nodes.map(n => {
-
                     const badgeStyle = n.status === 'COMPLETED'
-
                       ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-
                       : n.status === 'AWAITING_ACTION'
-
                         ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 node-pulse'
-
                         : n.status === 'FAILED'
-
                           ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-
                           : 'bg-white/[0.06] text-zinc-400 border-white/15';
 
+                    const friendlyTitles = {
+                      1: 'Log 911 Alarm Ticket',
+                      2: 'Checking our Rulebook',
+                      3: 'AI Detective Investigation',
+                      4: 'Formulate Repair Plan',
+                      5: 'Read Vendor Manual',
+                      6: 'Write Dual-Language Code',
+                      7: 'Security X-Ray',
+                      8: 'Safe Test Chamber',
+                      9: 'Run 4 Crash Tests',
+                      10: 'Generate Release Notes',
+                      11: 'Human Boss Approval'
+                    };
+                    const assemblyTitle = friendlyTitles[n.id] || n.name;
+                    const nodeHeading = (this.explanationMode === 'simple') ? assemblyTitle : n.name;
+                    const technicalTag = (this.explanationMode === 'simple') ? `<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.05] text-zinc-400 border border-white/10 font-normal">${n.name}</span>` : '';
+
                     return `
-
                       <div class="p-3 rounded-lg stitch-card border ${n.status === 'AWAITING_ACTION' ? 'border-amber-500/60' : 'border-white/[0.08]'} flex items-start justify-between gap-3">
-
                         <div class="flex items-start gap-2.5">
-
                           <span class="w-6 h-6 rounded-full text-[11px] font-mono font-bold flex items-center justify-center border shrink-0 mt-0.5 ${badgeStyle}">${n.id}</span>
-
                           <div>
-
-                            <div class="text-xs font-semibold text-white flex items-center gap-2">
-
-                              <span>${n.name}</span>
-
+                            <div class="text-xs font-semibold text-white flex items-center gap-2 flex-wrap">
+                              <span>${nodeHeading}</span>
+                              ${technicalTag}
                               ${n.duration_ms > 0 ? `<span class="text-[10px] font-mono text-zinc-400">${n.duration_ms}ms</span>` : ''}
-
                             </div>
-
                             <p class="text-[11px] text-zinc-400 mt-0.5">${n.detail}</p>
-
                           </div>
-
                         </div>
-
                         <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border shrink-0 ${badgeStyle}">${n.status}</span>
-
                       </div>
-
                     `;
-
                   }).join('')}
-
                 </div>
 
 
@@ -6779,49 +7100,41 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
           <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8">
 
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
-
               <div>
-
                 <h1 class="text-lg font-bold text-white tracking-tight">Human Code Review, GitHub PR & Deployment Gate</h1>
-
                 <p class="text-xs text-zinc-400">AutoPatch proposes and validates repairs; humans retain strict RBAC-enforced control over PR creation and production deployment.</p>
-
               </div>
-
               <div class="flex items-center gap-2 text-xs font-mono">
-
                 <span class="px-2.5 py-1 rounded stitch-card border border-white/[0.08] text-zinc-300">Active Role: <strong class="text-zinc-200">${this.db.currentUser.role}</strong></span>
-
                 <span class="px-2.5 py-1 rounded stitch-card border border-white/[0.08] text-zinc-300">Policy: <strong class="text-emerald-300">${this.db.workspace.approval_policy}</strong></span>
-
               </div>
-
             </div>
 
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('review')}
 
+            <!-- Role Permissions Explainer Banner -->
+            <div class="p-3.5 rounded-xl bg-zinc-950/90 border border-white/[0.08] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div class="flex items-center gap-2 text-zinc-300">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                <span><strong>Role Permissions Guidance:</strong> Only <strong class="text-white font-semibold">Admins</strong> or <strong class="text-white font-semibold">Reviewers</strong> can click Approve. Viewers can inspect code but cannot deploy.</span>
+              </div>
+              <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full shrink-0 ${this.db.currentUser.role === 'Admin' || this.db.currentUser.role === 'Reviewer' ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">
+                ${this.db.currentUser.role === 'Admin' || this.db.currentUser.role === 'Reviewer' ? '✓ Authorized to Approve & Ship' : '✕ Read-Only Mode (Viewer)'}
+              </span>
+            </div>
 
             ${!repair || !repair.repair_plan ? `
-
               <div class="p-12 rounded-xl bg-zinc-950/70 border border-white/[0.08] text-center space-y-3">
-
                 <div class="text-sm font-semibold text-white">No Validated Code Patch Awaiting Review</div>
-
                 <p class="text-xs text-zinc-400 max-w-md mx-auto">Trigger the API drift scenario and run the LangGraph repair workflow to inspect the side-by-side adapter diff and approval controls.</p>
-
                 <button onclick="window.AutoPatchApp.runAutomatedE2ETest(); window.AutoPatchApp.navigate('review');" class="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)] text-xs font-semibold">
-
                   Generate & Validate Demo Patch Now
-
                 </button>
-
               </div>
-
             ` : `
-
               <!-- Action Control Bar (Enforces Backend RBAC Roles) -->
-
               <div class="p-5 rounded-xl stitch-card border border-white/[0.08] space-y-4">
-
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div class="flex flex-wrap items-center gap-2">
                     <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-white/[0.08] border border-white/15 text-zinc-100">${repair.id}</span>
@@ -6848,37 +7161,40 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                   ${repair.repair_plan.behavioral_change}
                 </p>
 
-
-
                 <!-- 6 Required Review & Gate Controls -->
-
                 <div class="flex flex-wrap items-center gap-2.5 pt-3 border-t border-white/[0.06]">
-                  <button onclick="window.AutoPatchApp.approveRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.approveRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5" title="I agree with this fix — send it to staging.">
                     <i data-lucide="check" class="w-3.5 h-3.5"></i> Approve Repair
                   </button>
 
-                  <button onclick="window.AutoPatchApp.promptRejectRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-medium ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:border-rose-500/50 hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.promptRejectRepair('${repair.id}')" ${repair.workflow_state !== 'AWAITING_APPROVAL' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-medium ${repair.workflow_state === 'AWAITING_APPROVAL' ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:border-rose-500/50 hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5" title="Cancel this repair proposal.">
                     <i data-lucide="x" class="w-3.5 h-3.5"></i> Reject Repair
                   </button>
 
-                  <button onclick="window.AutoPatchApp.promptRequestRevision('${repair.id}')" ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-medium ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 hover:-translate-y-0.5 active:translate-y-0 transition-all'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.promptRequestRevision('${repair.id}')" ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-medium ${(repair.iteration_count >= repair.max_iterations || repair.workflow_state === 'DEPLOYED' || repair.workflow_state === 'REJECTED') ? 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 hover:-translate-y-0.5 active:translate-y-0 transition-all'} flex items-center gap-1.5" title="Ask the AI to rewrite this with my custom instructions.">
                     <i data-lucide="refresh-cw" class="w-3.5 h-3.5 ${repair.iteration_count >= repair.max_iterations ? 'text-zinc-600' : 'text-amber-400'}"></i> Request Revision (${repair.iteration_count}/${repair.max_iterations}${repair.iteration_count >= repair.max_iterations ? ' - Max' : ''})
                   </button>
 
-                  <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile('${repair.id}')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-white/[0.05] hover:bg-white/[0.1] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.downloadUnifiedPatchFile('${repair.id}')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-white/[0.05] hover:bg-white/[0.1] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-1.5" title="Download unified git patch file">
                     <i data-lucide="download" class="w-3.5 h-3.5 text-sky-400"></i> Export .patch
                   </button>
 
-                  <button onclick="window.AutoPatchApp.createPullRequestOrExport('${repair.id}')" ${repair.workflow_state !== 'APPROVED_READY_FOR_PR' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${repair.workflow_state === 'APPROVED_READY_FOR_PR' ? 'bg-white hover:bg-zinc-200 text-black shadow-[0_0_15px_rgba(255,255,255,0.25)] hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.createPullRequestOrExport('${repair.id}')" ${repair.workflow_state !== 'APPROVED_READY_FOR_PR' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${repair.workflow_state === 'APPROVED_READY_FOR_PR' ? 'bg-white hover:bg-zinc-200 text-black shadow-[0_0_15px_rgba(255,255,255,0.25)] hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5" title="Open pull request with validated adapter code">
                     <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i> ${this.db.workspace.github_config.configured ? 'Create GitHub PR' : 'Finalize Local Patch PR'}
                   </button>
 
-                  <button onclick="window.AutoPatchApp.authorizeDeployment('${repair.id}')" ${repair.workflow_state !== 'PR_CREATED' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${repair.workflow_state === 'PR_CREATED' ? 'bg-violet-600 hover:bg-violet-500 text-white shadow-[0_0_18px_rgba(139,92,246,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5">
+                  <button onclick="window.AutoPatchApp.authorizeDeployment('${repair.id}')" ${repair.workflow_state !== 'PR_CREATED' ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${repair.workflow_state === 'PR_CREATED' ? 'bg-violet-600 hover:bg-violet-500 text-white shadow-[0_0_18px_rgba(139,92,246,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all' : 'bg-white/[0.04] text-zinc-500 border border-white/[0.05] cursor-not-allowed'} flex items-center gap-1.5" title="Ship this fix live to production now.">
                     <i data-lucide="rocket" class="w-3.5 h-3.5"></i> Authorize Deployment
                   </button>
-
                 </div>
 
+                <!-- Plain-Language Action Consequences Explainer -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono text-zinc-400 border-t border-white/[0.04]">
+                  <div><strong class="text-emerald-400">Approve:</strong> "I agree with this fix — send it to staging."</div>
+                  <div><strong class="text-amber-400">Revision:</strong> "Ask the AI to rewrite with my instructions."</div>
+                  <div><strong class="text-rose-400">Reject:</strong> "Cancel this repair proposal."</div>
+                  <div><strong class="text-violet-400">Deploy:</strong> "Ship this fix live to production now."</div>
+                </div>
               </div>
 
 
@@ -6985,6 +7301,22 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
                     <span class="text-emerald-400">+5 additions / <span class="text-rose-400">-3 deletions</span></span>
 
+                  </div>
+
+                  <!-- Plain-Language Diff Banner -->
+                  <div class="px-4 py-3 bg-white/[0.02] border-b border-white/[0.06] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 text-zinc-300">
+                      <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>
+                        <strong>Visual Code Diff Guide:</strong>
+                        <span class="text-rose-400 font-semibold">Red lines</span> show old code removed;
+                        <span class="text-emerald-400 font-semibold">Green lines</span> show new code added.
+                        The new adapter accepts <strong class="text-white">BOTH</strong> words (<code>customerId</code> and <code>customer_id</code>), preventing customer crashes.
+                      </span>
+                    </div>
+                    <span class="text-[10px] font-mono text-zinc-400 px-2 py-0.5 rounded bg-black/40 border border-white/10 shrink-0">
+                      Dual-Language Compatible
+                    </span>
                   </div>
 
                   <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/[0.06] font-mono text-[11px] leading-relaxed">
@@ -7129,7 +7461,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('contracts')}
 
             <!-- Interactive Vector Search Tester -->
 
@@ -7507,7 +7840,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('analytics')}
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
@@ -7649,7 +7983,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('settings')}
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -7903,7 +8238,8 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
             </div>
 
-
+            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            ${this.renderExplanationCallout('blueprint')}
 
             <div id="e2e-verification-output" class="hidden p-4 rounded-xl bg-zinc-950 border border-emerald-500/40 font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed"></div>
 
