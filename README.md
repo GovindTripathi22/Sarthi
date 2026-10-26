@@ -83,14 +83,26 @@ When upstream providers make unannounced breaking changes (such as renaming fiel
 ```
 Sarthi/
 ├── index.html                                 # Standalone single-file interactive website & console
-├── autopatch_platform_self_healing_middleware.html # Original application source
+├── autopatch_platform_self_healing_middleware.html # Original application source mirror
 ├── docker-compose.yml                         # Multi-container orchestration (FastAPI, Qdrant, Redis, Postgres)
 ├── pyproject.toml                             # Python package configuration & tool settings
 ├── requirements.txt                           # Backend dependencies
+├── package.json                               # Scripts & test runners
 ├── .env.example                               # Environment template
 ├── .gitignore                                 # Git ignore rules
 ├── LICENSE                                    # MIT License
-├── README.md                                  # Project documentation
+├── README.md                                  # Project overview
+├── docs/                                      # Complete architecture, runbooks, and whitepaper
+│   ├── INTERVIEW_DEMO_RUNBOOK.md              # 14-Feature breakdown, demo pitch & FAANG interview Q&A
+│   ├── Sarthi_Executive_Whitepaper.pdf        # Publication-grade executive whitepaper
+│   ├── ARCHITECTURE.md                        # High-level architecture and sequence flows
+│   ├── API_REFERENCE.md                       # Complete REST & WebSocket API specification
+│   ├── SECURITY.md                            # AST sandbox & RBAC security model
+│   └── TEST_REPORT.md                         # Pytest & Node test verification reports
+├── sample_demo_files/                         # Demo payloads, OpenAPI 3.1 specs & vendor guides
+│   ├── commercecore_v2.2_spec.json            # Drifted vendor OpenAPI 3.1 specification
+│   ├── commercecore_v2.1_to_v2.2_migration_guide.md # Official vendor migration changelog
+│   └── customer_sample_payloads.json          # v2.1 vs v2.2 side-by-side payloads
 └── backend/
     ├── app/
     │   ├── main.py                            # FastAPI proxy gateway & endpoints
@@ -101,6 +113,15 @@ Sarthi/
     └── tests/
         └── test_commerce_adapter.py           # Contract drift & backward-compatibility test suite
 ```
+
+---
+
+## 📚 Documentation & Interview Resources
+
+* **[Senior Engineering Interview & Demo Runbook](docs/INTERVIEW_DEMO_RUNBOOK.md)**: Complete guide covering all 14 features, click-by-click demo instructions, and Staff-level FAANG interview Q&A.
+* **[Executive Whitepaper (PDF)](docs/Sarthi_Executive_Whitepaper.pdf)**: Comprehensive architectural analysis, MTTR reduction metrics, and security governance overview.
+* **[Architecture Specification](docs/ARCHITECTURE.md)**: Deep dive into the 11-node LangGraph autonomous agent and reverse proxy interceptor.
+* **[Sample Demo Files](sample_demo_files/)**: Real-world vendor OpenAPI 3.1 schema drifts and migration changelogs for live demonstrations.
 
 ---
 
