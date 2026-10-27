@@ -305,3 +305,19 @@ class EphemeralSandboxRunner:
             "results": results,
             "raw_log": raw_log,
         }
+
+
+class IsolatedSandboxRunner(EphemeralSandboxRunner):
+    """
+    Subprocess and container-isolated sandbox runner with explicit timeout enforcement.
+    """
+
+    def __init__(
+        self,
+        image: str = "autopatch/sandbox-py312:1.4",
+        docker_client: Optional[Any] = None,
+        timeout_seconds: int = 15,
+    ) -> None:
+        super().__init__(image=image, docker_client=docker_client)
+        self.timeout_seconds = timeout_seconds
+

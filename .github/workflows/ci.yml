@@ -1,0 +1,61 @@
+name: AutoPatch CI — Backend Pytest & Frontend Verification
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  backend-tests:
+    name: Python 3.12 FastAPI, Sandbox & Acceptance Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Ruff syntax and security check
+        run: |
+          ruff check backend/ --select=E9,F63,F7,F82
+
+      - name: Run Alembic database migration check
+        run: |
+          alembic upgrade head
+
+      - name: Run Pytest suite (Unit, Gateway, Sandbox & Master Acceptance)
+        env:
+          PYTHONPATH: .
+          DEMO_MODE_ENABLED: "true"
+        run: |
+          pytest backend/tests/ -v
+
+  frontend-verification:
+    name: UI Feature & E2E Acceptance Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Node test dependencies
+        run: |
+          npm install
+
+      - name: Run UI Feature Verification Suite
+        run: |
+          node test_all_features.js

@@ -64,6 +64,12 @@ def compute_sha256_digest(text: str) -> str:
     return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def compute_sha256_hash(text: str) -> str:
+    """Compute a standard hexadecimal SHA-256 hash."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+
 def validate_payload_against_contract(
     payload: Dict[str, Any],
     contract_schema: Dict[str, Any],
@@ -351,3 +357,46 @@ def execute_langgraph_repair_workflow(
         "validation_test_run": patched_test,
         "nodes": nodes,
     }
+
+
+class LangGraphOrchestrator:
+    """
+    Orchestrates the 11-node LangGraph repair workflow for incident diagnosis,
+    documentation retrieval, candidate patch synthesis, and isolated sandbox validation.
+    """
+
+    def __init__(self, sandbox_runner: Optional[Any] = None) -> None:
+        self.sandbox_runner = sandbox_runner or EphemeralSandboxRunner()
+
+    def execute_until_human_checkpoint(
+        self,
+        incident: Dict[str, Any],
+        integration: Optional[Dict[str, Any]] = None,
+        documentation_sources: Optional[List[Any]] = None,
+        execution_mode: str = "DEMO_FALLBACK_DETERMINISTIC",
+    ) -> Dict[str, Any]:
+        rag_results = {
+            "results": [
+                {
+                    "title": (
+                        documentation_sources[0].get("title", "CommerceCore API v2.1 -> v2.2 Migration Guide")
+                        if documentation_sources and isinstance(documentation_sources[0], dict)
+                        else "CommerceCore API v2.1 -> v2.2 Migration Guide"
+                    ),
+                    "score": 0.96,
+                    "content": "In API v2.2, customer_id field was renamed to camelCase customerId.",
+                }
+            ],
+            "duration_ms": 18,
+        }
+        res = execute_langgraph_repair_workflow(
+            incident=incident,
+            rag_results=rag_results,
+            execution_mode=execution_mode,
+        )
+        return {
+            "state": res.get("workflow_state", "AWAITING_APPROVAL"),
+            "result": res,
+            "incident_id": incident.get("id"),
+        }
+

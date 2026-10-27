@@ -121,6 +121,17 @@ async def root(request: Request):
     return response
 
 
+@app.get("/api/workbench-ui", include_in_schema=False)
+async def workbench_ui():
+    index_path = Path(__file__).resolve().parent.parent.parent / "index.html"
+    if not index_path.exists():
+        index_path = Path("index.html").resolve()
+    response = FileResponse(index_path, media_type="text/html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
+
+
+
 from fastapi.staticfiles import StaticFiles
 
 static_dir = Path(__file__).resolve().parent.parent.parent / "static"

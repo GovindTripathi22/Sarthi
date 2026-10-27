@@ -1,31 +1,54 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sarthi-middleware"
-version = "1.4.0"
-description = "AI-Powered Self-Healing API & Integration Middleware"
+name = "sarthi-autopatch"
+version = "1.0.0"
+description = "AutoPatch (Sarthi) — AI-Powered Self-Healing API & Integration Middleware"
 readme = "README.md"
-requires-python = ">=3.11"
-authors = [
-    { name = "Govind Tripathi", email = "govindtripathi62@gmail.com" }
-]
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Govind" }]
 dependencies = [
-    "fastapi>=0.111.0",
-    "uvicorn>=0.30.0",
-    "pydantic>=2.7.0",
-    "langgraph>=0.0.60",
-    "qdrant-client>=1.9.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "sqlalchemy>=2.0.36",
+    "alembic>=1.14.0",
+    "psycopg[binary]>=3.2.0",
+    "redis>=5.2.0",
+    "httpx>=0.28.0",
+    "qdrant-client>=1.12.0",
+    "langgraph>=0.2.60",
+    "cryptography>=44.0.0",
+    "passlib[bcrypt]>=1.7.4",
+    "pyjwt>=2.10.0",
+    "python-multipart>=0.0.20",
     "docker>=7.1.0",
-    "pytest>=8.2.0"
+    "structlog>=24.4.0",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.8.0",
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q"
+testpaths = ["backend/tests"]
+pythonpath = [".", "backend"]
+asyncio_mode = "auto"
 
 [tool.ruff]
 line-length = 100
 target-version = "py312"
 
-[tool.pytest.ini_options]
-pythonpath = ["."]
-testpaths = ["backend/tests"]
-python_files = ["test_*.py"]
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+ignore = ["S101", "B008"]
