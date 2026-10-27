@@ -185,12 +185,13 @@ def execute_langgraph_repair_workflow(
     incident: Dict[str, Any],
     rag_results: Dict[str, Any],
     execution_mode: str = "DEMO_FALLBACK_DETERMINISTIC",
+    sandbox_runner: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """
     Execute the 11-node repair workflow with real isolated pytest validation at Node 7.
     """
-    runner = EphemeralSandboxRunner()
-    is_schema_drift = incident.get("failure_type") == "SCHEMA_DRIFT"
+    runner = sandbox_runner or EphemeralSandboxRunner()
+    is_schema_drift = incident.get("failure_type", "SCHEMA_DRIFT") == "SCHEMA_DRIFT"
 
     initial_test = runner.run_validation(BASELINE_ADAPTER_CODE) if is_schema_drift else None
     patched_test = runner.run_validation(PATCHED_ADAPTER_CODE) if is_schema_drift else None
@@ -393,6 +394,7 @@ class LangGraphOrchestrator:
             incident=incident,
             rag_results=rag_results,
             execution_mode=execution_mode,
+            sandbox_runner=self.sandbox_runner,
         )
         return {
             "state": res.get("workflow_state", "AWAITING_APPROVAL"),

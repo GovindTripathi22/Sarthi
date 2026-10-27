@@ -99,9 +99,11 @@ class EphemeralSandboxRunner:
         self,
         image: str = "autopatch/sandbox-py312:1.4",
         docker_client: Optional[Any] = None,
+        timeout_seconds: int = 15,
     ) -> None:
         self.image = image
         self._client = docker_client
+        self.timeout_seconds = timeout_seconds
 
     @property
     def client(self):
@@ -152,7 +154,7 @@ class EphemeralSandboxRunner:
                         mem_limit="512m",
                         detach=True,
                     )
-                    status = container.wait(timeout=15)
+                    status = container.wait(timeout=self.timeout_seconds)
                     logs = container.logs().decode("utf-8")
                     container.remove(force=True)
                     return {
@@ -241,9 +243,11 @@ class EphemeralSandboxRunner:
                     env=clean_env,
                     capture_output=True,
                     text=True,
-                    timeout=15,
+                    timeout=self.timeout_seconds,
                 )
                 stdout = proc.stdout + ("\n" + proc.stderr if proc.stderr else "")
+            except subprocess.TimeoutExpired:
+                stdout = f"Subprocess timed out after {self.timeout_seconds} seconds."
             except Exception as exc:
                 stdout = f"Subprocess execution error: {exc}"
 
@@ -318,6 +322,5 @@ class IsolatedSandboxRunner(EphemeralSandboxRunner):
         docker_client: Optional[Any] = None,
         timeout_seconds: int = 15,
     ) -> None:
-        super().__init__(image=image, docker_client=docker_client)
-        self.timeout_seconds = timeout_seconds
+        super().__init__(image=image, docker_client=docker_client, timeout_seconds=timeout_seconds)
 

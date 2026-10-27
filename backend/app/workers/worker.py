@@ -71,9 +71,13 @@ class AutoPatchWorker:
         return job_id
 
     async def process_job(self, job: Dict[str, Any]) -> Dict[str, Any]:
+        if not isinstance(job, dict):
+            return {"status": "SKIPPED", "reason": "Job must be a dictionary"}
         job_id = job.get("job_id", "unknown")
         job_type = job.get("job_type", "")
         payload = job.get("payload", {})
+        if not isinstance(payload, dict):
+            payload = {}
         logger.info("Processing job %s [type=%s]", job_id, job_type)
 
         if job_type == "INGEST_DOCUMENT":
@@ -155,4 +159,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info("AutoPatch Worker interrupted by user; shutting down.")

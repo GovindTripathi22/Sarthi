@@ -222,3 +222,13 @@ def seed_database_if_empty(db: Session) -> None:
         db.add(chunk)
 
     db.commit()
+
+
+if __name__ == "__main__":
+    from backend.app.database import SessionLocal
+    from backend.app.models import init_db
+
+    init_db()
+    with SessionLocal() as session:
+        seed_database_if_empty(session)
+    print("Database seeding completed successfully.")

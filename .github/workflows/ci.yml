@@ -59,3 +59,4 @@ jobs:
       - name: Run UI Feature Verification Suite
         run: |
           node test_all_features.js
+          node test_simple_ui_features.js

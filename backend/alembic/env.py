@@ -15,6 +15,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 db_url = os.getenv("DATABASE_URL") or os.getenv("SQLITE_FALLBACK_URL") or "sqlite:///./autopatch_mvp.db"
+if db_url.startswith("postgresql+asyncpg://"):
+    db_url = db_url.replace("postgresql+asyncpg://", "postgresql+psycopg://", 1)
 config.set_main_option("sqlalchemy.url", db_url)
 
 target_metadata = Base.metadata

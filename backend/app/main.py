@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.adapters.commerce_customer_adapter import parse_commerce_customer
 from backend.app.config import settings
-from backend.app.database import SessionLocal, get_db
+from backend.app.database import Base, SessionLocal, get_db
 from backend.app.db_seed import seed_database_if_empty
 from backend.app.mock_upstream.server import mock_upstream_router
 from backend.app.models import (
@@ -207,6 +207,7 @@ async def get_health(db: Session = Depends(get_db)):
         "version": "1.4.0",
         "workspace_id": ws.id if ws else "ws_prod_01",
         "drift_active": ws.drift_active if ws else False,
+        "tables_initialized": len(Base.metadata.tables),
     }
 
 
