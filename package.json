@@ -1,14 +1,16 @@
 {
   "name": "sarthi-autopatch",
   "version": "1.4.0",
-  "description": "Sarthi / AutoPatch — Autonomous AI Self-Healing API Middleware",
+  "description": "Sarthi / AutoPatch \u2014 Autonomous AI Self-Healing API Middleware",
   "scripts": {
-    "dev": "uvicorn backend.app.main:app --reload --port 8000",
-    "start": "uvicorn backend.app.main:app --port 8000",
+    "dev": "uvicorn backend.app.main:app --reload --port 4007",
+    "start": "uvicorn backend.app.main:app --port 4007",
     "test": "pytest backend/tests -v && node test_all_features.js",
     "test:backend": "pytest backend/tests -v",
     "test:frontend": "node test_all_features.js",
-    "test:browser": "node test_real_browser.js"
+    "test:browser": "node test_real_browser.js",
+    "dev:8000": "uvicorn backend.app.main:app --reload --port 8000",
+    "dev:4007": "uvicorn backend.app.main:app --reload --port 4007"
   },
   "keywords": [
     "api",
