@@ -391,10 +391,6 @@
         <span>Console</span>
         <span id="nav-console-badge" class="hidden text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">!</span>
       </button>
-      <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="px-3 py-1.5 rounded-lg text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 border border-amber-500/20 transition-all duration-200 flex items-center gap-1.5">
-        <i data-lucide="mic" class="w-3.5 h-3.5"></i>
-        <span>Pitch Guide</span>
-      </button>
     </nav>
 
     <!-- Center Console Breadcrumb & Telemetry Indicator (Shown in Developer Console) -->
@@ -487,12 +483,6 @@
         <span class="stitch-kbd hidden md:inline">B</span>
       </button>
 
-      <!-- Interview Pitch & Demo Runbook Guide Button -->
-      <button onclick="window.AutoPatchApp.openInterviewDemoModal()" title="Open Interview Demo Guide (Press ?)" class="stitch-boost-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/15 hover:border-white/30 flex items-center gap-1.5 shadow-sm">
-        <i data-lucide="mic" class="w-3.5 h-3.5 text-emerald-400"></i>
-        <span class="hidden lg:inline font-mono">Pitch Guide</span>
-        <span class="stitch-kbd hidden xl:inline">?</span>
-      </button>
 
       <!-- Header Main CTA Button -->
       <button id="header-cta-btn" onclick="window.AutoPatchApp.handleHeaderCta()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-[0_0_18px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5">
@@ -670,13 +660,6 @@
         </button>
       </div>
 
-      <!-- Sidebar Footer Pitch Guide Launcher -->
-      <div class="px-3 pt-1 pb-1">
-        <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="w-full py-2 px-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all">
-          <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>Interview Pitch Cheatsheet</span>
-        </button>
-      </div>
 
       <!-- Interactive Guided E2E Walkthrough Widget -->
       <div class="p-3 m-3 rounded-xl bg-zinc-950/80 border border-white/[0.08] text-xs space-y-2">
@@ -2768,9 +2751,6 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.resetDemoEnvironment();" class="text-rose-400 hover:text-rose-300 text-xs font-mono flex items-center gap-1">
                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset to Pristine Baseline
               </button>
-              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.openInterviewDemoModal();" class="text-amber-300 hover:text-white font-medium flex items-center gap-1">
-                <i data-lucide="mic" class="w-3.5 h-3.5"></i> Open Interview Pitch Cheatsheet ➔
-              </button>
             </div>
           </div>
         `;
@@ -2823,211 +2803,66 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.openBoostActionsModal();" class="text-amber-300 hover:text-white font-medium flex items-center gap-1">
                 <i data-lucide="zap" class="w-3.5 h-3.5"></i> Turbo Boost Controls (B)
               </button>
-              <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.openInterviewDemoModal();" class="text-emerald-300 hover:text-white font-medium flex items-center gap-1">
-                <i data-lucide="mic" class="w-3.5 h-3.5"></i> Interview Pitch Cheatsheet (H/?) ➔
-              </button>
             </div>
           </div>
         `;
         this.openModal('<div class="flex items-center gap-2"><i data-lucide="target" class="w-5 h-5 text-emerald-400"></i><span>Autonomous Production Goals</span></div>', contentHtml, () => true, 'Close', 'bg-white text-black');
       }
 
-      copyPitchToClipboard() {
-        const text = `Sarthi - Autonomous Self-Healing API Middleware\n\n` +
-          `ELEVATOR PITCH (30s):\n` +
-          `"When third-party APIs (Stripe, Twilio, Shopify, CommerceCore) push unannounced breaking changes, consumer adapters throw fatal KeyError crashes. Sarthi is an autonomous, self-healing API middleware that sits transparently between your microservices and upstream vendors. In <180ms, it intercepts schema drift, grounds a backward-compatible adapter patch using official documentation via Qdrant RAG, verifies it in an isolated non-root Docker container, and delivers a tested Pull Request behind a strict two-stage RBAC human review gate—slashing enterprise MTTR from 3.5 hours to under 2 minutes with zero uncontrolled production drops."\n\n` +
-          `LIVE DEMONSTRATION RUNBOOK:\n` +
-          `1. Baseline Health Check: Press 1 -> Healthy CommerceCore proxy traffic <180ms, 0 open incidents.\n` +
-          `2. Simulate Schema Drift: Press D -> CommerceCore switches to v2.2 camelCase customerId, intercepted in <180ms.\n` +
-          `3. LangGraph Repair: Press 4 -> 11-node state machine, Qdrant RAG docs (score 0.92), AST security scan, 4/4 pytest sandbox.\n` +
-          `4. RBAC Gate: Press 5 -> Switch to Viewer (403 Forbidden denied), switch to Admin (approved, PR created).\n` +
-          `5. Deploy & Proof: Authorize deployment -> 200 OK verified for both v2.1 and v2.2 payloads, MTTR <2m!`;
-        if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-          navigator.clipboard.writeText(text).then(() => {
-            this.toast('Copied to Clipboard', 'Interview pitch and 5-phase demonstration runbook copied!', 'success');
-          }).catch(() => {
-            this.toast('Pitch Ready', 'You can copy the pitch directly from the modal.', 'info');
-          });
-        } else {
-          this.toast('Pitch Ready', 'You can copy the pitch directly from the modal.', 'info');
-        }
+      openInterviewDemoModal() {
+        this.openSystemOverviewModal();
       }
 
-      openInterviewDemoModal() {
+      openSystemOverviewModal() {
         const contentHtml = `
-          <div class="space-y-5 text-xs text-zinc-300 max-h-[72vh] overflow-y-auto pr-1">
-            <!-- 1. The 30-Second Elevator Pitch -->
+          <div class="space-y-4 text-xs text-zinc-300 max-h-[72vh] overflow-y-auto pr-1">
             <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/30 via-zinc-950 to-zinc-950 border border-emerald-500/30">
-              <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2 text-emerald-300 font-bold text-sm">
-                  <i data-lucide="sparkles" class="w-4 h-4"></i>
-                  <span>The 30-Second Elevator Pitch (Deliver This First)</span>
-                </div>
-                <button type="button" onclick="window.AutoPatchApp.copyPitchToClipboard()" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono flex items-center gap-1 transition-all">
-                  <i data-lucide="copy" class="w-3 h-3"></i> Copy Pitch
-                </button>
+              <div class="flex items-center gap-2 text-emerald-300 font-bold text-sm mb-2">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Sarthi Enterprise Architecture & System Overview</span>
               </div>
-              <p class="text-zinc-200 leading-relaxed italic text-xs">
-                "When third-party APIs (Stripe, Twilio, Shopify, CommerceCore) push unannounced breaking changes, consumer adapters throw fatal KeyError crashes. <strong>Sarthi</strong> is an autonomous, self-healing API middleware that sits transparently between your microservices and upstream vendors. In &lt;180ms, it intercepts schema drift, grounds a backward-compatible adapter patch using official documentation via Qdrant RAG, verifies it in an isolated non-root Docker container, and delivers a tested Pull Request behind a strict two-stage RBAC human review gate—slashing enterprise MTTR from 3.5 hours to under 2 minutes with zero uncontrolled production drops."
+              <p class="text-zinc-200 leading-relaxed text-xs">
+                Sarthi is an autonomous, self-healing API gateway and integration middleware. It sits transparently between internal microservices and external upstream vendors, detecting breaking schema drift in real time, retrieving doc context via vector RAG, synthesizing dual-compatible adapters, and validating them in isolated non-root sandboxes under strict human-in-the-loop RBAC governance.
               </p>
             </div>
 
-            <!-- 2. Step-by-Step Live Demo Runbook (Click Here -> Say This -> Observe This) -->
-            <div class="space-y-3">
-              <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
-                <i data-lucide="list-ordered" class="w-4 h-4 text-amber-400"></i>
-                <span>Live Demonstration Runbook (Follow During Interview)</span>
-              </h3>
-
-              <!-- Stage 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
               <div class="p-3.5 rounded-xl bg-zinc-950 border border-white/10 space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-mono">1</span> Baseline Health Check</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Phase 1</span>
-                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('dashboard');" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono flex items-center gap-1">Jump (1) ➔</button>
-                  </div>
+                <div class="font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Sub-180ms Interception</span>
                 </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">1</kbd> or click <strong>Overview Dashboard</strong>.
-                </div>
-                <div class="text-[11px] text-zinc-300">
-                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"Here is our live overview. Our CommerceCore integration is healthy, processing client requests in &lt;180ms against OpenAPI 3.1 contracts with 0 open incidents."</em>
-                </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> Green status badge, healthy request bar chart, 0 active incidents.
-                </div>
+                <p class="text-zinc-400">Compiled Pydantic C-extension contracts validate live JSON streaming payloads without introducing latency bottlenecks to downstream microservices.</p>
               </div>
 
-              <!-- Stage 2 -->
-              <div class="p-3.5 rounded-xl bg-zinc-950 border border-rose-500/20 space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center text-[10px] font-mono">2</span> Upstream API Schema Drift Interception</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">Phase 2</span>
-                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.toggleApiDrift();" class="px-2 py-0.5 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[10px] font-mono flex items-center gap-1">Drift (D) ➔</button>
-                  </div>
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-white/10 space-y-1.5">
+                <div class="font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>AST Threat Prevention</span>
                 </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">D</kbd> or click <strong>Simulate Drift</strong> in top navbar.
-                </div>
-                <div class="text-[11px] text-zinc-300">
-                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"Now imagine CommerceCore deploys v2.2 without notifying us, changing <code class='text-zinc-200'>customer_id</code> to camelCase <code class='text-rose-300'>customerId</code>. Let's emit a proxy request. Sarthi immediately intercepts the payload mismatch in &lt;180ms and classifies it specifically as Schema Drift—not a 401 auth or 429 rate limit."</em>
-                </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> Red pulsating banner appears, incident created, MTTD recorded at 180ms.
-                </div>
+                <p class="text-zinc-400">Abstract Syntax Tree (AST) validation rejects dangerous system calls, network sockets, eval/exec, and unauthorized imports before sandbox execution.</p>
               </div>
 
-              <!-- Stage 3 -->
-              <div class="p-3.5 rounded-xl bg-zinc-950 border border-sky-500/20 space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center text-[10px] font-mono">3</span> LangGraph Orchestration & Docker Sandbox</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">Phase 3</span>
-                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('workbench'); if (window.AutoPatchApp.db.incidents[0]) window.AutoPatchApp.startOrResumeRepair(window.AutoPatchApp.db.incidents[0].id);" class="px-2 py-0.5 rounded bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[10px] font-mono flex items-center gap-1">Repair (4) ➔</button>
-                  </div>
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-white/10 space-y-1.5">
+                <div class="font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="box" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <span>Isolated Ephemeral Sandbox</span>
                 </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">4</kbd> to open <strong>AI Repair Workbench</strong>, then click <strong>Run LangGraph Self-Healing</strong>.
-                </div>
-                <div class="text-[11px] text-zinc-300">
-                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"Instead of waking up on-call engineers, Sarthi triggers an 11-node LangGraph orchestrator. It queries our Qdrant vector database for official CommerceCore migration guides, writes a dual-compatible adapter fallback, runs a static AST security scan, and executes 4 pytest regressions inside an ephemeral non-root Docker sandbox."</em>
-                </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> 11-node execution graph, persisted checkpoint ID, cosine doc score (0.92), and 4/4 pytest passes.
-                </div>
+                <p class="text-zinc-400">Regression suites run inside network-disabled containers (--net none) with unprivileged non-root users (UID 10001) and read-only filesystems.</p>
               </div>
 
-              <!-- Stage 4 -->
-              <div class="p-3.5 rounded-xl bg-zinc-950 border border-amber-500/20 space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center text-[10px] font-mono">4</span> Two-Stage RBAC & Code Review Gate</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Phase 4</span>
-                    <button type="button" onclick="window.AutoPatchApp.closeModal(); window.AutoPatchApp.navigate('review');" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[10px] font-mono flex items-center gap-1">Review (5) ➔</button>
-                  </div>
+              <div class="p-3.5 rounded-xl bg-zinc-950 border border-white/10 space-y-1.5">
+                <div class="font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="users" class="w-3.5 h-3.5 text-violet-400"></i>
+                  <span>Two-Stage RBAC Governance</span>
                 </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Press <kbd class="stitch-kbd">5</kbd> to open <strong>Code Review & Gate</strong>. Switch role dropdown to <strong>Viewer</strong> and click <strong>Approve Repair</strong>.
-                </div>
-                <div class="text-[11px] text-zinc-300">
-                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"In an enterprise system, autonomous code deployment is a major liability. Notice our RBAC enforcement: when I attempt to approve as a Viewer, the action is rejected with a 403 Forbidden audit log. Only an authorized Reviewer or Admin can approve and export a Git PR."</em>
-                </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> 403 Forbidden toast, side-by-side adapter diff with <code class="text-emerald-300">.get('customerId') or .get('customer_id')</code>, immutable audit log entry.
-                </div>
-              </div>
-
-              <!-- Stage 5 -->
-              <div class="p-3.5 rounded-xl bg-zinc-950 border border-emerald-500/20 space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-white flex items-center gap-1.5"><span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-[10px] font-mono">5</span> Deployment Authorization & Zero-Downtime Proof</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Phase 5</span>
-                    <button type="button" onclick="window.AutoPatchApp.closeModal(); if (window.AutoPatchApp.db.repairs[0]) { window.AutoPatchApp.switchRole('Admin'); window.AutoPatchApp.quickOneClickApproveAndDeploy(window.AutoPatchApp.db.repairs[0].id); } else { window.AutoPatchApp.runAutomatedE2ETest(); }" class="px-2 py-0.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-mono flex items-center gap-1">1-Click Ship ➔</button>
-                  </div>
-                </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-emerald-400 font-semibold font-mono">Click:</span> Switch role to <strong>Admin</strong>, click <strong>Approve Repair</strong> ➔ <strong>Create GitHub PR</strong> ➔ <strong>Authorize Deployment</strong>.
-                </div>
-                <div class="text-[11px] text-zinc-300">
-                  <span class="text-amber-300 font-semibold font-mono">Say This:</span> <em>"The patch is authorized and loaded into the active middleware. Now, when we emit requests, both legacy v2.1 and drifted v2.2 payloads succeed with 200 OK. Our MTTR is under 2 minutes, and downstream consumers experience zero errors."</em>
-                </div>
-                <div class="text-[11px] text-zinc-400">
-                  <span class="text-sky-300 font-semibold font-mono">Observe:</span> State updates to DEPLOYED, verified production MTTR logged in Analytics, Goal tracker hits 100%!
-                </div>
-              </div>
-            </div>
-
-            <!-- 3. FAANG System Design Pillars -->
-            <div class="p-4 rounded-xl bg-zinc-950 border border-white/10 space-y-2">
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i data-lucide="layers" class="w-4 h-4 text-violet-400"></i>
-                <span>Architectural Tradeoffs (Interview Discussion Points)</span>
-              </h3>
-              <ul class="list-disc list-inside space-y-1.5 text-zinc-300 text-[11px]">
-                <li><strong>Reverse Proxy vs Envoy Sidecar:</strong> Sarthi runs as a transparent reverse proxy at the edge, but can also be deployed as a WebAssembly filter inside an Envoy service mesh for ultra-low latency (<2ms).</li>
-                <li><strong>AST Defense-in-Depth:</strong> We parse proposed code with Python's <code class="text-zinc-200">ast.parse</code> to reject <code class="text-rose-300">eval</code>, <code class="text-rose-300">exec</code>, <code class="text-rose-300">subprocess</code>, and dangerous imports before container execution.</li>
-                <li><strong>LangGraph State Checkpointing:</strong> Each node checkpoint is saved in PostgreSQL with a deterministic hash so long-running repairs can resume safely after restarts.</li>
-                <li><strong>Two-Stage Governance:</strong> Reviewers sign off on code correctness; Admins authorize deployment. Solves enterprise SOC2 compliance.</li>
-              </ul>
-            </div>
-
-            <!-- 4. Top 5 Hard System Design Interview Questions & Senior Answers -->
-            <div class="p-4 rounded-xl bg-gradient-to-r from-violet-950/20 via-zinc-950 to-zinc-950 border border-violet-500/30 space-y-3">
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
-                <span>Top 5 Hard Interview Questions & Staff-Level Answers</span>
-              </h3>
-              <div class="space-y-2.5 text-[11px]">
-                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
-                  <p class="font-bold text-amber-300 mb-1">Q1: How do you prevent LLMs from hallucinating or introducing malicious code?</p>
-                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> Three independent security perimeters: (1) Python AST analysis via <code class="text-zinc-200">ast.parse</code> statically blacklists eval/exec/subprocess/network sockets before code touches disk; (2) Docker runner with <code class="text-zinc-200">--net=none</code>, read-only rootfs, non-root user, and strict memory/CPU limits; (3) Mandatory human approval gate before production merge.</p>
-                </div>
-                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
-                  <p class="font-bold text-amber-300 mb-1">Q2: What happens during upstream 401 Unauthorized or 429 Rate Limit errors?</p>
-                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> The fault classifier isolates HTTP protocol status from JSON payload schema drift. 401s route to credential vault alerts, 429s trigger exponential backoff with jitter. Code generation is strictly forbidden for operational/auth failures.</p>
-                </div>
-                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
-                  <p class="font-bold text-amber-300 mb-1">Q3: How do you guarantee backward compatibility for in-flight requests?</p>
-                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> Sarthi synthesizes non-destructive fallback logic: <code class="text-emerald-300">payload.get('customerId') or payload.get('customer_id')</code>. Both legacy stored messages and drifted upstream payloads parse smoothly, preventing downstream data pipeline corruptions.</p>
-                </div>
-                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
-                  <p class="font-bold text-amber-300 mb-1">Q4: How does this scale to 100,000 requests per second?</p>
-                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> The critical path uses compiled schema validators in C++/Rust (or Envoy WASM filter) with cached contracts in Redis (<3ms overhead). Incident capture is fully decoupled: drift telemetry streams asynchronously over Kafka to offline LangGraph repair workers without blocking consumer traffic.</p>
-                </div>
-                <div class="p-2.5 rounded-lg bg-black/40 border border-white/[0.06]">
-                  <p class="font-bold text-amber-300 mb-1">Q5: How do you prevent duplicate repair runs during high-volume failure bursts?</p>
-                  <p class="text-zinc-300 leading-relaxed"><strong>Answer:</strong> We compute a deterministic error hash: <code class="text-zinc-200">sha256(integration_id + endpoint + sorted_missing_keys)</code>. Concurrent requests with matching signatures increment incident frequency counters and attach to the active repair run rather than spawning duplicate agents.</p>
-                </div>
+                <p class="text-zinc-400">Automates 95% of incident diagnosis while enforcing strict human approval gates. Reviewers approve patches; Admins authorize production deployments.</p>
               </div>
             </div>
           </div>
         `;
-        this.openModal('<div class="flex items-center gap-2"><i data-lucide="mic" class="w-5 h-5 text-amber-400"></i><span>Sarthi Interview Pitch & Live Demonstration Cheatsheet</span></div>', contentHtml, () => true, 'Close Cheatsheet', 'bg-white text-black');
+        this.openModal('<div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i><span>Enterprise Architecture & System Overview</span></div>', contentHtml, () => true, 'Close', 'bg-white text-black');
       }
-
 
 
 
@@ -5115,10 +4950,6 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                   <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-400"></i>
                 </button>
 
-                <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold text-xs sm:text-sm bg-gradient-to-r from-amber-500/15 to-violet-500/15 hover:from-amber-500/25 hover:to-violet-500/25 text-amber-200 hover:text-white border border-amber-500/30 hover:border-amber-500/50 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] flex items-center justify-center gap-2 backdrop-blur-md shadow-lg shadow-black/40">
-                  <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
-                  <span>Interview Pitch & Demo Guide</span>
-                </button>
               </div>
 
               <!-- Micro Proof Badges -->
@@ -5949,9 +5780,9 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
                     <span class="font-semibold text-violet-300 flex items-center gap-1"><i data-lucide="rocket" class="w-3 h-3 text-violet-400"></i> 3. 1-Click Ship</span>
                     <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Approve, PR & Deploy</span>
                   </button>
-                  <button onclick="window.AutoPatchApp.openInterviewDemoModal()" class="p-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 hover:text-white border border-amber-500/30 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
-                    <span class="font-semibold text-amber-300 flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3 text-amber-400"></i> Pitch Cheatsheet</span>
-                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Click ➔ Say ➔ Observe</span>
+                  <button onclick="window.AutoPatchApp.resetDemoEnvironment()" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
+                    <span class="font-semibold text-zinc-300 flex items-center gap-1"><i data-lucide="rotate-ccw" class="w-3 h-3 text-zinc-400"></i> 4. Reset System</span>
+                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Restore Baseline State</span>
                   </button>
                 </div>
               </div>
@@ -8719,7 +8550,7 @@ class EphemeralSandboxRunner:
       } else if (key === 'd' || key === 'D') {
         window.AutoPatchApp.toggleApiDrift();
       } else if (key === '?' || key === 'h' || key === 'H') {
-        window.AutoPatchApp.openInterviewDemoModal();
+        window.AutoPatchApp.openBoostActionsModal();
       }
     });
 
