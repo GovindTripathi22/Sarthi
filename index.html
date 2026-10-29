@@ -400,40 +400,6 @@
         <span class="text-zinc-600">/</span>
         <span id="console-active-tab-title" class="text-white font-medium">Overview Dashboard</span>
       </div>
-      <!-- Horizontal Quick Nav Pills for Instant 1-Click Switch -->
-      <div class="hidden xl:flex items-center gap-0.5 2xl:gap-1 bg-black/40 p-1 rounded-lg border border-white/[0.06] text-[11px]">
-        <button onclick="window.AutoPatchApp.navigate('dashboard')" data-quick-nav="dashboard" title="Overview Dashboard (1)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="layout-dashboard" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Overview</span> <span class="stitch-kbd">1</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('integrations')" data-quick-nav="integrations" title="Proxy Gateway (2)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="network" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Proxy</span> <span class="stitch-kbd">2</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('incidents')" data-quick-nav="incidents" title="Incident Explorer (3)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="alert-triangle" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Incidents</span> <span class="stitch-kbd">3</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('workbench')" data-quick-nav="workbench" title="AI Repair Workbench (4)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="cpu" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Workbench</span> <span class="stitch-kbd">4</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('review')" data-quick-nav="review" title="Code Review Gate (5)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="git-pull-request" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Review</span> <span class="stitch-kbd">5</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('contracts')" data-quick-nav="contracts" title="Docs & Contracts RAG (6)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="book-open" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Docs RAG</span> <span class="stitch-kbd">6</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('analytics')" data-quick-nav="analytics" title="Analytics & Cost (7)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="bar-chart-3" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Cost</span> <span class="stitch-kbd">7</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('settings')" data-quick-nav="settings" title="Settings & Audit (8)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="settings" class="w-3 h-3"></i> <span class="hidden 2xl:inline">Settings</span> <span class="stitch-kbd">8</span>
-        </button>
-        <button onclick="window.AutoPatchApp.navigate('blueprint')" data-quick-nav="blueprint" title="E2E Blueprint (9)" class="stitch-nav-pill px-2 py-1 rounded text-zinc-400 hover:text-white flex items-center gap-1">
-          <i data-lucide="terminal-square" class="w-3 h-3 text-emerald-400"></i> <span class="hidden 2xl:inline">E2E</span> <span class="stitch-kbd">9</span>
-        </button>
-      </div>
-      <div class="hidden 2xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-zinc-400 text-[11px]">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span>Self-Healing Engine Armed</span>
-      </div>
     </div>
 
     <!-- Right Actions: Unified, Clean & Balanced -->
@@ -475,13 +441,6 @@
           <option value="Viewer" class="bg-zinc-900 text-zinc-200">Viewer</option>
         </select>
       </div>
-
-      <!-- Turbo Boost Quick Launcher Button -->
-      <button onclick="window.AutoPatchApp.openBoostActionsModal()" title="Open Turbo Boost Actions (Press B)" class="stitch-boost-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-violet-500/20 hover:from-amber-500/30 hover:to-violet-500/30 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 flex items-center gap-1.5 shadow-sm">
-        <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
-        <span class="hidden sm:inline font-mono">Boost</span>
-        <span class="stitch-kbd hidden md:inline">B</span>
-      </button>
 
 
       <!-- Header Main CTA Button -->
@@ -5703,143 +5662,59 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
 
       // PAGE 1: OVERVIEW DASHBOARD
 
-      renderDashboardPage() {
+            renderDashboardPage() {
         const m = this.computeMetrics();
-        const recentEvents = this.db.request_events.slice(0, 8);
+        const recentEvents = this.db.request_events.slice(0, 6);
+        const driftActive = this.db.workspace.drift_active;
+        const inc = this.db.incidents[0] || null;
 
         return `
-          <div class="max-w-7xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8 select-text">
-            <!-- Top Header & Time Filter -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
-              <div>
-                <h1 class="text-xl font-bold text-white tracking-tight">System Telemetry & Self-Healing Overview</h1>
-                <p class="text-xs text-zinc-400 mt-0.5">Real-time gateway event logging, contract drift detection, and LangGraph autonomous repair telemetry.</p>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="inline-flex rounded-lg bg-zinc-950/80 border border-white/10 p-1 text-xs font-mono shadow-sm">
-                  ${['1h', '24h', '7d', '30d'].map(rng => `
-                    <button onclick="window.AutoPatchApp.selectedTimeRange='${rng}'; window.AutoPatchApp.render();" class="px-3 py-1 rounded-md transition-all duration-200 ${this.selectedTimeRange === rng ? 'bg-white text-black font-semibold shadow-[0_0_12px_rgba(255,255,255,0.25)]' : 'text-zinc-400 hover:text-white hover:bg-white/[0.04]'}">${rng}</button>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
+          <div class="max-w-6xl mx-auto space-y-6 animate-fade-in p-4 sm:p-6 lg:p-8 select-text">
 
-            <!-- Plain-English Subtitle Callout (Simple Mode) -->
+            <!-- 1. Guided Story Progress & Simple Subtitle -->
             ${this.renderExplanationCallout('dashboard')}
 
-            <!-- GOAL PROGRESSION & BOOST ACCELERATOR HUD (STITCH AESTHETIC) -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-              <!-- Goal Progression Card (Left 7 Cols) -->
-              <div onclick="window.AutoPatchApp.openGoalsModal()" title="View Autonomous Production Goals Breakdown (Press G)" class="lg:col-span-7 p-4 rounded-2xl stitch-card border border-white/10 space-y-3 cursor-pointer hover:border-emerald-500/30 transition-all">
-                <div class="flex items-center justify-between">
+            <!-- 2. Single Hero Status Card (Clear, Calm & Focused) -->
+            <div class="p-6 rounded-2xl ${driftActive ? 'bg-rose-950/20 border border-rose-500/30' : 'bg-zinc-950/80 border border-white/10'} shadow-xl backdrop-blur-xl">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+                <div class="space-y-1.5">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full ${this.getGoalsState().isAllComplete ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}"></span>
-                    <h2 class="text-xs font-bold text-white tracking-tight">Autonomous Production Goals</h2>
-                    <span class="stitch-kbd text-[9px]">G</span>
+                    <span class="w-3 h-3 rounded-full ${driftActive ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
+                    <span class="text-xs font-mono uppercase tracking-wider font-bold ${driftActive ? 'text-rose-400' : 'text-emerald-400'}">
+                      ${driftActive ? 'Contract Drift Active' : 'System Healthy'}
+                    </span>
                   </div>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${this.getGoalsState().isAllComplete ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/10 text-zinc-300 border border-white/15'} font-semibold">
-                    ${this.getGoalsState().completedCount}/4 Goals Achieved (${this.getGoalsState().pct}%)
-                  </span>
+                  <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                    ${driftActive ? 'Partner API Changed: customer_id ➔ customerId' : 'All Partner Connections Operating Smoothly'}
+                  </h1>
+                  <p class="text-xs sm:text-sm text-zinc-300 max-w-2xl leading-relaxed">
+                    ${driftActive 
+                      ? 'Upstream vendor CommerceCore updated their response format. Sarthi caught it in 180ms before your checkout broke. Click "Watch AI Fix It" to heal the code.' 
+                      : 'Sarthi is actively monitoring 3 third-party APIs. When any vendor makes an unannounced change, Sarthi catches it and fixes it automatically.'}
+                  </p>
                 </div>
-                <div class="stitch-goal-track">
-                  <div class="stitch-goal-fill" style="width: ${Math.max(12, this.getGoalsState().pct)}%;"></div>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-mono pt-1">
-                  ${this.getGoalsState().goals.map(g => `
-                    <div class="p-2 rounded-lg bg-black/40 border border-white/[0.06] flex flex-col justify-between space-y-1">
-                      <div class="flex items-center justify-between">
-                        <span class="text-zinc-400">Goal ${g.id}</span>
-                        <span class="w-1.5 h-1.5 rounded-full ${g.achieved ? 'bg-emerald-400' : 'bg-zinc-600'}"></span>
-                      </div>
-                      <span class="text-zinc-200 font-semibold truncate">${g.title}</span>
-                      <span class="${g.achieved ? 'text-emerald-400' : 'text-zinc-500'} font-medium">${g.badge}</span>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
 
-              <!-- Quick Turbo Boost Actions Bar (Right 5 Cols) -->
-              <div class="lg:col-span-5 p-4 rounded-2xl stitch-card border border-white/10 flex flex-col justify-between space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
-                    <span>Turbo Boost Controls</span>
-                  </span>
-                  <span class="text-[10px] font-mono text-zinc-400">Press <kbd class="stitch-kbd">B</kbd> for menu</span>
-                </div>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                  <button onclick="window.AutoPatchApp.toggleApiDrift()" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
-                    <span class="font-semibold text-rose-300 flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3 text-rose-400"></i> 1. Drift</span>
-                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Toggle v2.2 Drift</span>
-                  </button>
-                  <button onclick="window.AutoPatchApp.runAutomatedE2ETest()" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
-                    <span class="font-semibold text-emerald-300 flex items-center gap-1"><i data-lucide="cpu" class="w-3 h-3 text-emerald-400"></i> 2. Auto-Heal</span>
-                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">LangGraph & Sandbox</span>
-                  </button>
-                  <button onclick="if (window.AutoPatchApp.db.repairs[0]) { window.AutoPatchApp.switchRole('Admin'); window.AutoPatchApp.quickOneClickApproveAndDeploy(window.AutoPatchApp.db.repairs[0].id); } else { window.AutoPatchApp.runAutomatedE2ETest(); }" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
-                    <span class="font-semibold text-violet-300 flex items-center gap-1"><i data-lucide="rocket" class="w-3 h-3 text-violet-400"></i> 3. 1-Click Ship</span>
-                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Approve, PR & Deploy</span>
-                  </button>
-                  <button onclick="window.AutoPatchApp.resetDemoEnvironment()" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-zinc-200 hover:text-white border border-white/10 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between">
-                    <span class="font-semibold text-zinc-300 flex items-center gap-1"><i data-lucide="rotate-ccw" class="w-3 h-3 text-zinc-400"></i> 4. Reset System</span>
-                    <span class="text-[10px] font-mono text-zinc-400 mt-0.5">Restore Baseline State</span>
-                  </button>
+                <!-- One Big Obvious Action Button -->
+                <div class="flex items-center gap-3 shrink-0">
+                  ${driftActive ? `
+                    <button onclick="window.AutoPatchApp.startOrResumeRepair('${inc?.id || 'inc_1041'}')" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold transition-all shadow-lg shadow-emerald-500/25 flex items-center gap-2">
+                      <i data-lucide="cpu" class="w-4 h-4 text-black"></i>
+                      <span>✨ Watch AI Fix It (60s)</span>
+                    </button>
+                    <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-4 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 hover:text-white border border-white/10 text-xs font-medium transition-all">
+                      Reset
+                    </button>
+                  ` : `
+                    <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-6 py-3 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-bold transition-all shadow-lg shadow-white/20 flex items-center gap-2">
+                      <i data-lucide="zap" class="w-4 h-4 text-black"></i>
+                      <span>⚡ Test What Happens When an API Breaks</span>
+                    </button>
+                  `}
                 </div>
               </div>
             </div>
 
-            <!-- Interactive Alert Banner when Drift is Active or Incident Open -->
-            ${this.db.incidents.some(i => i.status !== 'DEPLOYED') ? `
-              <div class="p-4 sm:p-5 rounded-2xl border border-rose-500/30 bg-gradient-to-r from-rose-950/20 via-zinc-950 to-zinc-950 shadow-xl shadow-rose-950/20 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div class="flex items-start gap-3.5">
-                  <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
-                    <i data-lucide="alert-octagon" class="w-5 h-5"></i>
-                  </div>
-                  <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                      <span class="text-[10px] font-mono uppercase tracking-wider font-semibold text-rose-300 bg-rose-500/20 px-2.5 py-0.5 rounded-full border border-rose-500/30">Active Incident • ${this.db.incidents[0].id}</span>
-                      <span class="text-xs font-mono text-zinc-400">${this.db.incidents[0].failure_type}</span>
-                    </div>
-                    <div class="text-sm font-semibold text-white">
-                      ${this.db.incidents[0].integration_name} <span class="text-zinc-500">→</span> <code class="font-mono text-rose-300 text-xs px-1.5 py-0.5 rounded bg-zinc-900 border border-white/10">${this.db.incidents[0].endpoint}</code>
-                    </div>
-                    <p class="text-xs text-zinc-400 font-mono">${this.db.incidents[0].error_trace}</p>
-                    <div class="pt-1 text-xs text-rose-300 font-sans flex items-center gap-1.5">
-                      <i data-lucide="info" class="w-3.5 h-3.5 text-rose-400 shrink-0"></i>
-                      <span><strong>Alert:</strong> CommerceCore changed their data format! Sarthi stopped your app from crashing. Click "Open AI Repair Workbench" to watch the AI fix it.</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2.5 shrink-0">
-                  <button onclick="window.AutoPatchApp.startOrResumeRepair('${this.db.incidents[0].id}')" class="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-semibold shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-2">
-                    <i data-lucide="cpu" class="w-4 h-4 text-black"></i>
-                    <span>${this.db.repairs.length > 0 ? 'Open AI Repair Workbench' : 'Run LangGraph Self-Healing'}</span>
-                  </button>
-                </div>
-              </div>
-            ` : `
-              <div class="p-4 sm:p-5 rounded-2xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
-                    <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-                  </div>
-                  <div>
-                    <div class="text-sm font-semibold text-white">All ${m.monitoredIntegrations} Registered API Integrations Operating Within Contract Thresholds</div>
-                    <p class="text-xs text-zinc-400 mt-0.5">Proxy gateway actively validating responses against registered OpenAPI schemas in &lt;180ms.</p>
-                    <div class="pt-1 text-xs text-emerald-300 font-sans flex items-center gap-1.5">
-                      <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
-                      <span><strong>Status:</strong> Everything is running smoothly. Your app is connected to 18 partner services, and zero errors are occurring.</span>
-                    </div>
-                  </div>
-                </div>
-                <button onclick="window.AutoPatchApp.toggleApiDrift()" class="px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 text-xs font-semibold shrink-0 flex items-center gap-2 transition-all duration-200 hover:-translate-y-0.5">
-                  <i data-lucide="zap" class="w-4 h-4 text-zinc-300"></i>
-                  <span>Inject Test Schema Drift</span>
-                </button>
-              </div>
-            `}
-
-            <!-- Visual "Before & After" Data Card (Demystifies the Technical Drift) -->
+            <!-- 3. Visual Before & After Translation Card (Explains Everything in 1 Glance) -->
             <div class="p-5 rounded-2xl stitch-card border border-white/10 space-y-3">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -5851,240 +5726,103 @@ def parse_commerce_customer(payload: Dict[str, Any]) -> NormalizedCustomer:
               <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <div class="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1.5">
                   <div class="text-[10px] font-mono uppercase tracking-wider text-rose-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> 🔴 What Partner Sent (New Word)
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> 🔴 What Partner Sent
                   </div>
                   <div class="font-mono text-xs text-rose-200 bg-black/40 p-2 rounded border border-rose-500/20">
                     {"<strong class="text-rose-400">customerId</strong>": "cust_9041"}
                   </div>
-                  <p class="text-[11px] text-zinc-400 leading-relaxed">CommerceCore changed key to camelCase. Without Sarthi, your backend crashes with an unhandled KeyError.</p>
+                  <p class="text-[11px] text-zinc-400 leading-relaxed">Vendor changed snake_case to camelCase without notice.</p>
                 </div>
+
                 <div class="p-3.5 rounded-xl bg-sky-950/20 border border-sky-500/30 space-y-1.5">
                   <div class="text-[10px] font-mono uppercase tracking-wider text-sky-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-sky-400"></span> 🟢 What Your App Expected (Old Word)
+                    <span class="w-2 h-2 rounded-full bg-sky-400"></span> 🟢 What Your App Expected
                   </div>
                   <div class="font-mono text-xs text-sky-200 bg-black/40 p-2 rounded border border-sky-500/20">
                     payload["<strong class="text-sky-300">customer_id</strong>"]
                   </div>
-                  <p class="text-[11px] text-zinc-400 leading-relaxed">Your existing codebase expects snake_case. Normally an engineer spends 4 hours diagnosing the breakdown.</p>
+                  <p class="text-[11px] text-zinc-400 leading-relaxed">Your app expected the old field name and would normally crash.</p>
                 </div>
+
                 <div class="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-1.5">
                   <div class="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ⚡ What Sarthi Does (Self-Healing)
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ⚡ What Sarthi Does
                   </div>
                   <div class="font-mono text-xs text-emerald-200 bg-black/40 p-2 rounded border border-emerald-500/20">
                     payload.get("<strong class="text-emerald-400">customerId</strong>") or payload.get("<strong class="text-emerald-400">customer_id</strong>")
                   </div>
-                  <p class="text-[11px] text-zinc-300 leading-relaxed">Automatically translates between both words so customers never see an outage, saving $126,000 in downtime.</p>
+                  <p class="text-[11px] text-zinc-300 leading-relaxed">Translates both formats so checkout never breaks, saving $126,000.</p>
                 </div>
               </div>
             </div>
 
-            <!-- Primary KPI Grid (6 Cohesive Cards with Breathable Spacing) -->
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
-              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
-                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                  <span>Integrations</span>
-                  <i data-lucide="network" class="w-3.5 h-3.5 text-zinc-400"></i>
-                </div>
-                <div class="text-2xl font-bold font-mono text-white mt-2">${m.healthyIntegrations}/${m.monitoredIntegrations}</div>
-                <div class="text-[11px] font-mono text-emerald-400 mt-1.5 flex items-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Active Routes
-                </div>
-                <div class="text-[10px] text-zinc-500 font-sans mt-1">3 Active Connections</div>
+            <!-- 4. Four Clear Health Indicators (No Cluttered Buttons) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div class="p-4 rounded-xl bg-zinc-950/70 border border-white/[0.08]">
+                <div class="text-[11px] font-mono text-zinc-400">Protected APIs</div>
+                <div class="text-2xl font-bold font-mono text-white mt-1">3 / 3</div>
+                <div class="text-[10px] text-emerald-400 mt-0.5">Active & Monitored</div>
               </div>
 
-              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
-                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                  <span>Requests (${this.selectedTimeRange})</span>
-                  <i data-lucide="activity" class="w-3.5 h-3.5 text-zinc-400"></i>
-                </div>
-                <div class="text-2xl font-bold font-mono text-white mt-2">${m.totalRequests}</div>
-                <div class="text-[11px] font-mono ${m.failedRequests > 0 ? 'text-rose-400' : 'text-zinc-400'} mt-1.5 flex items-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full ${m.failedRequests > 0 ? 'bg-rose-400' : 'bg-zinc-400'}"></span> ${m.failedRequests} drifted (${m.failureRatePct}%)
-                </div>
-                <div class="text-[10px] text-zinc-500 font-sans mt-1">Monitored API calls</div>
+              <div class="p-4 rounded-xl bg-zinc-950/70 border border-white/[0.08]">
+                <div class="text-[11px] font-mono text-zinc-400">Detection Speed</div>
+                <div class="text-2xl font-bold font-mono text-cyan-300 mt-1">180ms</div>
+                <div class="text-[10px] text-zinc-400 mt-0.5">Faster than a blink</div>
               </div>
 
-              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
-                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                  <span>Drift Incidents</span>
-                  <i data-lucide="file-warning" class="w-3.5 h-3.5 ${m.schemaDriftEvents > 0 ? 'text-amber-400' : 'text-zinc-400'}"></i>
-                </div>
-                <div class="text-2xl font-bold font-mono ${m.schemaDriftEvents > 0 ? 'text-amber-400' : 'text-white'} mt-2">${m.schemaDriftEvents}</div>
-                <div class="text-[11px] font-mono text-zinc-400 mt-1.5">${m.openIncidents} Open Incident(s)</div>
-                <div class="text-[10px] text-zinc-500 font-sans mt-1">Caught before customer outage</div>
+              <div class="p-4 rounded-xl bg-zinc-950/70 border border-white/[0.08]">
+                <div class="text-[11px] font-mono text-zinc-400">Time to Fix (MTTR)</div>
+                <div class="text-2xl font-bold font-mono text-amber-300 mt-1">48s</div>
+                <div class="text-[10px] text-emerald-400 mt-0.5">vs 4 hours manual</div>
               </div>
 
-              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
-                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                  <span>Human Gate</span>
-                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-zinc-400"></i>
-                </div>
-                <div class="text-2xl font-bold font-mono ${m.awaitingApproval > 0 ? 'text-amber-300' : 'text-white'} mt-2">${m.awaitingApproval}</div>
-                <div class="text-[11px] font-mono text-zinc-400 mt-1.5">${m.deployedRepairs} Deployed • ${m.rejectedRepairs} Declined</div>
-                <div class="text-[10px] text-zinc-500 font-sans mt-1">Requires your approval</div>
-              </div>
-
-              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
-                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                  <span>Latency (p50)</span>
-                  <i data-lucide="gauge" class="w-3.5 h-3.5 text-zinc-400"></i>
-                </div>
-                <div class="text-2xl font-bold font-mono text-white mt-2">${m.p50}ms</div>
-                <div class="text-[11px] font-mono text-zinc-400 mt-1.5">p95: ${m.p95}ms • p99: ${m.p99}ms</div>
-                <div class="text-[10px] text-zinc-400 font-sans mt-1">⚡ 0.18s detection (blink of an eye)</div>
-              </div>
-
-              <div class="stitch-card p-4 rounded-xl flex flex-col justify-between hover:-translate-y-0.5 transition-all">
-                <div class="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-                  <span>MTTD / MTTR</span>
-                  <i data-lucide="clock" class="w-3.5 h-3.5 text-zinc-400"></i>
-                </div>
-                <div class="text-2xl font-bold font-mono text-white mt-2">${m.mttdMs}ms</div>
-                <div class="text-[11px] font-mono text-emerald-400 mt-1.5">Diagnosis: ${m.mttDiagSec}s</div>
-                <div class="text-[10px] text-emerald-400/90 font-sans mt-1">⏱️ Fixes in 2 mins vs 4 hours</div>
+              <div class="p-4 rounded-xl bg-zinc-950/70 border border-white/[0.08]">
+                <div class="text-[11px] font-mono text-zinc-400">Downtime Saved</div>
+                <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">$126,000+</div>
+                <div class="text-[10px] text-zinc-400 mt-0.5">Zero outages</div>
               </div>
             </div>
 
-            <!-- Charts Row: Request Telemetry & Pipeline Funnel -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              <!-- Live Request Event Stream Chart -->
-              <div class="lg:col-span-2 p-5 rounded-2xl stitch-card flex flex-col justify-between">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                  <div>
-                    <h2 class="text-sm font-semibold text-white tracking-tight">Proxy Request Telemetry & Contract Outcomes</h2>
-                    <p class="text-xs text-zinc-400">Real-time requests routed through <code class="font-mono text-zinc-300">/proxy/{integration_id}/*</code></p>
-                  </div>
-                  <div class="flex items-center gap-3 text-[11px] font-mono">
-                    <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 200 Valid</span>
-                    <span class="flex items-center gap-1.5 text-sky-400"><span class="w-2 h-2 rounded-full bg-sky-400"></span> 200 Patched</span>
-                    <span class="flex items-center gap-1.5 text-rose-400"><span class="w-2 h-2 rounded-full bg-rose-400"></span> Drift / Error</span>
-                  </div>
-                </div>
-
-                <!-- Dynamic SVG/CSS Bar Chart with refined rounded bars and glow hover -->
-                <div class="h-44 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-white/[0.08]">
-                  ${this.db.request_events.slice(0, 14).reverse().map(ev => {
-                    const heightPct = Math.min(100, Math.max(20, Math.round((ev.duration_ms / 260) * 100)));
-                    const barColor = ev.error_classification !== 'NONE'
-                      ? 'bg-rose-500/80 border-rose-400/80 hover:bg-rose-400'
-                      : ev.schema_validation_result === 'PASS_COMPAT_PATCHED'
-                        ? 'bg-sky-500/80 border-sky-400/80 hover:bg-sky-400'
-                        : 'bg-emerald-500/80 border-emerald-400/80 hover:bg-emerald-400';
-                    return `
-                      <div class="flex-1 flex flex-col items-center gap-1.5 group relative">
-                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-zinc-950 border border-white/20 text-[10px] font-mono p-2 rounded-lg shadow-xl absolute -top-14 whitespace-nowrap z-20 pointer-events-none">
-                          <span class="text-white font-semibold">${ev.id}</span> • ${ev.duration_ms}ms • ${ev.status_code} (${ev.schema_validation_result})
-                        </div>
-                        <div class="w-full max-w-[28px] rounded-t-md border-t ${barColor} transition-all duration-200" style="height: ${heightPct * 1.2}px"></div>
-                        <span class="text-[9px] font-mono text-zinc-500 truncate max-w-[40px]">${ev.id.replace('req_', '#')}</span>
-                      </div>
-                    `;
-                  }).join('')}
-                </div>
-
-                <div class="flex items-center justify-between text-xs text-zinc-400 pt-3">
-                  <span>Showing ${Math.min(14, this.db.request_events.length)} most recent persisted gateway requests</span>
-                  <button onclick="window.AutoPatchApp.sendProxyRequest()" class="text-zinc-200 hover:text-white font-medium flex items-center gap-1 transition-colors">
-                    <i data-lucide="play" class="w-3.5 h-3.5 text-zinc-400"></i>
-                    <span>Emit Live Proxy Request</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Pipeline Funnel Card -->
-              <div class="p-5 rounded-2xl stitch-card flex flex-col justify-between space-y-4">
-                <div>
-                  <h2 class="text-sm font-semibold text-white tracking-tight">Self-Healing Pipeline Stages</h2>
-                  <p class="text-xs text-zinc-400">Incident lifecycle across LangGraph checkpoints</p>
-                </div>
-
-                <div class="space-y-2.5 text-xs">
-                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-400"></span> 1. Drift Interception</span>
-                    <span class="font-mono font-bold text-rose-300">${this.db.incidents.filter(i => i.status !== 'DEPLOYED').length}</span>
-                  </div>
-
-                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span> 2. Awaiting Human Gate</span>
-                    <span class="font-mono font-bold text-amber-300">${this.db.repairs.filter(r => r.workflow_state === 'AWAITING_APPROVAL').length}</span>
-                  </div>
-
-                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-sky-400"></span> 3. Approved / PR Created</span>
-                    <span class="font-mono font-bold text-sky-300">${this.db.repairs.filter(r => r.workflow_state === 'PR_CREATED' || r.pr_number).length}</span>
-                  </div>
-
-                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08]">
-                    <span class="text-zinc-300 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 4. Deployed & Verified</span>
-                    <span class="font-mono font-bold text-emerald-400">${this.db.repairs.filter(r => r.workflow_state === 'DEPLOYED').length}</span>
-                  </div>
-                </div>
-
-                <div class="pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] text-zinc-400">
-                  <span>Mean Diagnosis: <strong class="text-zinc-200 font-mono">${m.mttDiagSec}s</strong></span>
-                  <span>Sandbox Pass Rate: <strong class="text-emerald-400 font-mono">100%</strong></span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Live Gateway Observability Stream Table -->
-            <div class="rounded-2xl stitch-card overflow-hidden">
-              <div class="px-5 py-4 border-b border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <h2 class="text-sm font-semibold text-white tracking-tight">Recent Gateway Request Telemetry (Sanitized)</h2>
-                  <p class="text-xs text-zinc-400">Authorization headers, tokens, and secrets are automatically redacted before persistence.</p>
-                </div>
-                <span class="text-xs font-mono text-zinc-400 bg-white/[0.04] px-2.5 py-1 rounded-md border border-white/10">Route: /proxy/{id}/*</span>
+            <!-- 5. Recent Activity Log (Simple & Clean Table) -->
+            <div class="rounded-xl bg-zinc-950/70 border border-white/[0.08] overflow-hidden">
+              <div class="px-4 py-3 border-b border-white/[0.08] flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">Live Activity Stream</span>
+                <span class="text-[10px] font-mono text-zinc-400">Auto-Refreshed</span>
               </div>
               <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
+                <table class="w-full text-left text-xs">
                   <thead>
-                    <tr class="border-b border-white/[0.08] text-[11px] font-mono uppercase text-zinc-400 bg-white/[0.02]">
-                      <th class="py-3 px-4">Correlation ID</th>
-                      <th class="py-3 px-4">Integration & Route</th>
-                      <th class="py-3 px-4">Status</th>
-                      <th class="py-3 px-4">Latency</th>
-                      <th class="py-3 px-4">Contract Validation</th>
-                      <th class="py-3 px-4">Redacted Sample</th>
-                      <th class="py-3 px-4 text-right">Timestamp</th>
+                    <tr class="border-b border-white/[0.06] text-[10px] font-mono uppercase text-zinc-500">
+                      <th class="py-2.5 px-4">Route</th>
+                      <th class="py-2.5 px-4">Status</th>
+                      <th class="py-2.5 px-4">Validation Outcome</th>
+                      <th class="py-2.5 px-4 text-right">Time</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-white/[0.06] font-mono text-[11px]">
+                  <tbody class="divide-y divide-white/[0.04] font-mono text-[11px]">
                     ${recentEvents.map(ev => `
-                      <tr class="hover:bg-white/[0.03] transition-colors duration-150">
-                        <td class="py-3 px-4 text-zinc-200">${ev.correlation_id}</td>
-                        <td class="py-3 px-4">
-                          <span class="px-1.5 py-0.5 rounded bg-white/[0.08] text-white mr-1.5">${ev.method}</span>
-                          <span class="text-zinc-300">${ev.normalized_route}</span>
+                      <tr>
+                        <td class="py-2 px-4 text-zinc-200">${ev.method} ${ev.normalized_route}</td>
+                        <td class="py-2 px-4">
+                          <span class="px-1.5 py-0.2 rounded ${ev.status_code >= 400 ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}">${ev.status_code}</span>
                         </td>
-                        <td class="py-3 px-4">
-                          <span class="px-2 py-0.5 rounded-full ${ev.status_code >= 400 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/15 text-emerald-300'}">${ev.status_code}</span>
-                        </td>
-                        <td class="py-3 px-4 text-zinc-300">${ev.duration_ms}ms</td>
-                        <td class="py-3 px-4">
+                        <td class="py-2 px-4">
                           ${ev.schema_validation_result === 'FAIL_DRIFT'
-                            ? `<span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">SCHEMA_DRIFT (${ev.incident_id})</span>`
-                            : ev.schema_validation_result === 'PASS_COMPAT_PATCHED'
-                              ? `<span class="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">PASS (DUAL-COMPAT)</span>`
-                              : ev.schema_validation_result === 'PASS'
-                                ? `<span class="text-emerald-400">PASS (v2.1)</span>`
-                                : `<span class="text-amber-400">${ev.error_classification}</span>`
+                            ? `<span class="text-rose-400 font-bold">SCHEMA_DRIFT</span>`
+                            : `<span class="text-emerald-400">HEALTHY PASS</span>`
                           }
                         </td>
-                        <td class="py-3 px-4 text-zinc-400 max-w-xs truncate">${JSON.stringify(ev.sanitized_payload)}</td>
-                        <td class="py-3 px-4 text-right text-zinc-500">${new Date(ev.timestamp).toLocaleTimeString()}</td>
+                        <td class="py-2 px-4 text-right text-zinc-500">${new Date(ev.timestamp).toLocaleTimeString()}</td>
                       </tr>
                     `).join('')}
                   </tbody>
                 </table>
               </div>
             </div>
+
           </div>
         `;
       }
-
-      // PAGE 2: INTEGRATIONS & PROXY GATEWAY
 
       renderIntegrationsPage() {
 
